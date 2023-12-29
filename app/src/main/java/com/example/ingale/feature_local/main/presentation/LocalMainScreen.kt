@@ -93,9 +93,6 @@ fun LocalMainScreen(
             }
         }
     }
-    ObserveEffects(effects) { effect ->
-        Log.d("myLogs", "second collector")
-    }
 
     val pagerState = rememberPagerState(
         pageCount = { state.sections.size }
