@@ -40,7 +40,7 @@ fun SongsSection(
             ) {
                 SongItem(
                     modifier = Modifier
-                        .animateItemPlacement(tween(300)),
+                        .animateItemPlacement(tween(PlacementAnimationDuration)),
                     song = it,
                     highlightedPart = query,
                     onSongClick = onSongClick,
@@ -72,3 +72,5 @@ fun SongsSection(
         }
     }
 }
+
+private const val PlacementAnimationDuration = 300

@@ -1,6 +1,5 @@
 package com.example.ingale.feature_local.main.presentation
 
-import android.util.Log
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -82,14 +81,13 @@ fun LocalMainScreen(
     ObserveEffects(effects) { effect ->
         when(effect) {
             is Effect.ScrollToTop -> {
-                Log.d("myLogs", "ScrollToTop received")
                 songsLazyColumnState.scrollToItem(0)
                 albumsGridsState.scrollToItem(0)
                 artistsGridsState.scrollToItem(0)
             }
 
             Effect.RequestPermissions -> {
-                Log.d("myLogs", "RequestPermissions received")
+                /** implemented in [PermissionRequester] */
             }
         }
     }
@@ -125,7 +123,6 @@ fun LocalMainScreen(
             },
             value = state.searchTextField,
             onValueChange = {
-                Log.d("searching", it)
                 sendEvent(Event.Search(it))
             },
             suffix = {

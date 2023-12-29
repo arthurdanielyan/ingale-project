@@ -17,7 +17,6 @@ import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
-import android.util.Log
 import android.view.KeyEvent
 import androidx.annotation.FloatRange
 import androidx.media.MediaBrowserServiceCompat
@@ -39,7 +38,6 @@ class PlayerService : MediaBrowserServiceCompat() {
 
     var mediaPlayer = MediaPlayer().apply {
         setOnCompletionListener {
-            Log.d("songPlayback", "played")
             if (AudioPlayer.pointer == AudioPlayer.songQueue.size - 1) {
                 AudioPlayer.pointer = 0
             } else AudioPlayer.pointer++

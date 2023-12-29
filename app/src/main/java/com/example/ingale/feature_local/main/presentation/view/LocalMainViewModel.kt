@@ -2,7 +2,6 @@ package com.example.ingale.feature_local.main.presentation.view
 
 import android.Manifest
 import android.os.Build
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.ingale.core.audio_player.AudioPlayer
 import com.example.ingale.core.domain.model.Song
@@ -43,7 +42,6 @@ class LocalMainViewModel(
 
     init {
         loadSongs()
-        Log.d("myLogs", "VM init")
         sendEffect {
             Effect.RequestPermissions
         }
@@ -140,7 +138,6 @@ class LocalMainViewModel(
                 )
             }
             sendEffect {
-                Log.d("myLogs", "sending ScrollToTop ${currentState.allSongs.getOrNull(5)?.title}")
                 Effect.ScrollToTop
             }
         }

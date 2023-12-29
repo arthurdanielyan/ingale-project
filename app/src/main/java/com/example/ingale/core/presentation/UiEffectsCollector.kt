@@ -1,6 +1,5 @@
 package com.example.ingale.core.presentation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -15,13 +14,9 @@ import kotlinx.coroutines.withContext
 fun <T: UiEffect> ObserveEffects(flow: Flow<T>, onEvent: suspend (T) -> Unit) {
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(flow, lifecycleOwner.lifecycle) {
-        Log.d("myLogs", lifecycleOwner.lifecycle.currentState.name)
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
             withContext(Dispatchers.Main.immediate) {
-                flow.collect {
-                    Log.d("myLogs", "Collect block")
-                    onEvent(it)
-                }
+                flow.collect(onEvent)
             }
         }
     }
