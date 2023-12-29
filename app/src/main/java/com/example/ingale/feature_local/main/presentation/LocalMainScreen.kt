@@ -48,6 +48,7 @@ import com.example.ingale.feature_local.main.presentation.components.songs_secti
 import com.example.ingale.feature_local.main.presentation.view.LocalMainContract
 import com.example.ingale.feature_local.main.presentation.view.LocalMainContract.Effect
 import com.example.ingale.feature_local.main.presentation.view.LocalMainContract.Event
+import com.example.ingale.mvi.rememberFlowOf
 import com.example.ingale.mvi.wrappers.StableList
 import com.example.ingale.ui.theme.colorScheme.colors
 import com.example.ingale.ui.theme.spacing
@@ -61,7 +62,7 @@ fun LocalMainScreen(
     state: LocalMainContract.State,
     sendEvent: (event: LocalMainContract.Event) -> Unit,
     effects: Flow<LocalMainContract.Effect>,
-    requiredPermissions: Array<String>,
+    requiredPermissions: Array<String>
 ) {
     PermissionRequester(
         requiredPermissions = requiredPermissions,
@@ -69,10 +70,11 @@ fun LocalMainScreen(
         onDismiss = {
             sendEvent(Event.DismissPermissionDialog)
         },
-        onPermissionResult = sendEvent
+        onPermissionResult = sendEvent,
+        requestPermissionsEffect = effects.rememberFlowOf(Effect.RequestPermissions::class)
     )
 
-    val lazyColumnState = rememberLazyListState()
+    val songsLazyColumnState = rememberLazyListState()
     val albumsGridsState = rememberLazyGridState()
     val artistsGridsState = rememberLazyGridState()
 
@@ -80,11 +82,19 @@ fun LocalMainScreen(
     ObserveEffects(effects) { effect ->
         when(effect) {
             is Effect.ScrollToTop -> {
-//                lazyColumnState.scrollToItem(0)
-//                albumsGridsState.scrollToItem(0)
-//                artistsGridsState.scrollToItem(0)
+                Log.d("myLogs", "ScrollToTop received")
+                songsLazyColumnState.scrollToItem(0)
+                albumsGridsState.scrollToItem(0)
+                artistsGridsState.scrollToItem(0)
+            }
+
+            Effect.RequestPermissions -> {
+                Log.d("myLogs", "RequestPermissions received")
             }
         }
+    }
+    ObserveEffects(effects) { effect ->
+        Log.d("myLogs", "second collector")
     }
 
     val pagerState = rememberPagerState(
@@ -207,7 +217,7 @@ fun LocalMainScreen(
             when (it) {
                 0 -> {
                     SongsSection(
-                        lazyListState = lazyColumnState,
+                        lazyListState = songsLazyColumnState,
                         songs = state.allSongs,
                         query = state.searchTextField,
                         isLoading = state.areSongsLoading,

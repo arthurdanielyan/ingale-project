@@ -28,16 +28,20 @@ interface LocalMainContract {
 
     sealed interface Effect : UiEffect {
         object ScrollToTop : Effect
+
+        object RequestPermissions : Effect
     }
 
     @Immutable
     data class State(
         val searchTextField: String,
-        val sections: StableList<String> = stableListOf(SECTION_SONGS, SECTION_ALBUMS, SECTION_ARTISTS),
         val allSongs: StableList<Song>,
         val albums: StableList<Album>,
         val artists: StableList<Artist>,
         val areSongsLoading: Boolean,
         val visiblePermissionDialogQueue: StableList<String>
-    ): UiState
+    ): UiState {
+
+        val sections: StableList<String> = stableListOf(SECTION_SONGS, SECTION_ALBUMS, SECTION_ARTISTS)
+    }
 }

@@ -10,17 +10,20 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
+import com.example.ingale.core.presentation.ObserveEffects
+import com.example.ingale.feature_local.main.presentation.view.LocalMainContract
 import com.example.ingale.feature_local.main.presentation.view.LocalMainContract.Event.PermissionResult
 import com.example.ingale.mvi.wrappers.StableList
+import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun PermissionRequester(
     requiredPermissions: Array<String>,
     visiblePermissionDialogQueue: StableList<String>,
     onDismiss: () -> Unit,
-    onPermissionResult: (PermissionResult) -> Unit
+    onPermissionResult: (PermissionResult) -> Unit,
+    requestPermissionsEffect: Flow<LocalMainContract.Effect.RequestPermissions>
 ) {
     val permissionsResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
@@ -30,7 +33,7 @@ fun PermissionRequester(
             }
         }
     )
-    LaunchedEffect(Unit) {
+    ObserveEffects(requestPermissionsEffect) {
         permissionsResultLauncher.launch(
             requiredPermissions
         )

@@ -10,6 +10,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -17,7 +21,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
+import androidx.compose.ui.layout.onSizeChanged
 import com.example.ingale.ui.theme.spacing
+import kotlin.math.max
 
 @Composable
 fun SongsSetButton(
@@ -26,6 +32,9 @@ fun SongsSetButton(
     text: String,
     onClick: () -> Unit
 ) {
+    var gradientRadius by remember {
+        mutableIntStateOf(1)
+    }
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -34,12 +43,16 @@ fun SongsSetButton(
                     center = Offset.Zero,
                     colors = listOf(
                         gradientWeak,
-                        Color(0, 0, 0, 77).compositeOver(gradientWeak)
+                        Color.Black.copy(alpha = DarkerAlpha).compositeOver(gradientWeak)
                     ),
+                    radius = gradientRadius.toFloat()
                 ),
-                shape = RoundedCornerShape(30)
+                shape = Shape
             )
-            .clip(RoundedCornerShape(30))
+            .onSizeChanged {
+                gradientRadius = max(it.height, it.width)
+            }
+            .clip(Shape)
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
@@ -50,3 +63,6 @@ fun SongsSetButton(
         )
     }
 }
+
+private const val DarkerAlpha = 0.3f
+private val Shape = RoundedCornerShape(30)

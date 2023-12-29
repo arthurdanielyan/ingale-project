@@ -26,7 +26,7 @@ class LocalMainViewModel(
     private val navigator: LocalMainNavigator,
     private val getSongsUseCase: GetSongsUseCase,
     private val organizeSongsUseCase: OrganizeSongsUseCase,
-    private val filterUseCase: FilterUseCase
+    private val filterUseCase: FilterUseCase,
 ) : BaseViewModel<State, Event, Effect>() {
 
     companion object {
@@ -35,7 +35,7 @@ class LocalMainViewModel(
         const val SECTION_ARTISTS = "Artists"
     }
 
-    val requiredPermissions = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    val requiredPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         arrayOf(Manifest.permission.READ_MEDIA_AUDIO, Manifest.permission.POST_NOTIFICATIONS)
     } else {
         arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -44,6 +44,9 @@ class LocalMainViewModel(
     init {
         loadSongs()
         Log.d("myLogs", "VM init")
+        sendEffect {
+            Effect.RequestPermissions
+        }
     }
 
     override fun defineInitialState(): State =
@@ -58,10 +61,11 @@ class LocalMainViewModel(
 
 
     override fun handleEvent(event: Event) {
-        when(event) {
+        when (event) {
             is Event.PermissionResult -> {
                 onPermissionResult(event.permission, event.isGranted)
             }
+
             Event.DismissPermissionDialog -> {
                 updateState {
                     copy(
@@ -73,12 +77,15 @@ class LocalMainViewModel(
                     )
                 }
             }
+
             is Event.AlbumClicked -> {
                 navigator.toSongsSet(event.songsSet)
             }
+
             is Event.ArtistClicked -> {
                 navigator.toSongsSet(event.songsSet)
             }
+
             is Event.Search -> search(event.query)
             is Event.PlaySong -> {
                 AudioPlayer.play(allSongs, allSongs.indexOf(event.song))
@@ -118,11 +125,13 @@ class LocalMainViewModel(
                 searchTextField = query
             )
         }
-        if(!this@LocalMainViewModel::allSongs.isInitialized
+        if (!this@LocalMainViewModel::allSongs.isInitialized
             || !::allAlbums.isInitialized
-            || !::allArtists.isInitialized) return
+            || !::allArtists.isInitialized
+        ) return
         viewModelScope.launch {
-            val songSeparation = filterUseCase(query, SongsSeparation(allSongs, allAlbums, allArtists))
+            val songSeparation =
+                filterUseCase(query, SongsSeparation(allSongs, allAlbums, allArtists))
             updateState {
                 copy(
                     allSongs = songSeparation.songs.toStableList(),
@@ -130,23 +139,24 @@ class LocalMainViewModel(
                     artists = songSeparation.artists.toStableList()
                 )
             }
-            sendEffect { Effect.ScrollToTop }
+            sendEffect {
+                Log.d("myLogs", "sending ScrollToTop ${currentState.allSongs.getOrNull(5)?.title}")
+                Effect.ScrollToTop
+            }
         }
     }
 
     private fun onPermissionResult(permission: String, isGranted: Boolean) {
         updateState {
             copy(
-                visiblePermissionDialogQueue = StableList(
-                    visiblePermissionDialogQueue.toMutableList().apply {
-                        if (!isGranted && !visiblePermissionDialogQueue.contains(permission)) {
-                            add(0, permission)
-                        }
+                visiblePermissionDialogQueue = visiblePermissionDialogQueue.toMutableList().apply {
+                    if (!isGranted && !visiblePermissionDialogQueue.contains(permission)) {
+                        add(0, permission)
                     }
-                )
+                }.toStableList()
             )
         }
-        if(currentState.visiblePermissionDialogQueue.isEmpty()) {
+        if (currentState.visiblePermissionDialogQueue.isEmpty()) {
             loadSongs()
         }
     }

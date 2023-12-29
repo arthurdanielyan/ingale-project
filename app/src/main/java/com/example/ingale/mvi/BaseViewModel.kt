@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 abstract class BaseViewModel<State : UiState, Event : UiEvent, Effect : UiEffect> : ViewModel() {
@@ -15,15 +15,15 @@ abstract class BaseViewModel<State : UiState, Event : UiEvent, Effect : UiEffect
     protected abstract fun defineInitialState(): State
 
     private val _state = MutableStateFlow(initialState)
-    val state = _state.asStateFlow()
+    val state = _state.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), initialState)
 
     private val _event = MutableSharedFlow<Event>()
 
     private val _effect = Channel<Effect>()
-    val effect = _effect.receiveAsFlow()
+    val effect = _effect.asFlow(viewModelScope)
 
     val currentState: State
-        get() = state.value
+        get() = _state.value
 
     init {
         subscribeEvents()
