@@ -1,0 +1,55 @@
+{
+  ConstraintSets: {
+    start: {
+      songs_icon: {
+        width: 120,
+        height: 120,
+        start: ['parent', 'start'],
+        end: ['parent', 'end'],
+        top: ['parent', 'top', 16],
+      },
+      songs_title: {
+        start: ['parent', 'start'],
+        end: ['parent', 'end'],
+        top: ['songs_icon', 'bottom', 16],
+      },
+      background: {
+        width: "spread",
+        height: "spread",
+        start: ['parent', 'start'],
+        end: ['parent', 'end'],
+        top: ['parent', 'top'],
+        bottom: ['parent', 'bottom' -16],
+      }
+    },
+    end: {
+      songs_icon: {
+        width: 50,
+        height: 50,
+        start: ['parent', 'start', 16],
+        top: ['parent', 'top', 16],
+        bottom: ['parent', 'bottom', 16],
+      },
+      songs_title: {
+        start: ['songs_icon', 'end', 8],
+        top: ['songs_icon', 'top'],
+        bottom: ['songs_icon', 'bottom'],
+      },
+      background: {
+        width: "spread",
+        height: "spread",
+        start: ['parent', 'start'],
+        end: ['parent', 'end'],
+        top: ['parent', 'top'],
+        bottom: ['parent', 'bottom'],
+      }
+    }
+  },
+  Transitions: {
+    default: {
+      from: 'start',
+      to: 'end',
+      pathMotionArc: 'startVertical'
+    }
+  }
+}
