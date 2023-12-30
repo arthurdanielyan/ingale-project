@@ -52,6 +52,7 @@ import com.example.ingale.mvi.wrappers.StableList
 import com.example.ingale.ui.theme.colorScheme.colors
 import com.example.ingale.ui.theme.spacing
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
@@ -81,9 +82,10 @@ fun LocalMainScreen(
     ObserveEffects(effects) { effect ->
         when(effect) {
             is Effect.ScrollToTop -> {
+                delay(100)
                 songsLazyColumnState.scrollToItem(0)
-                albumsGridsState.scrollToItem(0)
-                artistsGridsState.scrollToItem(0)
+                albumsGridsState.animateScrollToItem(0)
+                artistsGridsState.animateScrollToItem(0)
             }
 
             Effect.RequestPermissions -> {
