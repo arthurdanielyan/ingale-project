@@ -19,7 +19,7 @@
         start: ['parent', 'start'],
         end: ['parent', 'end'],
         top: ['parent', 'top'],
-        bottom: ['parent', 'bottom' -16],
+        bottom: ['parent', 'bottom', -16],
       }
     },
     end: {
