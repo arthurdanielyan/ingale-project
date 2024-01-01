@@ -71,7 +71,7 @@ fun LocalMainScreen(
             sendEvent(Event.DismissPermissionDialog)
         },
         onPermissionResult = sendEvent,
-        requestPermissionsEffect = effects.rememberFlowOf(Effect.RequestPermissions::class)
+        requestPermissionsEffect = effects.rememberFlowOf<Effect.RequestPermissions>()
     )
 
     val songsLazyColumnState = rememberLazyListState()

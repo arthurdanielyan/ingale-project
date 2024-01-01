@@ -8,10 +8,11 @@ import android.os.Build
 import com.example.ingale.core.di.coroutineDispatcherModule
 import com.example.ingale.feature_local.featureLocalModule
 import com.example.ingale.feature_yt.ytModule
+import dagger.hilt.android.HiltAndroidApp
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
-
+@HiltAndroidApp
 class IngaleApplication : Application() {
 
     companion object {

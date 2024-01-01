@@ -4,8 +4,9 @@ import com.example.ingale.feature_local.main.domain.model.SongsSeparation
 import com.example.ingale.mvi.wrappers.toStableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class FilterUseCase(
+class FilterUseCase @Inject constructor(
     private val dispatcher: CoroutineDispatcher
 ) {
 

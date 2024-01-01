@@ -3,6 +3,7 @@ package com.example.ingale.feature_local
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -30,9 +31,10 @@ fun LocalSectionNavGraph() {
             route = Screens.Local.MainScreen.route,
         ) {
             LaunchedEffect(Unit) { bottomNavigationEffects.emit(BottomNavigationEffects.ShowBottomBar) }
-            val vm = ingaleViewModels<LocalMainViewModel>(navigator = LocalMainNavigator(navController))
+//            val vm = ingaleViewModels<LocalMainViewModel>(navigator = LocalMainNavigator(navController))
+            val vm = hiltViewModel<LocalMainViewModel>()
             LocalMainScreen(
-                state = vm.state.collectAsState().value,
+                state = vm.state.collectAsState().value!!,
                 sendEvent = vm::sendEvent,
                 effects = vm.effect,
                 requiredPermissions = vm.requiredPermissions
@@ -50,7 +52,7 @@ fun LocalSectionNavGraph() {
                 navigator = LocalSongsSetNavigator(navController)
             )
             SongsSetScreen(
-                state = vm.state.collectAsState().value,
+                state = vm.state.collectAsState().value!!,
                 sendEvent = vm::sendEvent
             )
         }

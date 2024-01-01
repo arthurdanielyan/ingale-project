@@ -10,11 +10,10 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.shareIn
-import kotlin.reflect.KClass
 
 @Composable
-fun <E: UiEffect> Flow<*>.rememberFlowOf(klass: KClass<E>) = remember {
-    this.filterIsInstance(klass)
+inline fun <reified E: UiEffect> Flow<*>.rememberFlowOf(): Flow<E> = remember {
+    this.filterIsInstance<E>()
 }
 
 /**

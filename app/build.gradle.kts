@@ -1,16 +1,8 @@
-//val compose_ui_version: String by rootProject.extra
-
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.hilt.android)
 }
 
 kapt {
@@ -24,7 +16,7 @@ android {
     defaultConfig {
         applicationId = "com.example.ingale"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -45,24 +37,22 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.ui.version.get()
+        kotlinCompilerExtensionVersion = "1.5.7"
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "1.8"
     }
 }
 
 dependencies {
     implementation(libs.androidx.ktx)
-//    implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.9.0"))
     implementation(platform(libs.kotlin.bom))
     implementation(libs.androidx.lifecycle)
     implementation(libs.androidx.activity.compose)
-//    implementation(platform("androidx.compose:compose-bom:2023.06.01"))
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
@@ -74,7 +64,6 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso)
     androidTestImplementation(platform(libs.androidx.compose.bom))
-//    androidTestImplementation(platform("androidx.compose:compose-bom:2022.10.00"))
     androidTestImplementation(libs.androidx.compose.junit)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
@@ -89,6 +78,16 @@ dependencies {
     implementation("io.insert-koin:koin-core:3.4.3")
     implementation("io.insert-koin:koin-android:3.4.3")
     implementation("io.insert-koin:koin-androidx-compose:3.4.6")
+
+    // Dagger-Hilt
+    implementation(libs.hilt.android)
+    annotationProcessor(libs.hilt.compiler)
+    kapt(libs.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+//    implementation("com.google.dagger:hilt-android:2.50")
+//    annotationProcessor("com.google.dagger:hilt-compiler:2.50")
+//    kapt("com.google.dagger:hilt-compiler:2.50")
+//    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
     // Retrofit
     implementation(libs.google.gson)

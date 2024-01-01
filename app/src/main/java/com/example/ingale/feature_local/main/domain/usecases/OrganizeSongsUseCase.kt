@@ -8,8 +8,9 @@ import com.example.ingale.mvi.wrappers.stableListOf
 import com.example.ingale.mvi.wrappers.toStableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class OrganizeSongsUseCase(
+class OrganizeSongsUseCase @Inject constructor(
     private val dispatcher: CoroutineDispatcher
 ) {
     suspend operator fun invoke(songs: List<Song>): SongsSeparation =

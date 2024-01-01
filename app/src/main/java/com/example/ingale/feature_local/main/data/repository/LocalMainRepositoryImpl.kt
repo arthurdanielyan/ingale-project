@@ -12,10 +12,12 @@ import android.util.Log
 import android.util.Size
 import com.example.ingale.core.domain.model.Song
 import com.example.ingale.feature_local.main.domain.repository.LocalMainRepository
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
+import javax.inject.Inject
 
-class LocalMainRepositoryImpl(
-    private val applicationContext: Context
+class LocalMainRepositoryImpl @Inject constructor(
+    @ApplicationContext private val applicationContext: Context
 ) : LocalMainRepository {
 
     override fun getSongs(): List<Song> {

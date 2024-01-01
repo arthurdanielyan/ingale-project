@@ -4,8 +4,9 @@ import com.example.ingale.core.domain.model.Song
 import com.example.ingale.feature_local.main.domain.repository.LocalMainRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class GetSongsUseCase(
+class GetSongsUseCase @Inject constructor(
     private val dispatcher: CoroutineDispatcher,
     private val repository: LocalMainRepository
 ) {

@@ -18,21 +18,17 @@ import com.example.ingale.mvi.BaseViewModel
 import com.example.ingale.mvi.wrappers.StableList
 import com.example.ingale.mvi.wrappers.emptyStableList
 import com.example.ingale.mvi.wrappers.toStableList
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-
-class LocalMainViewModel(
-    private val navigator: LocalMainNavigator,
+@HiltViewModel
+class LocalMainViewModel @Inject constructor(
+//    private val navigator: LocalMainNavigator,
     private val getSongsUseCase: GetSongsUseCase,
     private val organizeSongsUseCase: OrganizeSongsUseCase,
     private val filterUseCase: FilterUseCase,
-) : BaseViewModel<State, Event, Effect>() {
-
-    companion object {
-        const val SECTION_SONGS = "Songs"
-        const val SECTION_ALBUMS = "Albums"
-        const val SECTION_ARTISTS = "Artists"
-    }
+) : BaseViewModel<State, Event, Effect> () {
 
     val requiredPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         arrayOf(Manifest.permission.READ_MEDIA_AUDIO, Manifest.permission.POST_NOTIFICATIONS)
@@ -77,11 +73,11 @@ class LocalMainViewModel(
             }
 
             is Event.AlbumClicked -> {
-                navigator.toSongsSet(event.songsSet)
+//                navigator.toSongsSet(event.songsSet)
             }
 
             is Event.ArtistClicked -> {
-                navigator.toSongsSet(event.songsSet)
+//                navigator.toSongsSet(event.songsSet)
             }
 
             is Event.Search -> search(event.query)

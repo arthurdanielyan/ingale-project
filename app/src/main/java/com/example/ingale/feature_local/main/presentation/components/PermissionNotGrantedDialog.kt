@@ -2,12 +2,13 @@ package com.example.ingale.feature_local.main.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -56,7 +57,14 @@ fun PermissionNotGrantedDialog(
                     modifier = Modifier.padding(24.dp),
                     text = descriptionProvider.description
                 )
-                HorizontalDivider()
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .requiredHeight(1.dp)
+                        .background(
+                            color = MaterialTheme.colors.onBackground
+                        )
+                )
                 Text(
                     text = if (isPermanentlyDeclined) "Go to settings" else "OK",
                     modifier = Modifier
