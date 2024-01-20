@@ -1,4 +1,4 @@
-package com.example.ingale.feature_local.main.presentation.components
+package com.example.ingale.feature_local.main.presentation.ui_components
 
 
 import androidx.compose.foundation.background

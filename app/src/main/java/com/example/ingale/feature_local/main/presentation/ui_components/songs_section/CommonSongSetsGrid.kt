@@ -1,4 +1,4 @@
-package com.example.ingale.feature_local.main.presentation.components.songs_section
+package com.example.ingale.feature_local.main.presentation.ui_components.songs_section
 
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi

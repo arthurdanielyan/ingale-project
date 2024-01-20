@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.IntSize
-import com.example.ingale.ui.theme.colorScheme.colors
+import com.example.ingale.ui.theme.colorScheme.ingaleColors
 
 fun Modifier.navigationClickable(
     enabled: Boolean = true,
@@ -60,7 +60,7 @@ fun Modifier.shimmer(): Modifier = composed {
         0.9f
     }
 
-    val colorScheme = MaterialTheme.colors
+    val colorScheme = MaterialTheme.ingaleColors
     val bgColor = remember {
         colorScheme.primaryInverse
     }

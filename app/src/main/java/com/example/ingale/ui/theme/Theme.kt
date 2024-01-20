@@ -12,9 +12,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import com.example.ingale.feature_local.local_navigation.LocalNavigation
 import com.example.ingale.ui.theme.colorScheme.ColorSchemeDark
 import com.example.ingale.ui.theme.colorScheme.ColorSchemeLight
 import com.example.ingale.ui.theme.colorScheme.LocalColorScheme
+import org.koin.compose.koinInject
 
 val PurpleGrey80 = Color(0xFFCCC2DC)
 val Pink80 = Color(0xFFEFB8C8)
@@ -49,7 +51,6 @@ private val LightColorScheme = lightColorScheme(
 fun IngaleTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -73,7 +74,8 @@ fun IngaleTheme(
     CompositionLocalProvider(
         LocalSpacing provides Spacing(),
         LocalColorScheme provides
-                if(isSystemInDarkTheme()) ColorSchemeDark() else ColorSchemeLight()
+                if(isSystemInDarkTheme()) ColorSchemeDark() else ColorSchemeLight(),
+        LocalNavigation provides koinInject()
     ) {
         MaterialTheme(
             colorScheme = colorScheme,

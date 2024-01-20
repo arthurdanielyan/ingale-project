@@ -3,20 +3,19 @@ package com.example.ingale.feature_local.songs_set.presentation.view
 import androidx.lifecycle.SavedStateHandle
 import com.example.ingale.core.audio_player.AudioPlayer
 import com.example.ingale.feature_local.local_core.domain.model.SongsSet
-import com.example.ingale.main_navigation.Screens
-import com.example.ingale.mvi.BaseViewModel
+import com.example.ingale.feature_local.local_navigation.LocalDestination
 import com.example.ingale.feature_local.songs_set.presentation.view.LocalSongsSetContract.Effect
 import com.example.ingale.feature_local.songs_set.presentation.view.LocalSongsSetContract.Event
 import com.example.ingale.feature_local.songs_set.presentation.view.LocalSongsSetContract.State
+import com.example.ingale.mvi.BaseViewModel
 import com.example.ingale.mvi.wrappers.emptyStableList
 
 class SongsSetViewModel(
-    private val navigator: LocalSongsSetNavigator,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<State, Event, Effect>() {
 
     init {
-        savedStateHandle.get<SongsSet>(Screens.Local.SongsSetScreen.ARG_SONGS_SET).let {
+        savedStateHandle.get<SongsSet>(LocalDestination.SongsSetScreen.argumentKey).let {
             updateState {
                 copy(
                     songsSetInfo = it!!

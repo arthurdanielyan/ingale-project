@@ -31,7 +31,7 @@ import com.example.ingale.feature_local.local_core.domain.functions.highlight
 import com.example.ingale.feature_local.local_core.domain.model.SongOperations
 import com.example.ingale.feature_local.local_core.presentation.SongOperationsBottomSheet
 import com.example.ingale.core.domain.model.Song
-import com.example.ingale.ui.theme.colorScheme.colors
+import com.example.ingale.ui.theme.colorScheme.ingaleColors
 import com.example.ingale.ui.theme.spacing
 
 @SuppressLint("SuspiciousIndentation")
@@ -50,7 +50,7 @@ fun SongItem(
             .requiredHeight(SongItemHeight)
             .background(
                 shape = RoundedCornerShape(8.dp),
-                color = MaterialTheme.colors.background,
+                color = MaterialTheme.ingaleColors.background,
             )
             .clip(RoundedCornerShape(8.dp))
             .clickable(

@@ -1,4 +1,4 @@
-package com.example.ingale.feature_local.main.presentation.components
+package com.example.ingale.feature_local.main.presentation.ui_components
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateDpAsState
@@ -30,7 +30,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.example.ingale.mvi.wrappers.StableList
-import com.example.ingale.ui.theme.colorScheme.colors
+import com.example.ingale.ui.theme.colorScheme.ingaleColors
 import kotlin.math.roundToInt
 
 @Composable
@@ -107,7 +107,7 @@ fun <T> TabRow(
                 .offset { IntOffset(offsetAnim, 0) }
                 .width(widthAnim)
                 .height(1.dp)
-                .background(MaterialTheme.colors.onBackground)
+                .background(MaterialTheme.ingaleColors.onBackground)
         )
     }
 }

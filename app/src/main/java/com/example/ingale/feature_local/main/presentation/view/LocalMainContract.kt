@@ -18,18 +18,16 @@ interface LocalMainContract {
 
     sealed interface Event : UiEvent {
         class PermissionResult(val permission: String, val isGranted: Boolean) : Event
-        object DismissPermissionDialog : Event
+        data object DismissPermissionDialog : Event
         class AlbumClicked(val songsSet: SongsSet) : Event
         class ArtistClicked(val songsSet: SongsSet) : Event
         class Search(val query: String) : Event
-
         class PlaySong(val song: Song) : Event
     }
 
     sealed interface Effect : UiEffect {
-        object ScrollToTop : Effect
-
-        object RequestPermissions : Effect
+        data object ScrollToTop : Effect
+        data object RequestPermissions : Effect
     }
 
     @Immutable

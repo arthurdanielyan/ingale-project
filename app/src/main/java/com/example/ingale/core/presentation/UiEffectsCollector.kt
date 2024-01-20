@@ -21,3 +21,15 @@ fun <T: UiEffect> ObserveEffects(flow: Flow<T>, onEvent: suspend (T) -> Unit) {
         }
     }
 }
+
+@Composable
+fun <T> ComposeCollect(flow: Flow<T>, onEvent: suspend (T) -> Unit) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(flow, lifecycleOwner.lifecycle) {
+        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            withContext(Dispatchers.Main.immediate) {
+                flow.collect(onEvent)
+            }
+        }
+    }
+}

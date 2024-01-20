@@ -17,11 +17,12 @@ interface ColorScheme {
     val secondaryText: Color
 }
 
-val LocalColorScheme: ProvidableCompositionLocal<ColorScheme>
-    = compositionLocalOf { ColorSchemeLight() }
+val LocalColorScheme: ProvidableCompositionLocal<ColorScheme> = compositionLocalOf {
+    throw Exception("No theme provided")
+}
 
 @Suppress("UnusedReceiverParameter")
-val MaterialTheme.colors: ColorScheme
+val MaterialTheme.ingaleColors: ColorScheme
     @Composable
     @ReadOnlyComposable
     get() = LocalColorScheme.current

@@ -49,7 +49,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.ui.version.get()
+        kotlinCompilerExtensionVersion = "1.5.4"
     }
     kotlinOptions {
         jvmTarget = "17"

@@ -5,6 +5,8 @@ import android.os.Build
 import androidx.lifecycle.viewModelScope
 import com.example.ingale.core.audio_player.AudioPlayer
 import com.example.ingale.core.domain.model.Song
+import com.example.ingale.feature_local.local_navigation.LocalDestination
+import com.example.ingale.feature_local.local_navigation.LocalNavigator
 import com.example.ingale.feature_local.main.domain.model.Album
 import com.example.ingale.feature_local.main.domain.model.Artist
 import com.example.ingale.feature_local.main.domain.model.SongsSeparation
@@ -22,7 +24,7 @@ import kotlinx.coroutines.launch
 
 
 class LocalMainViewModel(
-    private val navigator: LocalMainNavigator,
+    private val navigator: LocalNavigator,
     private val getSongsUseCase: GetSongsUseCase,
     private val organizeSongsUseCase: OrganizeSongsUseCase,
     private val filterUseCase: FilterUseCase,
@@ -34,11 +36,9 @@ class LocalMainViewModel(
         const val SECTION_ARTISTS = "Artists"
     }
 
-    val requiredPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        arrayOf(Manifest.permission.READ_MEDIA_AUDIO, Manifest.permission.POST_NOTIFICATIONS)
-    } else {
-        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-    }
+    private lateinit var allSongs: List<Song>
+    private lateinit var allAlbums: List<Album>
+    private lateinit var allArtists: List<Artist>
 
     init {
         loadSongs()
@@ -77,11 +77,11 @@ class LocalMainViewModel(
             }
 
             is Event.AlbumClicked -> {
-                navigator.toSongsSet(event.songsSet)
+                navigator.navigate(LocalDestination.SongsSetScreen, event.songsSet)
             }
 
             is Event.ArtistClicked -> {
-                navigator.toSongsSet(event.songsSet)
+                navigator.navigate(LocalDestination.SongsSetScreen, event.songsSet)
             }
 
             is Event.Search -> search(event.query)
@@ -90,10 +90,6 @@ class LocalMainViewModel(
             }
         }
     }
-
-    private lateinit var allSongs: List<Song>
-    private lateinit var allAlbums: List<Album>
-    private lateinit var allArtists: List<Artist>
 
     private fun loadSongs() {
         viewModelScope.launch {

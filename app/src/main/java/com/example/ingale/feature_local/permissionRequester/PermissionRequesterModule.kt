@@ -1,0 +1,5 @@
+package com.example.ingale.feature_local.permissionRequester
+
+import com.example.ingale.feature_local.permissionRequester.presentation.presentationModule
+
+val permissionRequesterModule = presentationModule

@@ -6,6 +6,6 @@ import org.koin.dsl.module
 
 val presentationModule = module {
     viewModel {parameters ->
-        SongsSetViewModel(parameters[0], parameters[1])
+        SongsSetViewModel(parameters[0])
     }
 }

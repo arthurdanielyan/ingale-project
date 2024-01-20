@@ -7,8 +7,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import com.example.ingale.feature_local.permissionRequester.presentation.RequiredPermissionsRequester
 import com.example.ingale.ui.theme.IngaleTheme
-import com.example.ingale.ui.theme.colorScheme.colors
+import com.example.ingale.ui.theme.colorScheme.ingaleColors
 
 class MainActivity : ComponentActivity() {
 
@@ -19,8 +20,9 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
+                    color = MaterialTheme.ingaleColors.background
                 ) {
+                    RequiredPermissionsRequester()
                     BottomNavigation()
                 }
             }

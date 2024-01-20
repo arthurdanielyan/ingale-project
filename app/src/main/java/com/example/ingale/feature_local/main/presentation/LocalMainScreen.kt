@@ -40,16 +40,15 @@ import androidx.compose.ui.unit.dp
 import com.example.ingale.core.presentation.ObserveEffects
 import com.example.ingale.feature_local.local_core.domain.model.SongsSet
 import com.example.ingale.feature_local.local_core.presentation.SongsSection
-import com.example.ingale.feature_local.main.presentation.components.PermissionRequester
-import com.example.ingale.feature_local.main.presentation.components.SongsSetButton
-import com.example.ingale.feature_local.main.presentation.components.TabRow
-import com.example.ingale.feature_local.main.presentation.components.songs_section.CommonSongSetsGrid
+import com.example.ingale.feature_local.permissionRequester.presentation.RequiredPermissionsRequester
+import com.example.ingale.feature_local.main.presentation.ui_components.SongsSetButton
+import com.example.ingale.feature_local.main.presentation.ui_components.TabRow
+import com.example.ingale.feature_local.main.presentation.ui_components.songs_section.CommonSongSetsGrid
 import com.example.ingale.feature_local.main.presentation.view.LocalMainContract
 import com.example.ingale.feature_local.main.presentation.view.LocalMainContract.Effect
 import com.example.ingale.feature_local.main.presentation.view.LocalMainContract.Event
-import com.example.ingale.mvi.rememberFlowOf
 import com.example.ingale.mvi.wrappers.StableList
-import com.example.ingale.ui.theme.colorScheme.colors
+import com.example.ingale.ui.theme.colorScheme.ingaleColors
 import com.example.ingale.ui.theme.spacing
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -60,20 +59,9 @@ import kotlinx.coroutines.launch
 @Composable
 fun LocalMainScreen(
     state: LocalMainContract.State,
-    sendEvent: (event: LocalMainContract.Event) -> Unit,
-    effects: Flow<LocalMainContract.Effect>,
-    requiredPermissions: Array<String>
+    sendEvent: (event: Event) -> Unit,
+    effects: Flow<Effect>
 ) {
-    PermissionRequester(
-        requiredPermissions = requiredPermissions,
-        visiblePermissionDialogQueue = state.visiblePermissionDialogQueue,
-        onDismiss = {
-            sendEvent(Event.DismissPermissionDialog)
-        },
-        onPermissionResult = sendEvent,
-        requestPermissionsEffect = effects.rememberFlowOf(Effect.RequestPermissions::class)
-    )
-
     val songsLazyColumnState = rememberLazyListState()
     val albumsGridsState = rememberLazyGridState()
     val artistsGridsState = rememberLazyGridState()
@@ -89,7 +77,7 @@ fun LocalMainScreen(
             }
 
             Effect.RequestPermissions -> {
-                /** implemented in [PermissionRequester] */
+                /** implemented in [RequiredPermissionsRequester] */
             }
         }
     }
@@ -110,7 +98,7 @@ fun LocalMainScreen(
     Column(
         modifier = Modifier
             .background(
-                color = MaterialTheme.colors.background
+                color = MaterialTheme.ingaleColors.background
             )
             .padding(
                 top = 8.dp
@@ -120,7 +108,7 @@ fun LocalMainScreen(
             placeholder = {
                 Text(
                     text = "Search",
-                    color = MaterialTheme.colors.onBackground
+                    color = MaterialTheme.ingaleColors.onBackground
                 )
             },
             value = state.searchTextField,
@@ -131,7 +119,7 @@ fun LocalMainScreen(
                 Icon(
                     imageVector = Icons.Default.Close,
                     contentDescription = "Remove search text",
-                    tint = MaterialTheme.colors.onBackground,
+                    tint = MaterialTheme.ingaleColors.onBackground,
                     modifier = Modifier.clickable {
                         sendEvent(Event.Search(""))
                     }
@@ -150,9 +138,9 @@ fun LocalMainScreen(
                     shape = RoundedCornerShape(5000.dp)
                 ),
             colors = OutlinedTextFieldDefaults.colors(
-                focusedTextColor = MaterialTheme.colors.onBackground,
+                focusedTextColor = MaterialTheme.ingaleColors.onBackground,
                 unfocusedTextColor = Color.Green,//MaterialTheme.colors.secondaryText,
-                focusedBorderColor = MaterialTheme.colors.onBackground,
+                focusedBorderColor = MaterialTheme.ingaleColors.onBackground,
             )
         )
         Row(

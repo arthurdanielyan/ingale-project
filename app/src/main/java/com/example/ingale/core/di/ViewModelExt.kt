@@ -5,7 +5,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import com.example.ingale.main_navigation.Navigator
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -14,13 +13,11 @@ inline fun <reified T : ViewModel> ingaleViewModels(
     savedStateHandle: SavedStateHandle,
     viewModelStoreOwner: ViewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current) {
         "No ViewModelStoreOwner was provided via LocalViewModelStoreOwner"
-    },
-    navigator: Navigator
+    }
 ) = koinViewModel<T>(
     viewModelStoreOwner = viewModelStoreOwner,
     parameters = {
         parametersOf(
-            navigator,
             savedStateHandle
         )
     }
@@ -30,13 +27,7 @@ inline fun <reified T : ViewModel> ingaleViewModels(
 inline fun <reified T : ViewModel> ingaleViewModels(
     viewModelStoreOwner: ViewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current) {
         "No ViewModelStoreOwner was provided via LocalViewModelStoreOwner"
-    },
-    navigator: Navigator
-) = koinViewModel<T>(
-    viewModelStoreOwner = viewModelStoreOwner,
-    parameters = {
-        parametersOf(
-            navigator
-        )
     }
+) = koinViewModel<T>(
+    viewModelStoreOwner = viewModelStoreOwner
 )

@@ -3,6 +3,7 @@ package com.example.ingale.mvi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -15,7 +16,7 @@ abstract class BaseViewModel<State : UiState, Event : UiEvent, Effect : UiEffect
     protected abstract fun defineInitialState(): State
 
     private val _state = MutableStateFlow(initialState)
-    val state = _state.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), initialState)
+    open val state = _state.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), initialState)
 
     private val _event = MutableSharedFlow<Event>()
 
@@ -55,4 +56,7 @@ abstract class BaseViewModel<State : UiState, Event : UiEvent, Effect : UiEffect
             _state.emit(currentState.modify())
         }
     }
+
+    protected fun Flow<State>.viewModelState() =
+        this.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), initialState)
 }
