@@ -1,4 +1,4 @@
-package com.example.ingale.feature_local.local_navigation
+package com.example.ingale.feature_local.local_navigation.screen_navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -8,7 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.ingale.core.di.ingaleViewModels
-import com.example.ingale.core.presentation.ComposeCollect
+import com.example.ingale.core.presentation.flows.ComposeCollect
+import com.example.ingale.core.presentation.navigation.destination.putScreenData
 import com.example.ingale.feature_local.main.presentation.LocalMainScreen
 import com.example.ingale.feature_local.main.presentation.view.LocalMainViewModel
 import com.example.ingale.feature_local.songs_set.presentation.SongsSetScreen
@@ -28,7 +29,7 @@ fun LocalSectionNavGraph() {
         startDestination = Screens.Local.MainScreen.route
     ) {
         composable(
-            route = LocalDestination.MainScreen.route
+            route = LocalScreenDestination.MainScreen.route
         ) {
             LaunchedEffect(Unit) { bottomNavigationEffects.emit(BottomNavigationEffects.ShowBottomBar) }
             val vm = ingaleViewModels<LocalMainViewModel>()
@@ -40,7 +41,7 @@ fun LocalSectionNavGraph() {
         }
 
         composable(
-            route = LocalDestination.SongsSetScreen.route
+            route = LocalScreenDestination.SongsSetScreen.route
         ) {
             LaunchedEffect(Unit) {
                 bottomNavigationEffects.emit(BottomNavigationEffects.HideBottomBar)
@@ -61,9 +62,10 @@ private fun ObserveNavigationEvents(navController: NavController) {
     val navigation = LocalNavigation.current
     ComposeCollect(navigation.navigationEvent) { navEvent ->
         navController.navigate(navEvent.destination.route)
-        navEvent.argument?.let {
-            navController.currentBackStackEntry?.savedStateHandle
-                ?.set(navEvent.destination.argumentKey!!, navEvent.argument)
-        }
+        navController.currentBackStackEntry?.savedStateHandle
+            ?.putScreenData(
+                argument = navEvent.argument,
+                onResult = navEvent.onResult
+            )
     }
 }

@@ -2,8 +2,8 @@ package com.example.ingale.feature_local.songs_set.presentation.view
 
 import androidx.lifecycle.SavedStateHandle
 import com.example.ingale.core.audio_player.AudioPlayer
+import com.example.ingale.core.presentation.navigation.destination.getArgument
 import com.example.ingale.feature_local.local_core.domain.model.SongsSet
-import com.example.ingale.feature_local.local_navigation.LocalDestination
 import com.example.ingale.feature_local.songs_set.presentation.view.LocalSongsSetContract.Effect
 import com.example.ingale.feature_local.songs_set.presentation.view.LocalSongsSetContract.Event
 import com.example.ingale.feature_local.songs_set.presentation.view.LocalSongsSetContract.State
@@ -15,10 +15,10 @@ class SongsSetViewModel(
 ) : BaseViewModel<State, Event, Effect>() {
 
     init {
-        savedStateHandle.get<SongsSet>(LocalDestination.SongsSetScreen.argumentKey).let {
+        savedStateHandle.getArgument<SongsSet>()?.let {
             updateState {
                 copy(
-                    songsSetInfo = it!!
+                    songsSetInfo = it
                 )
             }
         }

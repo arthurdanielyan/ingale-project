@@ -12,7 +12,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
-import com.example.ingale.feature_local.local_navigation.LocalNavigation
+import com.example.ingale.core.presentation.navigation.dialog_navigation.LocalDialogNavigation
+import com.example.ingale.core.presentation.navigation.dialog_navigation.LocalDialogViewModelStoreOwner
+import com.example.ingale.feature_local.local_navigation.screen_navigation.LocalNavigation
 import com.example.ingale.ui.theme.colorScheme.ColorSchemeDark
 import com.example.ingale.ui.theme.colorScheme.ColorSchemeLight
 import com.example.ingale.ui.theme.colorScheme.LocalColorScheme
@@ -75,7 +77,9 @@ fun IngaleTheme(
         LocalSpacing provides Spacing(),
         LocalColorScheme provides
                 if(isSystemInDarkTheme()) ColorSchemeDark() else ColorSchemeLight(),
-        LocalNavigation provides koinInject()
+        LocalNavigation provides koinInject(),
+        LocalDialogNavigation provides koinInject(),
+        LocalDialogViewModelStoreOwner provides koinInject()
     ) {
         MaterialTheme(
             colorScheme = colorScheme,

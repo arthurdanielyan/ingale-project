@@ -1,4 +1,4 @@
-package com.example.ingale.feature_local.permissionRequester.presentation.view
+package com.example.ingale.feature_local.required_permissions_requester_dialog.presentation.view
 
 import androidx.compose.runtime.Immutable
 import com.example.ingale.mvi.UiEffect
@@ -7,7 +7,7 @@ import com.example.ingale.mvi.UiState
 import com.example.ingale.mvi.wrappers.StableList
 import com.example.ingale.mvi.wrappers.emptyStableList
 
-interface PermissionRequesterContract {
+interface RequiredPermissionsRequesterContract {
 
     sealed interface Event : UiEvent {
         data class PermissionResult(

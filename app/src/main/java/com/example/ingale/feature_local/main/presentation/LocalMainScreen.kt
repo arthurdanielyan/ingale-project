@@ -37,10 +37,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.ingale.core.presentation.ObserveEffects
+import com.example.ingale.core.presentation.flows.ObserveEffects
 import com.example.ingale.feature_local.local_core.domain.model.SongsSet
 import com.example.ingale.feature_local.local_core.presentation.SongsSection
-import com.example.ingale.feature_local.permissionRequester.presentation.RequiredPermissionsRequester
 import com.example.ingale.feature_local.main.presentation.ui_components.SongsSetButton
 import com.example.ingale.feature_local.main.presentation.ui_components.TabRow
 import com.example.ingale.feature_local.main.presentation.ui_components.songs_section.CommonSongSetsGrid
@@ -74,10 +73,6 @@ fun LocalMainScreen(
                 songsLazyColumnState.scrollToItem(0)
                 albumsGridsState.animateScrollToItem(0)
                 artistsGridsState.animateScrollToItem(0)
-            }
-
-            Effect.RequestPermissions -> {
-                /** implemented in [RequiredPermissionsRequester] */
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.example.ingale.core.presentation
+package com.example.ingale.core.presentation.ui
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode

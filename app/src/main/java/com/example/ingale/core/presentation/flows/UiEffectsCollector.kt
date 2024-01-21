@@ -1,4 +1,4 @@
-package com.example.ingale.core.presentation
+package com.example.ingale.core.presentation.flows
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect

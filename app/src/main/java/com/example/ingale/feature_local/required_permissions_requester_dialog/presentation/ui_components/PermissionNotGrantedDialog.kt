@@ -1,4 +1,4 @@
-package com.example.ingale.feature_local.permissionRequester.presentation.ui_components
+package com.example.ingale.feature_local.required_permissions_requester_dialog.presentation.ui_components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

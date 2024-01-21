@@ -1,5 +1,3 @@
-@file:Suppress("ObjectPropertyName")
-
 package com.example.ingale.main_navigation
 
 import androidx.compose.animation.core.LinearEasing
@@ -43,7 +41,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.example.ingale.feature_local.local_navigation.LocalSectionNavGraph
+import com.example.ingale.feature_local.local_navigation.screen_navigation.LocalSectionNavGraph
 import com.example.ingale.feature_local.local_core.presentation.song_item.SongIcon
 import com.example.ingale.ui.theme.colorScheme.ingaleColors
 import com.example.ingale.ui.theme.spacing
@@ -52,11 +50,12 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 sealed interface BottomNavigationEffects {
-    object ShowBottomBar : BottomNavigationEffects
-    object HideBottomBar : BottomNavigationEffects
+    data object ShowBottomBar : BottomNavigationEffects
+    data object HideBottomBar : BottomNavigationEffects
 }
 
 val bottomNavigationEffects = MutableSharedFlow<BottomNavigationEffects>()
+@Suppress("ObjectPropertyName")
 private val _bottomNavigationEffects = bottomNavigationEffects.asSharedFlow()
 
 @OptIn(ExperimentalFoundationApi::class)

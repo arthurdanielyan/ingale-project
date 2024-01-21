@@ -30,8 +30,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.example.ingale.core.presentation.navigationClickable
-import com.example.ingale.core.presentation.shimmer
+import com.example.ingale.core.presentation.ui.navigationClickable
+import com.example.ingale.core.presentation.ui.shimmer
 import com.example.ingale.feature_local.local_core.domain.functions.highlight
 import com.example.ingale.feature_local.local_core.domain.model.SongsSet
 import com.example.ingale.feature_local.local_core.presentation.song_item.SongIcon

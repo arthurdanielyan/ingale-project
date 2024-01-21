@@ -27,7 +27,6 @@ interface LocalMainContract {
 
     sealed interface Effect : UiEffect {
         data object ScrollToTop : Effect
-        data object RequestPermissions : Effect
     }
 
     @Immutable

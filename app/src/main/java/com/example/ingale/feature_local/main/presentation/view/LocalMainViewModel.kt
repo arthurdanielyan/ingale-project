@@ -1,12 +1,12 @@
 package com.example.ingale.feature_local.main.presentation.view
 
-import android.Manifest
-import android.os.Build
 import androidx.lifecycle.viewModelScope
 import com.example.ingale.core.audio_player.AudioPlayer
 import com.example.ingale.core.domain.model.Song
-import com.example.ingale.feature_local.local_navigation.LocalDestination
-import com.example.ingale.feature_local.local_navigation.LocalNavigator
+import com.example.ingale.core.presentation.navigation.dialog_navigation.DialogDestination.LocalDialogDestination
+import com.example.ingale.core.presentation.navigation.dialog_navigation.DialogNavigator
+import com.example.ingale.feature_local.local_navigation.screen_navigation.LocalScreenDestination
+import com.example.ingale.feature_local.local_navigation.screen_navigation.LocalNavigator
 import com.example.ingale.feature_local.main.domain.model.Album
 import com.example.ingale.feature_local.main.domain.model.Artist
 import com.example.ingale.feature_local.main.domain.model.SongsSeparation
@@ -25,6 +25,7 @@ import kotlinx.coroutines.launch
 
 class LocalMainViewModel(
     private val navigator: LocalNavigator,
+    dialogNavigator: DialogNavigator,
     private val getSongsUseCase: GetSongsUseCase,
     private val organizeSongsUseCase: OrganizeSongsUseCase,
     private val filterUseCase: FilterUseCase,
@@ -41,10 +42,19 @@ class LocalMainViewModel(
     private lateinit var allArtists: List<Artist>
 
     init {
-        loadSongs()
-        sendEffect {
-            Effect.RequestPermissions
-        }
+        dialogNavigator.activate<Boolean>(
+            LocalDialogDestination.RequiredPermissionRequester,
+            onResult = { shouldLoadSongs ->
+                dialogNavigator.dismiss()
+                if(shouldLoadSongs) {
+                    loadSongs()
+                } else {
+                    updateState {
+                        copy(areSongsLoading = false)
+                    }
+                }
+            }
+        )
     }
 
     override fun defineInitialState(): State =
@@ -77,11 +87,11 @@ class LocalMainViewModel(
             }
 
             is Event.AlbumClicked -> {
-                navigator.navigate(LocalDestination.SongsSetScreen, event.songsSet)
+                navigator.navigate(LocalScreenDestination.SongsSetScreen, event.songsSet)
             }
 
             is Event.ArtistClicked -> {
-                navigator.navigate(LocalDestination.SongsSetScreen, event.songsSet)
+                navigator.navigate(LocalScreenDestination.SongsSetScreen, event.songsSet)
             }
 
             is Event.Search -> search(event.query)

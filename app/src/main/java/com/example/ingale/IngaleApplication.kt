@@ -5,7 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
-import com.example.ingale.core.di.coroutineDispatcherModule
+import com.example.ingale.core.coreModule
 import com.example.ingale.feature_local.featureLocalModule
 import com.example.ingale.feature_yt.ytModule
 import org.koin.android.ext.koin.androidContext
@@ -22,7 +22,7 @@ class IngaleApplication : Application() {
         super.onCreate()
         startKoin {
             androidContext(applicationContext)
-            modules(coroutineDispatcherModule + featureLocalModule + ytModule)
+            modules(coreModule + featureLocalModule + ytModule)
         }
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

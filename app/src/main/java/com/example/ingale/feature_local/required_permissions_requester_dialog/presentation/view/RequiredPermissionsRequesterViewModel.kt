@@ -1,4 +1,4 @@
-package com.example.ingale.feature_local.permissionRequester.presentation.view
+package com.example.ingale.feature_local.required_permissions_requester_dialog.presentation.view
 
 import android.Manifest
 import android.content.Context
@@ -9,21 +9,24 @@ import android.os.Build
 import android.provider.Settings
 import android.util.Log
 import androidx.core.content.ContextCompat
-import com.example.ingale.feature_local.permissionRequester.presentation.view.PermissionRequesterContract.Effect
-import com.example.ingale.feature_local.permissionRequester.presentation.view.PermissionRequesterContract.Event
-import com.example.ingale.feature_local.permissionRequester.presentation.view.PermissionRequesterContract.State
+import androidx.lifecycle.SavedStateHandle
+import com.example.ingale.core.presentation.navigation.destination.getOnResultCallback
+import com.example.ingale.feature_local.required_permissions_requester_dialog.presentation.view.RequiredPermissionsRequesterContract.Effect
+import com.example.ingale.feature_local.required_permissions_requester_dialog.presentation.view.RequiredPermissionsRequesterContract.Event
+import com.example.ingale.feature_local.required_permissions_requester_dialog.presentation.view.RequiredPermissionsRequesterContract.State
 import com.example.ingale.mvi.BaseViewModel
 import com.example.ingale.mvi.wrappers.emptyStableList
-import com.example.ingale.mvi.wrappers.plus
 import com.example.ingale.mvi.wrappers.minus
+import com.example.ingale.mvi.wrappers.plus
 import com.example.ingale.mvi.wrappers.stableListOf
 import com.example.ingale.mvi.wrappers.toStableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 
-class PermissionRequesterViewModel(
-    private val applicationContext: Context,
+class RequiredPermissionsRequesterViewModel(
+    private val savedStateHandle: SavedStateHandle,
+    private val applicationContext: Context
 ) : BaseViewModel<State, Event, Effect>() {
 
     private val requiredPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -43,11 +46,19 @@ class PermissionRequesterViewModel(
         }.viewModelState()
 
     init {
+        checkPermissions()
+    }
+
+    private fun checkPermissions() {
         val permissionsToRequest = requiredPermissions.filter { requiredPermission ->
             ContextCompat.checkSelfPermission(applicationContext, requiredPermission) == PackageManager.PERMISSION_DENIED
         }
-        sendEffect {
-            Effect.RequestPermission(permissionsToRequest.toStableList())
+        if(permissionsToRequest.isNotEmpty()) {
+            sendEffect {
+                Effect.RequestPermission(permissionsToRequest.toStableList())
+            }
+        } else {
+            savedStateHandle.getOnResultCallback<Boolean>()?.invoke(true)
         }
     }
 
@@ -89,6 +100,9 @@ class PermissionRequesterViewModel(
             requiredPermissionDialogs.value = requiredPermissionDialogs.value + permission
         } else if(isGranted) {
             requiredPermissionDialogs.value = requiredPermissionDialogs.value - permission
+            if(permission == Manifest.permission.READ_MEDIA_AUDIO || permission == Manifest.permission.READ_EXTERNAL_STORAGE) {
+                savedStateHandle.getOnResultCallback<Boolean>()?.invoke(true)
+            }
         }
     }
 

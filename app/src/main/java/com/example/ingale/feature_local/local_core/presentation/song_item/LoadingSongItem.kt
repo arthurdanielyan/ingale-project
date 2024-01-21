@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.example.ingale.core.presentation.shimmer
+import com.example.ingale.core.presentation.ui.shimmer
 import com.example.ingale.ui.theme.spacing
 
 
