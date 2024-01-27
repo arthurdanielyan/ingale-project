@@ -29,9 +29,12 @@ class DialogNavigatorImpl : DialogNavigator, ActiveDialogHolder, ViewModelStoreO
         scope.launch {
             _activeDialog.send(null)
             /**
-             * Sometimes this is called before ViewModel is put in the viewModelStore.
+             * In some cases the necessity of a dialog existence is determined in the init
+             * block of its ViewModel when the ViewModel is not yet put in the ViewModelStore
+             * and calling [ViewModelStore.clear] here doesn't remove the ViewModel and it
+             * remains in the memory.
              * Particularly in the case of [RequiredPermissionsRequesterViewModel] when all
-             * permissions are already granted
+             * permissions are already granted.
              * */
             viewModelStore = ViewModelStore()
         }
@@ -75,9 +78,9 @@ class DialogNavigatorImpl : DialogNavigator, ActiveDialogHolder, ViewModelStoreO
 }
 
 val LocalDialogNavigation = compositionLocalOf<ActiveDialogHolder> {
-    throw Exception("No DialogNavigator provided")
+    error("No DialogNavigator provided")
 }
 
 val LocalDialogViewModelStoreOwner = compositionLocalOf<ViewModelStoreOwner> {
-    throw Exception("No DialogViewModelStoreOwner provided")
+    error("No DialogViewModelStoreOwner provided")
 }
