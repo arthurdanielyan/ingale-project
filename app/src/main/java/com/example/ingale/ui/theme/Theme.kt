@@ -15,6 +15,8 @@ import androidx.core.view.WindowCompat
 import com.example.ingale.core.presentation.navigation.dialog_navigation.LocalDialogNavigation
 import com.example.ingale.core.presentation.navigation.dialog_navigation.LocalDialogViewModelStoreOwner
 import com.example.ingale.feature_local.local_navigation.screen_navigation.LocalNavigation
+import com.example.ingale.main_navigation.bottom_bar_controls.LocalBottomBarController
+import com.example.ingale.main_navigation.bottom_bar_controls.LocalBottomBarEffects
 import com.example.ingale.ui.theme.colorScheme.ColorSchemeDark
 import com.example.ingale.ui.theme.colorScheme.ColorSchemeLight
 import com.example.ingale.ui.theme.colorScheme.LocalColorScheme
@@ -79,7 +81,9 @@ fun IngaleTheme(
                 if(isSystemInDarkTheme()) ColorSchemeDark() else ColorSchemeLight(),
         LocalNavigation provides koinInject(),
         LocalDialogNavigation provides koinInject(),
-        LocalDialogViewModelStoreOwner provides koinInject()
+        LocalDialogViewModelStoreOwner provides koinInject(),
+        LocalBottomBarEffects provides koinInject(),
+        LocalBottomBarController provides koinInject()
     ) {
         MaterialTheme(
             colorScheme = colorScheme,

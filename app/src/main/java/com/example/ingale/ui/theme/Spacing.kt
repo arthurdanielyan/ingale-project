@@ -16,7 +16,9 @@ data class Spacing(
     val squared: Dp = 64.dp
 )
 
-val LocalSpacing = compositionLocalOf { Spacing() }
+val LocalSpacing = compositionLocalOf<Spacing> {
+    error("No Spacing provided here")
+}
 
 @Suppress("UnusedReceiverParameter")
 val MaterialTheme.spacing: Spacing

@@ -10,7 +10,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class DialogNavigatorImpl : DialogNavigator, ActiveDialogHolder, ViewModelStoreOwner {
@@ -23,7 +23,7 @@ class DialogNavigatorImpl : DialogNavigator, ActiveDialogHolder, ViewModelStoreO
         capacity = 1,
         onBufferOverflow = BufferOverflow.DROP_LATEST
     )
-    override val activeDialog: Flow<DialogNavEvent<*, *>?> = _activeDialog.consumeAsFlow()
+    override val activeDialog: Flow<DialogNavEvent<*, *>?> = _activeDialog.receiveAsFlow()
 
     override fun dismiss() {
         scope.launch {
@@ -75,10 +75,6 @@ class DialogNavigatorImpl : DialogNavigator, ActiveDialogHolder, ViewModelStoreO
             )
         }
     }
-}
-
-val LocalDialogNavigation = compositionLocalOf<ActiveDialogHolder> {
-    error("No DialogNavigator provided")
 }
 
 val LocalDialogViewModelStoreOwner = compositionLocalOf<ViewModelStoreOwner> {

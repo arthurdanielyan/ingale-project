@@ -8,6 +8,7 @@ import android.os.Build
 import com.example.ingale.core.coreModule
 import com.example.ingale.feature_local.featureLocalModule
 import com.example.ingale.feature_yt.ytModule
+import com.example.ingale.main_navigation.bottom_bar_controls.bottomBarControllerModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -22,16 +23,22 @@ class IngaleApplication : Application() {
         super.onCreate()
         startKoin {
             androidContext(applicationContext)
-            modules(coreModule + featureLocalModule + ytModule)
+            modules(
+                *coreModule.toTypedArray(),
+                bottomBarControllerModule,
+                *featureLocalModule.toTypedArray(),
+                ytModule
+            )
         }
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val musicNotificationChannel = NotificationChannel(
                 MUSIC_PLAYER_NOTIFICATION_CHANNEL_ID,
                 "Music Player",
                 NotificationManager.IMPORTANCE_LOW
             )
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(musicNotificationChannel)
         }
     }

@@ -44,6 +44,7 @@ import com.example.ingale.ui.theme.spacing
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CommonSongSetsGrid(
+    modifier: Modifier = Modifier,
     lazyGridState: LazyGridState = rememberLazyGridState(),
     items : StableList <SongsSet>,
     onClick: (songsSet: SongsSet) -> Unit,
@@ -54,7 +55,7 @@ fun CommonSongSetsGrid(
         LazyVerticalGrid(
             state = lazyGridState,
             columns = GridCells.Fixed(2),
-            modifier = Modifier.fillMaxSize(),
+            modifier = modifier.fillMaxSize(),
             contentPadding = PaddingValues(MaterialTheme.spacing.normal)
         ) {
             items(

@@ -1,5 +1,3 @@
-//val compose_ui_version: String by rootProject.extra
-
 buildscript {
     repositories {
         google()
@@ -24,7 +22,7 @@ android {
     defaultConfig {
         applicationId = "com.example.ingale"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -60,9 +58,9 @@ dependencies {
     implementation(libs.androidx.ktx)
 //    implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.9.0"))
     implementation(platform(libs.kotlin.bom))
-    implementation(libs.androidx.lifecycle)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.activity.compose)
-//    implementation(platform("androidx.compose:compose-bom:2023.06.01"))
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
@@ -86,9 +84,9 @@ dependencies {
     implementation(libs.androidx.compose.navigation)
 
     // Koin for Kotlin apps
-    implementation("io.insert-koin:koin-core:3.4.3")
-    implementation("io.insert-koin:koin-android:3.4.3")
-    implementation("io.insert-koin:koin-androidx-compose:3.4.6")
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
 
     // Retrofit
     implementation(libs.google.gson)

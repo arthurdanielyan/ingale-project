@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -21,7 +22,7 @@ abstract class BaseViewModel<State : UiState, Event : UiEvent, Effect : UiEffect
     private val _event = MutableSharedFlow<Event>()
 
     private val _effect = Channel<Effect>()
-    val effect = _effect.asFlow(viewModelScope)
+    val effect = _effect.receiveAsFlow()
 
     val currentState: State
         get() = _state.value

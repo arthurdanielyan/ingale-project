@@ -1,7 +1,5 @@
 package com.example.ingale.feature_local.main.presentation
 
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -29,45 +27,50 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import com.example.ingale.core.presentation.flows.ObserveEffects
 import com.example.ingale.feature_local.local_core.domain.model.SongsSet
-import com.example.ingale.feature_local.local_core.presentation.SongsSection
+import com.example.ingale.feature_local.local_core.presentation.SongsLazyList
 import com.example.ingale.feature_local.main.presentation.ui_components.SongsSetButton
 import com.example.ingale.feature_local.main.presentation.ui_components.TabRow
 import com.example.ingale.feature_local.main.presentation.ui_components.songs_section.CommonSongSetsGrid
 import com.example.ingale.feature_local.main.presentation.view.LocalMainContract
 import com.example.ingale.feature_local.main.presentation.view.LocalMainContract.Effect
 import com.example.ingale.feature_local.main.presentation.view.LocalMainContract.Event
+import com.example.ingale.main_navigation.bottom_bar_controls.BottomBarController
+import com.example.ingale.main_navigation.bottom_bar_controls.BottomBarEffect
+import com.example.ingale.main_navigation.bottom_bar_controls.LocalBottomBarController
+import com.example.ingale.main_navigation.bottom_bar_controls.SendBottomBarEffect
 import com.example.ingale.mvi.wrappers.StableList
 import com.example.ingale.ui.theme.colorScheme.ingaleColors
 import com.example.ingale.ui.theme.spacing
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
+import org.koin.java.KoinJavaComponent.inject
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LocalMainScreen(
     state: LocalMainContract.State,
     sendEvent: (event: Event) -> Unit,
-    effects: Flow<Effect>
+    effects: Flow<Effect>,
 ) {
     val songsLazyColumnState = rememberLazyListState()
     val albumsGridsState = rememberLazyGridState()
     val artistsGridsState = rememberLazyGridState()
 
-
+    SendBottomBarEffect(BottomBarEffect.ShowBottomBar)
     ObserveEffects(effects) { effect ->
-        when(effect) {
+        when (effect) {
             is Effect.ScrollToTop -> {
                 delay(100)
                 songsLazyColumnState.scrollToItem(0)
@@ -77,19 +80,24 @@ fun LocalMainScreen(
         }
     }
 
+    var selectedTabIndex by rememberSaveable {
+        mutableIntStateOf(0)
+    }
     val pagerState = rememberPagerState(
         pageCount = { state.sections.size }
     )
-    var selectedPageIndex by remember {
-        mutableIntStateOf(0)
+    val bottomBarController = LocalBottomBarController.current
+    LaunchedEffect(selectedTabIndex) {
+        bottomBarController.sendEffect(BottomBarEffect.ExpandMusicInfo)
+        pagerState.animateScrollToPage(
+            page = selectedTabIndex
+        )
     }
-    LaunchedEffect(pagerState) {
-        snapshotFlow { pagerState.currentPage }.collect {
-            selectedPageIndex = pagerState.targetPage
-            if (!pagerState.isScrollInProgress) selectedPageIndex = pagerState.currentPage
+    LaunchedEffect(pagerState.currentPage, pagerState.isScrollInProgress) {
+        if (!pagerState.isScrollInProgress) {
+            selectedTabIndex = pagerState.currentPage
         }
     }
-    val scope = rememberCoroutineScope()
     Column(
         modifier = Modifier
             .background(
@@ -166,27 +174,18 @@ fun LocalMainScreen(
         Spacer(modifier = Modifier.height(16.dp))
         TabRow(
             modifier = Modifier.fillMaxWidth(),
-            itemContent = {
+            selectedItemIndex = { selectedTabIndex },
+            items = state.sections,
+            itemContent = { title ->
                 Text(
-                    modifier = Modifier
-                        .padding(16.dp),
-                    text = it
+                    text = title,
+                    color = MaterialTheme.ingaleColors.onBackground,
+                    modifier = Modifier.padding(MaterialTheme.spacing.large)
                 )
             },
             onSelect = { index, _ ->
-                selectedPageIndex = index
-                scope.launch(Dispatchers.Default) {
-                    pagerState.animateScrollToPage(
-                        page = index,
-                        animationSpec = tween(
-                            durationMillis = 300,
-                            easing = LinearEasing
-                        )
-                    )
-                }
+                selectedTabIndex = index
             },
-            selectedItemIndex = { selectedPageIndex },
-            items = state.sections
         )
         HorizontalPager(
             state = pagerState,
@@ -195,7 +194,9 @@ fun LocalMainScreen(
         ) {
             when (it) {
                 0 -> {
-                    SongsSection(
+                    SongsLazyList(
+                        modifier = Modifier
+                            .nestedScroll(NestedScrollForMusicBarNotification),
                         lazyListState = songsLazyColumnState,
                         songs = state.allSongs,
                         query = state.searchTextField,
@@ -208,6 +209,8 @@ fun LocalMainScreen(
 
                 1 -> {
                     CommonSongSetsGrid(
+                        modifier = Modifier
+                            .nestedScroll(NestedScrollForMusicBarNotification),
                         lazyGridState = albumsGridsState,
                         items = StableList(state.albums.map { album ->
                             SongsSet(
@@ -227,6 +230,8 @@ fun LocalMainScreen(
 
                 2 -> {
                     CommonSongSetsGrid(
+                        modifier = Modifier
+                            .nestedScroll(NestedScrollForMusicBarNotification),
                         lazyGridState = artistsGridsState,
                         items = StableList(state.artists.map { artist ->
                             SongsSet(
@@ -245,5 +250,25 @@ fun LocalMainScreen(
                 }
             }
         }
+    }
+}
+
+object NestedScrollForMusicBarNotification : NestedScrollConnection {
+
+    private val bottomBarController by inject<BottomBarController>(BottomBarController::class.java)
+    override fun onPostScroll(
+        consumed: Offset,
+        available: Offset,
+        source: NestedScrollSource,
+    ): Offset {
+        bottomBarController.sendEffect(
+            if (consumed.y < 0f) {
+                BottomBarEffect.CollapseMusicInfo
+            } else {
+                BottomBarEffect.ExpandMusicInfo
+            }
+        )
+
+        return super.onPostScroll(consumed, available, source)
     }
 }

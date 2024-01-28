@@ -1,5 +1,6 @@
 package com.example.ingale.core.presentation.navigation.dialog_navigation
 
+import androidx.compose.runtime.compositionLocalOf
 import kotlinx.coroutines.flow.Flow
 
 interface DialogNavigator {
@@ -28,4 +29,8 @@ interface DialogNavigator {
 interface ActiveDialogHolder {
 
     val activeDialog: Flow<DialogNavEvent<*, *>?>
+}
+
+val LocalDialogNavigation = compositionLocalOf<ActiveDialogHolder> {
+    error("No DialogNavigator provided")
 }

@@ -21,7 +21,7 @@ import com.example.ingale.mvi.wrappers.StableList
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun SongsSection(
+fun SongsLazyList(
     modifier: Modifier = Modifier,
     lazyListState: LazyListState = rememberLazyListState(),
     songs: StableList<Song>,

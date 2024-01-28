@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
@@ -28,7 +29,6 @@
             android:theme="@style/Theme.Ingale">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -36,15 +36,21 @@
         <service
             android:name=".core.audio_player.PlayerService"
             android:foregroundServiceType="mediaPlayback"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.media.browse.MediaBrowserService"/>
             </intent-filter>
         </service>
         <service android:name=".core.audio_player.actions_receivers.PlaybackActionService"/>
 
-        <receiver android:name=".core.audio_player.actions_receivers.ReceiverTogglePlaying"/>
-        <receiver android:name=".core.audio_player.actions_receivers.ReceiverSkipToNext"/>
-        <receiver android:name=".core.audio_player.actions_receivers.ReceiverSkipToPrevious"/>
+        <receiver
+            android:exported="false"
+            android:name=".core.audio_player.actions_receivers.ReceiverTogglePlaying"/>
+        <receiver
+            android:exported="false"
+            android:name=".core.audio_player.actions_receivers.ReceiverSkipToNext"/>
+        <receiver
+            android:exported="false"
+            android:name=".core.audio_player.actions_receivers.ReceiverSkipToPrevious"/>
     </application>
 </manifest>

@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
-import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.SavedStateHandle
 import com.example.ingale.core.presentation.navigation.destination.getOnResultCallback
@@ -26,11 +25,17 @@ import kotlinx.coroutines.flow.combine
 
 class RequiredPermissionsRequesterViewModel(
     private val savedStateHandle: SavedStateHandle,
-    private val applicationContext: Context
+    private val applicationContext: Context,
 ) : BaseViewModel<State, Event, Effect>() {
 
-    private val requiredPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    private val requiredPermissions = if (Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU) {
         arrayOf(Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.READ_MEDIA_AUDIO)
+    } else if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU) {
+        arrayOf(
+            Manifest.permission.POST_NOTIFICATIONS,
+            Manifest.permission.READ_MEDIA_AUDIO,
+            Manifest.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK
+        )
     } else {
         arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
     }
@@ -51,9 +56,12 @@ class RequiredPermissionsRequesterViewModel(
 
     private fun checkPermissions() {
         val permissionsToRequest = requiredPermissions.filter { requiredPermission ->
-            ContextCompat.checkSelfPermission(applicationContext, requiredPermission) == PackageManager.PERMISSION_DENIED
+            ContextCompat.checkSelfPermission(
+                applicationContext,
+                requiredPermission
+            ) == PackageManager.PERMISSION_DENIED
         }
-        if(permissionsToRequest.isNotEmpty()) {
+        if (permissionsToRequest.isNotEmpty()) {
             sendEffect {
                 Effect.RequestPermission(permissionsToRequest.toStableList())
             }
@@ -98,16 +106,11 @@ class RequiredPermissionsRequesterViewModel(
     private fun onPermissionResult(permission: String, isGranted: Boolean) {
         if (!isGranted && requiredPermissionDialogs.value.firstOrNull { it == permission } == null) {
             requiredPermissionDialogs.value = requiredPermissionDialogs.value + permission
-        } else if(isGranted) {
+        } else if (isGranted) {
             requiredPermissionDialogs.value = requiredPermissionDialogs.value - permission
-            if(permission == Manifest.permission.READ_MEDIA_AUDIO || permission == Manifest.permission.READ_EXTERNAL_STORAGE) {
+            if (permission == Manifest.permission.READ_MEDIA_AUDIO || permission == Manifest.permission.READ_EXTERNAL_STORAGE) {
                 savedStateHandle.getOnResultCallback<Boolean>()?.invoke(true)
             }
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        Log.d("myLogs", "ViewModelCleared")
     }
 }

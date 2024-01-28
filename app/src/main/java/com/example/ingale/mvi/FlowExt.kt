@@ -11,6 +11,11 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.shareIn
 
+/**
+ * Sometimes certain effects emitted form ViewModels need to be handled by
+ * child composables. This function filters those effects and returns the flow
+ * containing only them
+ * */
 @Composable
 inline fun <reified E: UiEffect> Flow<*>.rememberFlowOf() = remember {
     this.filterIsInstance<E>()
@@ -19,9 +24,9 @@ inline fun <reified E: UiEffect> Flow<*>.rememberFlowOf() = remember {
 /**
  * Transform this Channel into a hot flow.
  * In contrast to [receiveAsFlow], elements emitted by this flow
- * will be received by all collectors
+ * will be received by all collectors.
  * */
-fun <E: UiEffect> Channel<E>.asFlow(scope: CoroutineScope): Flow<E> = flow {
+fun <T> Channel<T>.asFlow(scope: CoroutineScope): Flow<T> = flow {
     for(effect in this@asFlow) {
         emit(effect)
     }

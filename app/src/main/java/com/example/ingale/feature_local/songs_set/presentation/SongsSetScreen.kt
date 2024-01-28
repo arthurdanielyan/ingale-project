@@ -33,9 +33,11 @@ import androidx.constraintlayout.compose.MotionScene
 import androidx.constraintlayout.solver.widgets.Optimizer
 import com.example.ingale.R
 import com.example.ingale.feature_local.local_core.domain.model.SongsSet
-import com.example.ingale.feature_local.local_core.presentation.SongsSection
+import com.example.ingale.feature_local.local_core.presentation.SongsLazyList
 import com.example.ingale.feature_local.local_core.presentation.song_item.SongIcon
 import com.example.ingale.feature_local.songs_set.presentation.view.LocalSongsSetContract
+import com.example.ingale.main_navigation.bottom_bar_controls.BottomBarEffect
+import com.example.ingale.main_navigation.bottom_bar_controls.SendBottomBarEffect
 import com.example.ingale.ui.theme.colorScheme.ingaleColors
 import kotlin.math.abs
 
@@ -44,6 +46,7 @@ fun SongsSetScreen(
     state: LocalSongsSetContract.State,
     sendEvent: (LocalSongsSetContract.Event) -> Unit,
 ) {
+    SendBottomBarEffect(BottomBarEffect.HideBottomBar)
     val lazyListState = rememberLazyListState()
     val animationEndIndex = remember { 2 }
     Column(
@@ -62,7 +65,7 @@ fun SongsSetScreen(
                 } else 1f
             }
         )
-        SongsSection(
+        SongsLazyList(
             modifier = Modifier.fillMaxSize(),
             lazyListState = lazyListState,
             songs = state.songsSetInfo.songs,

@@ -7,7 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.UNLIMITED
-import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class LocalNavigatorImpl : LocalNavigator, LocalNavigatorEventsHolder {
@@ -17,7 +17,7 @@ class LocalNavigatorImpl : LocalNavigator, LocalNavigatorEventsHolder {
     private val _navigationEvent = Channel<LocalNavEvent<*, *>>(
         capacity = UNLIMITED
     )
-    override val navigationEvent = _navigationEvent.consumeAsFlow()
+    override val navigationEvent = _navigationEvent.receiveAsFlow()
 
     override fun <A, R> navigate(
         destination: LocalScreenDestination,

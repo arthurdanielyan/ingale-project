@@ -1,7 +1,6 @@
 package com.example.ingale.feature_local.local_navigation.screen_navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -14,9 +13,7 @@ import com.example.ingale.feature_local.main.presentation.LocalMainScreen
 import com.example.ingale.feature_local.main.presentation.view.LocalMainViewModel
 import com.example.ingale.feature_local.songs_set.presentation.SongsSetScreen
 import com.example.ingale.feature_local.songs_set.presentation.view.SongsSetViewModel
-import com.example.ingale.main_navigation.BottomNavigationEffects
 import com.example.ingale.main_navigation.Screens
-import com.example.ingale.main_navigation.bottomNavigationEffects
 
 
 @Composable
@@ -31,7 +28,6 @@ fun LocalSectionNavGraph() {
         composable(
             route = LocalScreenDestination.MainScreen.route
         ) {
-            LaunchedEffect(Unit) { bottomNavigationEffects.emit(BottomNavigationEffects.ShowBottomBar) }
             val vm = ingaleViewModels<LocalMainViewModel>()
             LocalMainScreen(
                 state = vm.state.collectAsState().value,
@@ -43,9 +39,6 @@ fun LocalSectionNavGraph() {
         composable(
             route = LocalScreenDestination.SongsSetScreen.route
         ) {
-            LaunchedEffect(Unit) {
-                bottomNavigationEffects.emit(BottomNavigationEffects.HideBottomBar)
-            }
             val vm = ingaleViewModels<SongsSetViewModel>(
                 savedStateHandle = it.savedStateHandle
             )
