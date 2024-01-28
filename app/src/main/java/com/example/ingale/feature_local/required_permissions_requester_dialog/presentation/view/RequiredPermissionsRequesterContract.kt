@@ -17,7 +17,7 @@ interface RequiredPermissionsRequesterContract {
 
         sealed interface DialogEvent : Event {
             data class OkClick(val permission: String): DialogEvent
-            data object GoToSettingsClick: DialogEvent
+            data class GoToSettingsClick(val permission: String): DialogEvent
         }
     }
 

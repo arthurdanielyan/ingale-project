@@ -72,7 +72,7 @@ private fun RequiredPermissionsRequesterDialogContent(
                 sendEvent(Event.DialogEvent.OkClick(permission))
             },
             onGoToAppSettings = {
-                sendEvent(Event.DialogEvent.GoToSettingsClick)
+                sendEvent(Event.DialogEvent.GoToSettingsClick(permission))
             }
         )
     }

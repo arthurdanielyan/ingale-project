@@ -10,6 +10,7 @@ import android.provider.Settings
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.SavedStateHandle
 import com.example.ingale.core.presentation.navigation.destination.getOnResultCallback
+import com.example.ingale.core.presentation.navigation.dialog_navigation.DialogNavigator
 import com.example.ingale.feature_local.required_permissions_requester_dialog.presentation.view.RequiredPermissionsRequesterContract.Effect
 import com.example.ingale.feature_local.required_permissions_requester_dialog.presentation.view.RequiredPermissionsRequesterContract.Event
 import com.example.ingale.feature_local.required_permissions_requester_dialog.presentation.view.RequiredPermissionsRequesterContract.State
@@ -22,9 +23,11 @@ import com.example.ingale.mvi.wrappers.toStableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.update
 
 class RequiredPermissionsRequesterViewModel(
     private val savedStateHandle: SavedStateHandle,
+    private val dialogNavigator: DialogNavigator,
     private val applicationContext: Context,
 ) : BaseViewModel<State, Event, Effect>() {
 
@@ -66,14 +69,15 @@ class RequiredPermissionsRequesterViewModel(
                 Effect.RequestPermission(permissionsToRequest.toStableList())
             }
         } else {
+            dialogNavigator.dismiss()
             savedStateHandle.getOnResultCallback<Boolean>()?.invoke(true)
         }
     }
 
     override fun handleEvent(event: Event) {
         when (event) {
-            Event.DialogEvent.GoToSettingsClick -> {
-                onGoToSettingsClick()
+            is Event.DialogEvent.GoToSettingsClick -> {
+                onGoToSettingsClick(event.permission)
             }
 
             is Event.DialogEvent.OkClick -> onOkClick(event.permission)
@@ -87,13 +91,14 @@ class RequiredPermissionsRequesterViewModel(
     private fun onOkClick(permission: String) {
         // This forces the dialog to be updated with a different button
         // as the same element will be inserted again
-        requiredPermissionDialogs.value = requiredPermissionDialogs.value - permission
+        requiredPermissionDialogs.update { it - permission }
         sendEffect {
             Effect.RequestPermission(stableListOf(permission))
         }
     }
 
-    private fun onGoToSettingsClick() {
+    private fun onGoToSettingsClick(permission: String) {
+        requiredPermissionDialogs.update { it - permission }
         Intent(
             Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
             Uri.fromParts("package", applicationContext.packageName, null)
@@ -105,9 +110,9 @@ class RequiredPermissionsRequesterViewModel(
 
     private fun onPermissionResult(permission: String, isGranted: Boolean) {
         if (!isGranted && requiredPermissionDialogs.value.firstOrNull { it == permission } == null) {
-            requiredPermissionDialogs.value = requiredPermissionDialogs.value + permission
+            requiredPermissionDialogs.update { it + permission }
         } else if (isGranted) {
-            requiredPermissionDialogs.value = requiredPermissionDialogs.value - permission
+            requiredPermissionDialogs.update { it - permission }
             if (permission == Manifest.permission.READ_MEDIA_AUDIO || permission == Manifest.permission.READ_EXTERNAL_STORAGE) {
                 savedStateHandle.getOnResultCallback<Boolean>()?.invoke(true)
             }

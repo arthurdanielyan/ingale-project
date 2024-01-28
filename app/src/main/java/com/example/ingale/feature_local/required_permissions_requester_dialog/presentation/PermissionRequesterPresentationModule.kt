@@ -6,6 +6,6 @@ import org.koin.dsl.module
 
 val presentationModule = module {
     viewModel { parameters ->
-        RequiredPermissionsRequesterViewModel(parameters[0], get())
+        RequiredPermissionsRequesterViewModel(parameters[0], get(), get())
     }
 }

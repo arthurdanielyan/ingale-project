@@ -45,7 +45,6 @@ class LocalMainViewModel(
         dialogNavigator.activate<Boolean>(
             LocalDialogDestination.RequiredPermissionRequester,
             onResult = { shouldLoadSongs ->
-                dialogNavigator.dismiss()
                 if(shouldLoadSongs) {
                     loadSongs()
                 } else {

@@ -253,7 +253,7 @@ fun LocalMainScreen(
     }
 }
 
-object NestedScrollForMusicBarNotification : NestedScrollConnection {
+private object NestedScrollForMusicBarNotification : NestedScrollConnection {
 
     private val bottomBarController by inject<BottomBarController>(BottomBarController::class.java)
     override fun onPostScroll(
@@ -261,13 +261,13 @@ object NestedScrollForMusicBarNotification : NestedScrollConnection {
         available: Offset,
         source: NestedScrollSource,
     ): Offset {
-        bottomBarController.sendEffect(
-            if (consumed.y < 0f) {
-                BottomBarEffect.CollapseMusicInfo
-            } else {
-                BottomBarEffect.ExpandMusicInfo
-            }
-        )
+        if (consumed.y < 0f) {
+            BottomBarEffect.CollapseMusicInfo
+            bottomBarController.sendEffect(BottomBarEffect.CollapseMusicInfo)
+        } else if(consumed.y > 0f) {
+            BottomBarEffect.ExpandMusicInfo
+            bottomBarController.sendEffect(BottomBarEffect.ExpandMusicInfo)
+        }
 
         return super.onPostScroll(consumed, available, source)
     }
