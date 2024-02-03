@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.ingale.mvi.UiEffect
 import kotlinx.coroutines.Dispatchers
@@ -16,11 +15,11 @@ import kotlinx.coroutines.withContext
 fun <T: UiEffect> ObserveEffects(flow: Flow<T>, onEvent: suspend (T) -> Unit) {
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(flow, lifecycleOwner.lifecycle) {
-//        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            withContext(lifecycleOwner.lifecycle.coroutineScope.coroutineContext + Dispatchers.Main.immediate) {
+        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            withContext(Dispatchers.Main.immediate) {
                 flow.collect(onEvent)
             }
-//        }
+        }
     }
 }
 

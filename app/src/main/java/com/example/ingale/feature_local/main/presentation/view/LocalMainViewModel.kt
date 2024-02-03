@@ -1,10 +1,16 @@
 package com.example.ingale.feature_local.main.presentation.view
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewModelScope
 import com.example.ingale.core.audio_player.AudioPlayer
 import com.example.ingale.core.domain.model.Song
 import com.example.ingale.core.presentation.navigation.dialog_navigation.DialogDestination.LocalDialogDestination
 import com.example.ingale.core.presentation.navigation.dialog_navigation.DialogNavigator
+import com.example.ingale.core.presentation.view.LoadingViewState
 import com.example.ingale.feature_local.local_navigation.screen_navigation.LocalScreenDestination
 import com.example.ingale.feature_local.local_navigation.screen_navigation.LocalNavigator
 import com.example.ingale.feature_local.main.domain.model.Album
@@ -29,12 +35,16 @@ class LocalMainViewModel(
     private val getSongsUseCase: GetSongsUseCase,
     private val organizeSongsUseCase: OrganizeSongsUseCase,
     private val filterUseCase: FilterUseCase,
+    private val applicationContext: Context,
 ) : BaseViewModel<State, Event, Effect>() {
 
     companion object {
         const val SECTION_SONGS = "Songs"
         const val SECTION_ALBUMS = "Albums"
         const val SECTION_ARTISTS = "Artists"
+
+        const val NO_SONGS_FOUND_ERROR = "no_audio_filed_found"
+        const val PERMISSION_NOT_GRANTED_ERROR = "no_audio_permission_granted"
     }
 
     private lateinit var allSongs: List<Song>
@@ -44,14 +54,8 @@ class LocalMainViewModel(
     init {
         dialogNavigator.activate<Boolean>(
             LocalDialogDestination.RequiredPermissionRequester,
-            onResult = { shouldLoadSongs ->
-                if(shouldLoadSongs) {
-                    loadSongs()
-                } else {
-                    updateState {
-                        copy(areSongsLoading = false)
-                    }
-                }
+            onResult = {
+                loadSongs()
             }
         )
     }
@@ -62,63 +66,58 @@ class LocalMainViewModel(
             allSongs = emptyStableList(),
             albums = emptyStableList(),
             artists = emptyStableList(),
-            areSongsLoading = true,
-            visiblePermissionDialogQueue = emptyStableList()
+            songLoadingState = LoadingViewState.Loading
         )
 
 
     override fun handleEvent(event: Event) {
         when (event) {
-            is Event.PermissionResult -> {
-                onPermissionResult(event.permission, event.isGranted)
-            }
-
-            Event.DismissPermissionDialog -> {
-                updateState {
-                    copy(
-                        visiblePermissionDialogQueue = StableList(
-                            visiblePermissionDialogQueue.toMutableList().apply {
-                                removeFirst()
-                            }
-                        )
-                    )
-                }
-            }
-
-            is Event.AlbumClicked -> {
+            Event.Refresh -> loadSongs()
+            is Event.AlbumClicked ->
                 navigator.navigate(LocalScreenDestination.SongsSetScreen, event.songsSet)
-            }
 
-            is Event.ArtistClicked -> {
+            is Event.ArtistClicked ->
                 navigator.navigate(LocalScreenDestination.SongsSetScreen, event.songsSet)
-            }
 
             is Event.Search -> search(event.query)
-            is Event.PlaySong -> {
+            is Event.PlaySong ->
                 AudioPlayer.play(allSongs, allSongs.indexOf(event.song))
-            }
         }
     }
 
     private fun loadSongs() {
         viewModelScope.launch {
             updateState {
-                copy(areSongsLoading = true)
+                copy(songLoadingState = LoadingViewState.Loading)
             }
             val songs = getSongsUseCase()
-            val separatedSongs = organizeSongsUseCase(songs)
-            allSongs = songs
-            allAlbums = separatedSongs.albums
-            allArtists = separatedSongs.artists
-            updateState {
-                copy(
-                    areSongsLoading = false,
-                    allSongs = StableList(songs),
-                    albums = separatedSongs.albums.toStableList(),
-                    artists = separatedSongs.artists.toStableList(),
-                )
+            if (songs.isNotEmpty()) {
+                val separatedSongs = organizeSongsUseCase(songs)
+                allSongs = songs
+                allAlbums = separatedSongs.albums
+                allArtists = separatedSongs.artists
+                updateState {
+                    copy(
+                        songLoadingState = LoadingViewState.Success,
+                        allSongs = StableList(songs),
+                        albums = separatedSongs.albums.toStableList(),
+                        artists = separatedSongs.artists.toStableList(),
+                    )
+                }
+                search(currentState.searchTextField)
+            } else {
+                updateState {
+                    copy(
+                        songLoadingState = LoadingViewState.Error(
+                            if (isAudioPermissionGranted) {
+                                NO_SONGS_FOUND_ERROR
+                            } else {
+                                PERMISSION_NOT_GRANTED_ERROR
+                            }
+                        )
+                    )
+                }
             }
-            search(currentState.searchTextField)
         }
     }
 
@@ -148,18 +147,16 @@ class LocalMainViewModel(
         }
     }
 
-    private fun onPermissionResult(permission: String, isGranted: Boolean) {
-        updateState {
-            copy(
-                visiblePermissionDialogQueue = visiblePermissionDialogQueue.toMutableList().apply {
-                    if (!isGranted && !visiblePermissionDialogQueue.contains(permission)) {
-                        add(0, permission)
-                    }
-                }.toStableList()
-            )
+    private val isAudioPermissionGranted: Boolean
+        get() {
+            val audioPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                Manifest.permission.READ_MEDIA_AUDIO
+            } else {
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            }
+            return ContextCompat.checkSelfPermission(
+                applicationContext,
+                audioPermission
+            ) == PackageManager.PERMISSION_GRANTED
         }
-        if (currentState.visiblePermissionDialogQueue.isEmpty()) {
-            loadSongs()
-        }
-    }
 }

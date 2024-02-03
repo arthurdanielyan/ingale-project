@@ -8,6 +8,7 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 interface ColorScheme {
+    val primary: Color
     val primaryInverse: Color
     val background: Color
     val backgroundInverse: Color

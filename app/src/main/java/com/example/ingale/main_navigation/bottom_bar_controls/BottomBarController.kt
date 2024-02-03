@@ -2,7 +2,7 @@ package com.example.ingale.main_navigation.bottom_bar_controls
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
-import com.example.ingale.core.presentation.ui.SingleLaunchedEffect
+import com.example.ingale.core.presentation.view.SingleLaunchedEffect
 import kotlinx.coroutines.flow.Flow
 
 interface BottomBarController {

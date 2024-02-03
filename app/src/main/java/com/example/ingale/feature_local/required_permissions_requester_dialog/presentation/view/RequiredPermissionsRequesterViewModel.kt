@@ -106,6 +106,9 @@ class RequiredPermissionsRequesterViewModel(
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
             applicationContext.startActivity(this)
         }
+        if(requiredPermissionDialogs.value.isEmpty()) {
+            dialogNavigator.dismiss()
+        }
     }
 
     private fun onPermissionResult(permission: String, isGranted: Boolean) {
@@ -113,9 +116,9 @@ class RequiredPermissionsRequesterViewModel(
             requiredPermissionDialogs.update { it + permission }
         } else if (isGranted) {
             requiredPermissionDialogs.update { it - permission }
-            if (permission == Manifest.permission.READ_MEDIA_AUDIO || permission == Manifest.permission.READ_EXTERNAL_STORAGE) {
-                savedStateHandle.getOnResultCallback<Boolean>()?.invoke(true)
-            }
+        }
+        if (permission == Manifest.permission.READ_MEDIA_AUDIO || permission == Manifest.permission.READ_EXTERNAL_STORAGE) {
+            savedStateHandle.getOnResultCallback<Boolean>()?.invoke(isGranted)
         }
     }
 }

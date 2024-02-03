@@ -3,6 +3,7 @@ package com.example.ingale.ui.theme.colorScheme
 import androidx.compose.ui.graphics.Color
 
 data class ColorSchemeLight(
+    override val primary: Color = Color(0xFF004914),
     override val backgroundInverse: Color = Color(0xFF00B432),
     override val primaryInverse: Color = Color(0xFFB5FDBD),
     override val background: Color = Color(0xFFDFFFE3),

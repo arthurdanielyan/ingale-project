@@ -2,7 +2,6 @@ package com.example.ingale.feature_local.main.presentation.ui_components
 
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -22,6 +21,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.layout.onSizeChanged
+import com.example.ingale.core.presentation.ui.navigationClickable
 import com.example.ingale.ui.theme.spacing
 import kotlin.math.max
 
@@ -53,7 +53,7 @@ fun SongsSetButton(
                 gradientRadius = max(it.height, it.width)
             }
             .clip(Shape)
-            .clickable(onClick = onClick),
+            .navigationClickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
         Text(

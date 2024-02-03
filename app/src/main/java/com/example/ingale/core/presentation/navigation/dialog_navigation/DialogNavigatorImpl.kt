@@ -36,6 +36,7 @@ class DialogNavigatorImpl : DialogNavigator, ActiveDialogHolder, ViewModelStoreO
              * Particularly in the case of [RequiredPermissionsRequesterViewModel] when all
              * permissions are already granted.
              * */
+            viewModelStore.clear()
             viewModelStore = ViewModelStore()
         }
     }

@@ -38,6 +38,8 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import com.example.ingale.core.presentation.flows.ObserveEffects
+import com.example.ingale.core.presentation.ui.DataPlaceholder
+import com.example.ingale.core.presentation.ui.LoadingStatePresenter
 import com.example.ingale.feature_local.local_core.domain.model.SongsSet
 import com.example.ingale.feature_local.local_core.presentation.SongsLazyList
 import com.example.ingale.feature_local.main.presentation.ui_components.SongsSetButton
@@ -46,6 +48,7 @@ import com.example.ingale.feature_local.main.presentation.ui_components.songs_se
 import com.example.ingale.feature_local.main.presentation.view.LocalMainContract
 import com.example.ingale.feature_local.main.presentation.view.LocalMainContract.Effect
 import com.example.ingale.feature_local.main.presentation.view.LocalMainContract.Event
+import com.example.ingale.feature_local.main.presentation.view.LocalMainViewModel.Companion.PERMISSION_NOT_GRANTED_ERROR
 import com.example.ingale.main_navigation.bottom_bar_controls.BottomBarController
 import com.example.ingale.main_navigation.bottom_bar_controls.BottomBarEffect
 import com.example.ingale.main_navigation.bottom_bar_controls.LocalBottomBarController
@@ -71,7 +74,7 @@ fun LocalMainScreen(
     SendBottomBarEffect(BottomBarEffect.ShowBottomBar)
     ObserveEffects(effects) { effect ->
         when (effect) {
-            is Effect.ScrollToTop -> {
+            Effect.ScrollToTop -> {
                 delay(100)
                 songsLazyColumnState.scrollToItem(0)
                 albumsGridsState.animateScrollToItem(0)
@@ -194,15 +197,37 @@ fun LocalMainScreen(
         ) {
             when (it) {
                 0 -> {
-                    SongsLazyList(
-                        modifier = Modifier
-                            .nestedScroll(NestedScrollForMusicBarNotification),
-                        lazyListState = songsLazyColumnState,
-                        songs = state.allSongs,
-                        query = state.searchTextField,
-                        isLoading = state.areSongsLoading,
-                        onSongClick = { song ->
-                            sendEvent(Event.PlaySong(song))
+                    LoadingStatePresenter(
+                        loadingState = state.songLoadingState,
+                        notErrorView = {
+                            SongsLazyList(
+                                modifier = Modifier
+                                    .nestedScroll(NestedScrollForMusicBarNotification),
+                                lazyListState = songsLazyColumnState,
+                                songs = state.allSongs,
+                                query = state.searchTextField,
+                                isLoading = state.songLoadingState.isLoading,
+                                onSongClick = { song ->
+                                    sendEvent(Event.PlaySong(song))
+                                }
+                            )
+                        },
+                        errorView = { error ->
+                            DataPlaceholder(
+                                title =
+                                    if (error.message == PERMISSION_NOT_GRANTED_ERROR) {
+                                        PERMISSION_NOT_GRANTED_TITLE
+                                    } else {
+                                        NO_SONGS_FOUND_MESSAGE
+                                    },
+                                description =
+                                    if (error.message == PERMISSION_NOT_GRANTED_ERROR) {
+                                        PERMISSION_NOT_GRANTED_MESSAGE
+                                    } else null,
+                                onAction = {
+                                    sendEvent(Event.Refresh)
+                                }
+                            )
                         }
                     )
                 }
@@ -223,7 +248,7 @@ fun LocalMainScreen(
                         onClick = { songsSet ->
                             sendEvent(Event.AlbumClicked(songsSet))
                         },
-                        isLoading = state.areSongsLoading,
+                        isLoading = state.songLoadingState.isLoading,
                         query = state.searchTextField
                     )
                 }
@@ -244,7 +269,7 @@ fun LocalMainScreen(
                         onClick = { songsSet ->
                             sendEvent(Event.ArtistClicked(songsSet))
                         },
-                        isLoading = state.areSongsLoading,
+                        isLoading = state.songLoadingState.isLoading,
                         query = state.searchTextField
                     )
                 }
@@ -261,10 +286,10 @@ private object NestedScrollForMusicBarNotification : NestedScrollConnection {
         available: Offset,
         source: NestedScrollSource,
     ): Offset {
-        if (consumed.y < 0f) {
+        if (consumed.y < -1f) {
             BottomBarEffect.CollapseMusicInfo
             bottomBarController.sendEffect(BottomBarEffect.CollapseMusicInfo)
-        } else if(consumed.y > 0f) {
+        } else if (consumed.y > 1f) {
             BottomBarEffect.ExpandMusicInfo
             bottomBarController.sendEffect(BottomBarEffect.ExpandMusicInfo)
         }
@@ -272,3 +297,11 @@ private object NestedScrollForMusicBarNotification : NestedScrollConnection {
         return super.onPostScroll(consumed, available, source)
     }
 }
+
+private const val PERMISSION_NOT_GRANTED_TITLE =
+    "Grant Permission"
+private const val PERMISSION_NOT_GRANTED_MESSAGE =
+    "Please grant audio permission access so that we could read your audio files"
+
+private const val NO_SONGS_FOUND_MESSAGE =
+    "Couldn't find any songs"
