@@ -28,7 +28,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -50,7 +49,6 @@ import com.example.ingale.feature_local.local_core.presentation.song_item.SongIc
 import com.example.ingale.feature_local.local_navigation.screen_navigation.LocalSectionNavGraph
 import com.example.ingale.main_navigation.bottom_bar_controls.BottomBarEffect
 import com.example.ingale.main_navigation.bottom_bar_controls.LocalBottomBarEffects
-import com.example.ingale.ui.theme.colorScheme.ingaleColors
 import com.example.ingale.ui.theme.spacing
 import kotlinx.coroutines.launch
 
@@ -101,18 +99,10 @@ fun BottomNavigation() {
                     .fillMaxWidth()
                     .requiredHeight(BottomBarHeight)
                     .offset(y = bottomBarOffsetAnim),
-                containerColor = MaterialTheme.ingaleColors.primaryInverse,
             ) {
                 bottomNavItems.forEachIndexed { index, item ->
                     NavigationBarItem(
                         modifier = Modifier.requiredSize(1.15 * BottomBarHeight),
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = MaterialTheme.ingaleColors.primaryInverse,
-                            selectedTextColor = MaterialTheme.ingaleColors.backgroundInverse,
-                            indicatorColor = MaterialTheme.ingaleColors.backgroundInverse,
-                            unselectedIconColor = MaterialTheme.ingaleColors.onBackgroundLight,
-                            unselectedTextColor = MaterialTheme.ingaleColors.onBackgroundLight
-                        ),
                         selected = selected == item.title,
                         onClick = {
                             selected = item.title
@@ -152,7 +142,7 @@ fun BottomNavigation() {
         ) {
             Box(
                 modifier = Modifier
-                    .background(color = MaterialTheme.ingaleColors.background)
+                    .background(color = MaterialTheme.colorScheme.background)
                     .fillMaxSize()
             ) {
                 HorizontalPager(
@@ -238,7 +228,7 @@ private fun CurrentMusicInfoButton(
                 .requiredWidth(cardWidth)
                 .fillMaxHeight()
                 .background(
-                    color = MaterialTheme.ingaleColors.primaryInverse,
+                    color = MaterialTheme.colorScheme.inversePrimary,
                     shape = CircleShape
                 )
         ) {

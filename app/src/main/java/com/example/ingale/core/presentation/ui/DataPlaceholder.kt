@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
-import com.example.ingale.ui.theme.colorScheme.ingaleColors
 import com.example.ingale.ui.theme.spacing
 
 @Composable
@@ -26,7 +25,7 @@ fun DataPlaceholder(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.ingaleColors.background)
+            .background(MaterialTheme.colorScheme.background)
             .padding(MaterialTheme.spacing.large),
         verticalArrangement = Arrangement.spacedBy(
             space = MaterialTheme.spacing.normal,
@@ -37,13 +36,13 @@ fun DataPlaceholder(
         Text(
             text = title,
             fontSize = 28.sp,
-            color = MaterialTheme.ingaleColors.onBackground
+            color = MaterialTheme.colorScheme.onBackground
         )
         description?.let {
             Text(
                 text = description,
                 fontSize = 16.sp,
-                color = MaterialTheme.ingaleColors.onBackground
+                color = MaterialTheme.colorScheme.onBackground
             )
         }
         Button(

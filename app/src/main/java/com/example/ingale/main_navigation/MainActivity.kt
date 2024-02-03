@@ -11,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.ingale.core.presentation.navigation.dialog_navigation.DialogView
 import com.example.ingale.ui.theme.IngaleTheme
-import com.example.ingale.ui.theme.colorScheme.ingaleColors
 
 class MainActivity : ComponentActivity() {
 
@@ -22,7 +21,7 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.ingaleColors.background
+                    color = MaterialTheme.colorScheme.background
                 ) {
                     Box(
                         modifier = Modifier.fillMaxSize(),

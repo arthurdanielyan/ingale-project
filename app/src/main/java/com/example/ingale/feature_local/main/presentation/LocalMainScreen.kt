@@ -21,7 +21,6 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -54,7 +53,6 @@ import com.example.ingale.main_navigation.bottom_bar_controls.BottomBarEffect
 import com.example.ingale.main_navigation.bottom_bar_controls.LocalBottomBarController
 import com.example.ingale.main_navigation.bottom_bar_controls.SendBottomBarEffect
 import com.example.ingale.mvi.wrappers.StableList
-import com.example.ingale.ui.theme.colorScheme.ingaleColors
 import com.example.ingale.ui.theme.spacing
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -104,7 +102,7 @@ fun LocalMainScreen(
     Column(
         modifier = Modifier
             .background(
-                color = MaterialTheme.ingaleColors.background
+                color = MaterialTheme.colorScheme.background
             )
             .padding(
                 top = 8.dp
@@ -114,7 +112,7 @@ fun LocalMainScreen(
             placeholder = {
                 Text(
                     text = "Search",
-                    color = MaterialTheme.ingaleColors.onBackground
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             },
             value = state.searchTextField,
@@ -125,7 +123,7 @@ fun LocalMainScreen(
                 Icon(
                     imageVector = Icons.Default.Close,
                     contentDescription = "Remove search text",
-                    tint = MaterialTheme.ingaleColors.onBackground,
+                    tint = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.clickable {
                         sendEvent(Event.Search(""))
                     }
@@ -143,11 +141,6 @@ fun LocalMainScreen(
                 .clip(
                     shape = RoundedCornerShape(5000.dp)
                 ),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedTextColor = MaterialTheme.ingaleColors.onBackground,
-                unfocusedTextColor = Color.Green,//MaterialTheme.colors.secondaryText,
-                focusedBorderColor = MaterialTheme.ingaleColors.onBackground,
-            )
         )
         Row(
             modifier = Modifier
@@ -182,7 +175,7 @@ fun LocalMainScreen(
             itemContent = { title ->
                 Text(
                     text = title,
-                    color = MaterialTheme.ingaleColors.onBackground,
+                    color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.padding(MaterialTheme.spacing.large)
                 )
             },

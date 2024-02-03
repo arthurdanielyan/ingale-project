@@ -17,7 +17,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
-import com.example.ingale.ui.theme.colorScheme.ingaleColors
 import com.example.ingale.ui.theme.spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,13 +40,13 @@ fun PermissionNotGrantedDialog(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    color = MaterialTheme.ingaleColors.background
+                    color = MaterialTheme.colorScheme.surface
                 ),
         ) {
             Text(
                 text = "Permission required",
                 fontSize = 24.sp,
-                color = MaterialTheme.ingaleColors.onBackground,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(
                     top = MaterialTheme.spacing.large,
                     start = MaterialTheme.spacing.large,
@@ -60,12 +59,12 @@ fun PermissionNotGrantedDialog(
                 Text(
                     modifier = Modifier.padding(24.dp),
                     text = descriptionProvider.description,
-                    color = MaterialTheme.ingaleColors.onBackground
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Divider()
                 Text(
                     text = if (isPermanentlyDeclined) "Go to settings" else "OK",
-                    color = MaterialTheme.ingaleColors.onBackground,
+                    color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable(
