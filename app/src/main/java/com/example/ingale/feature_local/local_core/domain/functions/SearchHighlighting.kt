@@ -6,7 +6,6 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
-import com.example.ingale.ui.theme.colorScheme.ingaleColors
 
 @Composable
 fun String.highlight(highlight: String): AnnotatedString = buildAnnotatedString {
@@ -17,7 +16,7 @@ fun String.highlight(highlight: String): AnnotatedString = buildAnnotatedString 
     val parts = this@highlight.splitBy(highlight)
     parts.forEach { part ->
         if(part.lowercase() == highlight.lowercase()) {
-            withStyle(SpanStyle(color = MaterialTheme.ingaleColors.backgroundInverse)) {
+            withStyle(SpanStyle(color = MaterialTheme.colorScheme.inverseSurface)) {
                 append(part)
             }
         } else append(part)

@@ -38,7 +38,6 @@ import com.example.ingale.feature_local.local_core.presentation.song_item.SongIc
 import com.example.ingale.feature_local.songs_set.presentation.view.LocalSongsSetContract
 import com.example.ingale.main_navigation.bottom_bar_controls.BottomBarEffect
 import com.example.ingale.main_navigation.bottom_bar_controls.SendBottomBarEffect
-import com.example.ingale.ui.theme.colorScheme.ingaleColors
 import kotlin.math.abs
 
 @Composable
@@ -113,7 +112,7 @@ fun CollapsingTitle(
         ) {
             Box(modifier = Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.ingaleColors.primaryInverse)
+                .background(MaterialTheme.colorScheme.inversePrimary)
                 .layoutId("background")
                 .onSizeChanged {
                     boxHeight = density.run {
@@ -126,7 +125,7 @@ fun CollapsingTitle(
                 modifier = Modifier
                     .border(
                         width = 2.dp,
-                        color = MaterialTheme.colorScheme.scrim,
+                        color = MaterialTheme.colorScheme.outline,
                         shape = CircleShape
                     )
                     .layoutId("songs_icon")

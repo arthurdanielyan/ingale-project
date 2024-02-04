@@ -21,7 +21,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.ingale.R
 import com.example.ingale.ui.theme.IngaleTheme
-import com.example.ingale.ui.theme.colorScheme.ingaleColors
 
 @Composable
 fun SongIcon(
@@ -41,10 +40,10 @@ fun SongIcon(
         Icon(
             bitmap = pictureR,
             contentDescription = "Song picture",
-            tint = MaterialTheme.ingaleColors.onBackground,
+            tint = MaterialTheme.colorScheme.onSurface,
             modifier = modifier
                 .background(
-                    color = MaterialTheme.ingaleColors.backgroundLight,
+                    color = MaterialTheme.colorScheme.surface,
                     shape = shape
                 )
                 .clip(shape)
@@ -59,7 +58,7 @@ fun SongIcon(
             modifier = modifier
                 .size(60.dp)
                 .background(
-                    color = MaterialTheme.colorScheme.secondary,
+                    color = MaterialTheme.colorScheme.surface,
                     shape = shape
                 )
                 .clip(shape),

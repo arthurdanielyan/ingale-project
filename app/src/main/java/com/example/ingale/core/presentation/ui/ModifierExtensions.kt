@@ -20,7 +20,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.IntSize
-import com.example.ingale.ui.theme.colorScheme.ingaleColors
 
 fun Modifier.navigationClickable(
     enabled: Boolean = true,
@@ -60,12 +59,12 @@ fun Modifier.shimmer(): Modifier = composed {
         0.9f
     }
 
-    val colorScheme = MaterialTheme.ingaleColors
+    val colorScheme = MaterialTheme.colorScheme
     val bgColor = remember {
-        colorScheme.primaryInverse
+        colorScheme.surface
     }
     val shimmerColor = remember {
-        colorScheme.backgroundInverse.copy(alpha = ShimmerBgAlpha)
+        colorScheme.background.copy(alpha = ShimmerBgAlpha)
     }
 
     val infiniteTransition = rememberInfiniteTransition(label = "shimmer effect")
@@ -98,5 +97,5 @@ fun Modifier.shimmer(): Modifier = composed {
     }
 }
 
-const val ShimmerBgAlpha = 0.2f
+const val ShimmerBgAlpha = 0.9f
 const val AnimationDuration = 2000
