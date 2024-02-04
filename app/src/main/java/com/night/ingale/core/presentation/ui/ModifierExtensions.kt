@@ -61,6 +61,9 @@ fun Modifier.shimmer(): Modifier = composed {
     }
     val shimmerWidth = remember { 0.5f }
     val doubleShimmerWidth = remember { 2 * shimmerWidth }
+    val brushRadius = remember(maxRadius) {
+        maxRadius + doubleShimmerWidth*maxRadius
+    }
     val shimmerColor = remember {
         colorScheme.background.copy(alpha = ShimmerBgAlpha)
     }
@@ -88,7 +91,7 @@ fun Modifier.shimmer(): Modifier = composed {
                 radiusProgress + doubleShimmerWidth to bgColor,
             ),
             center = Offset.Zero,
-            radius = maxRadius
+            radius = brushRadius
         )
     ).onSizeChanged {
         maxRadius = maxOf(it.width, it.height).toFloat()
