@@ -40,10 +40,10 @@ fun SongIcon(
         Icon(
             bitmap = pictureR,
             contentDescription = "Song picture",
-            tint = MaterialTheme.colorScheme.onBackground,
+            tint = MaterialTheme.colorScheme.onSurface,
             modifier = modifier
                 .background(
-                    color = MaterialTheme.colorScheme.tertiaryContainer,
+                    color = MaterialTheme.colorScheme.surface,
                     shape = shape
                 )
                 .clip(shape)
@@ -58,7 +58,7 @@ fun SongIcon(
             modifier = modifier
                 .size(60.dp)
                 .background(
-                    color = MaterialTheme.colorScheme.tertiaryContainer,
+                    color = MaterialTheme.colorScheme.surface,
                     shape = shape
                 )
                 .clip(shape),

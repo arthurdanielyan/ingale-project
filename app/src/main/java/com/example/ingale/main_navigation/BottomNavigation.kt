@@ -28,6 +28,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -99,9 +100,17 @@ fun BottomNavigation() {
                     .fillMaxWidth()
                     .requiredHeight(BottomBarHeight)
                     .offset(y = bottomBarOffsetAnim),
+                containerColor = MaterialTheme.colorScheme.inversePrimary
             ) {
                 bottomNavItems.forEachIndexed { index, item ->
                     NavigationBarItem(
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = MaterialTheme.colorScheme.inversePrimary,
+                            selectedTextColor = MaterialTheme.colorScheme.inverseSurface,
+                            indicatorColor = MaterialTheme.colorScheme.secondaryContainer,
+                            unselectedIconColor = MaterialTheme.colorScheme.onBackground,
+                            unselectedTextColor = MaterialTheme.colorScheme.onBackground
+                        ),
                         modifier = Modifier.requiredSize(1.15 * BottomBarHeight),
                         selected = selected == item.title,
                         onClick = {
