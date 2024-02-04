@@ -1,6 +1,6 @@
 package com.example.ingale.core.presentation.ui
 
-import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.EaseInOut
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -10,7 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -19,7 +19,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.unit.IntSize
 
 fun Modifier.navigationClickable(
     enabled: Boolean = true,
@@ -52,50 +51,49 @@ private class NavigationClickListener(
 }
 
 fun Modifier.shimmer(): Modifier = composed {
-    var size by remember {
-        mutableStateOf(IntSize(1,1))
-    }
-    val shimmerWidth = remember {
-        0.9f
+    var maxRadius by remember {
+        mutableFloatStateOf(1f)
     }
 
     val colorScheme = MaterialTheme.colorScheme
     val bgColor = remember {
         colorScheme.surface
     }
+    val shimmerWidth = remember { 0.5f }
+    val doubleShimmerWidth = remember { 2 * shimmerWidth }
     val shimmerColor = remember {
         colorScheme.background.copy(alpha = ShimmerBgAlpha)
     }
 
     val infiniteTransition = rememberInfiniteTransition(label = "shimmer effect")
-    val shimmerOffset by infiniteTransition.animateFloat(
-        initialValue = -shimmerWidth,
-        targetValue = 1f+shimmerWidth,
+    val radiusProgress by infiniteTransition.animateFloat(
+        initialValue = -doubleShimmerWidth,
+        targetValue = 1f,
         animationSpec = infiniteRepeatable(
             repeatMode = RepeatMode.Restart,
             animation = tween(
                 durationMillis = AnimationDuration,
                 delayMillis = 0,
-                easing = LinearEasing
+                easing = EaseInOut
             )
         ),
         label = "shimmer effect"
     )
 
     background(
-        brush = Brush.linearGradient(
+        brush = Brush.radialGradient(
             colorStops = arrayOf(
-                shimmerOffset - shimmerWidth to bgColor,
-                shimmerOffset to shimmerColor,
-                shimmerOffset + shimmerWidth to bgColor,
+                radiusProgress                      to bgColor,
+                radiusProgress + shimmerWidth       to shimmerColor,
+                radiusProgress + doubleShimmerWidth to bgColor,
             ),
-            start = Offset.Zero,
-            end = Offset(size.width.toFloat(), size.height.toFloat())
+            center = Offset.Zero,
+            radius = maxRadius
         )
     ).onSizeChanged {
-        size = it
+        maxRadius = maxOf(it.width, it.height).toFloat()
     }
 }
 
-const val ShimmerBgAlpha = 0.9f
-const val AnimationDuration = 2000
+private const val ShimmerBgAlpha = 0.7f
+private const val AnimationDuration = 2000
