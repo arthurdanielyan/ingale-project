@@ -2,8 +2,8 @@ package com.example.ingale.core.presentation.view
 
 sealed class LoadingViewState {
 
-    val isLoading: Boolean = true
-//        get() = this is Loading
+    val isLoading: Boolean
+        get() = this is Loading
     val isSuccess: Boolean
         get() = this is Loading
     val isError: Boolean
