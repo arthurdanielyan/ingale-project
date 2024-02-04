@@ -9,8 +9,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class DialogNavigatorImpl : DialogNavigator, ActiveDialogHolder, ViewModelStoreOwner {
@@ -23,7 +24,9 @@ class DialogNavigatorImpl : DialogNavigator, ActiveDialogHolder, ViewModelStoreO
         capacity = 1,
         onBufferOverflow = BufferOverflow.DROP_LATEST
     )
-    override val activeDialog: Flow<DialogNavEvent<*, *>?> = _activeDialog.receiveAsFlow()
+    override val activeDialog = _activeDialog
+        .receiveAsFlow()
+        .stateIn(scope, SharingStarted.Eagerly, null)
 
     override fun dismiss() {
         scope.launch {
