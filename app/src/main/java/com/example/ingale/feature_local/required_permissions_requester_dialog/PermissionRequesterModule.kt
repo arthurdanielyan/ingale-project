@@ -1,5 +1,0 @@
-package com.example.ingale.feature_local.required_permissions_requester_dialog
-
-import com.example.ingale.feature_local.required_permissions_requester_dialog.presentation.presentationModule
-
-val permissionRequesterModule = presentationModule
