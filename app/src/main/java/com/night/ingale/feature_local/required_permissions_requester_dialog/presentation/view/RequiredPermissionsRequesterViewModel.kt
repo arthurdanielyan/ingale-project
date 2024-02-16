@@ -70,6 +70,8 @@ class RequiredPermissionsRequesterViewModel(
             }
         } else {
             dialogNavigator.dismiss()
+        }
+        if(isAudioPermissionGranted) {
             savedStateHandle.getOnResultCallback<Boolean>()?.invoke(true)
         }
     }
@@ -121,4 +123,17 @@ class RequiredPermissionsRequesterViewModel(
             savedStateHandle.getOnResultCallback<Boolean>()?.invoke(isGranted)
         }
     }
+
+    private val isAudioPermissionGranted: Boolean
+        get() {
+            val audioPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                Manifest.permission.READ_MEDIA_AUDIO
+            } else {
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            }
+            return ContextCompat.checkSelfPermission(
+                applicationContext,
+                audioPermission
+            ) == PackageManager.PERMISSION_GRANTED
+        }
 }

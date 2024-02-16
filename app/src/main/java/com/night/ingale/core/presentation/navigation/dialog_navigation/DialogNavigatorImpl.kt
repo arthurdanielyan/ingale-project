@@ -3,20 +3,19 @@ package com.night.ingale.core.presentation.navigation.dialog_navigation
 import androidx.compose.runtime.compositionLocalOf
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
-import com.night.ingale.feature_local.required_permissions_requester_dialog.presentation.view.RequiredPermissionsRequesterViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class DialogNavigatorImpl : DialogNavigator, ActiveDialogHolder, ViewModelStoreOwner {
-
-    override var viewModelStore = ViewModelStore()
+class DialogNavigatorImpl : DialogNavigator, ActiveDialogHolder, DialogViewModelStore {
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
@@ -28,19 +27,23 @@ class DialogNavigatorImpl : DialogNavigator, ActiveDialogHolder, ViewModelStoreO
         .receiveAsFlow()
         .stateIn(scope, SharingStarted.Eagerly, null)
 
+    private val viewModelStoreOwners = mutableMapOf<DialogDestination, ViewModelStoreOwner>()
+
+    override val currentViewModelStore: ViewModelStoreOwner
+        get() {
+            val lastDestination = activeDialog.value?.destination
+                ?: throw IllegalAccessException("No active dialog")
+            return viewModelStoreOwners[lastDestination]
+                ?: throw IllegalAccessException("No active dialog")
+        }
+
+
     override fun dismiss() {
         scope.launch {
+            activeDialog.value?.destination?.let {
+                viewModelStoreOwners.remove(it)
+            }
             _activeDialog.send(null)
-            /**
-             * In some cases the necessity of a dialog existence is determined in the init
-             * block of its ViewModel when the ViewModel is not yet put in the ViewModelStore
-             * and calling [ViewModelStore.clear] here doesn't remove the ViewModel and it
-             * remains in the memory.
-             * Particularly in the case of [RequiredPermissionsRequesterViewModel] when all
-             * permissions are already granted.
-             * */
-            viewModelStore.clear()
-            viewModelStore = ViewModelStore()
         }
     }
 
@@ -77,6 +80,9 @@ class DialogNavigatorImpl : DialogNavigator, ActiveDialogHolder, ViewModelStoreO
                     onResult = onResult
                 )
             )
+        }
+        viewModelStoreOwners[destination] = object : ViewModelStoreOwner {
+            override val viewModelStore = ViewModelStore()
         }
     }
 }

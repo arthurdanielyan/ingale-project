@@ -1,6 +1,5 @@
 package com.night.ingale.core.presentation.navigation.dialog_navigation
 
-import androidx.lifecycle.ViewModelStoreOwner
 import org.koin.dsl.module
 
 val dialogNavigationModule = module {
@@ -13,7 +12,7 @@ val dialogNavigationModule = module {
     single<ActiveDialogHolder> {
         get<DialogNavigatorImpl>()
     }
-    single<ViewModelStoreOwner> {
+    single<DialogViewModelStore> {
         get<DialogNavigatorImpl>()
     }
 }
