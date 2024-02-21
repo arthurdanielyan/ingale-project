@@ -81,24 +81,9 @@ fun LocalMainScreen(
         }
     }
 
-    var selectedTabIndex by rememberSaveable {
-        mutableIntStateOf(0)
-    }
     val pagerState = rememberPagerState(
         pageCount = { state.sections.size }
     )
-    val bottomBarController = LocalBottomBarController.current
-    LaunchedEffect(selectedTabIndex) {
-        bottomBarController.sendEffect(BottomBarEffect.ExpandMusicInfo)
-        pagerState.animateScrollToPage(
-            page = selectedTabIndex
-        )
-    }
-    LaunchedEffect(pagerState.currentPage, pagerState.isScrollInProgress) {
-        if (!pagerState.isScrollInProgress) {
-            selectedTabIndex = pagerState.currentPage
-        }
-    }
     Column(
         modifier = Modifier
             .background(
@@ -170,7 +155,7 @@ fun LocalMainScreen(
         Spacer(modifier = Modifier.height(16.dp))
         TabRow(
             modifier = Modifier.fillMaxWidth(),
-            selectedItemIndex = { selectedTabIndex },
+            pagerState = pagerState,
             items = state.sections,
             itemContent = { title ->
                 Text(
@@ -178,10 +163,7 @@ fun LocalMainScreen(
                     color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.padding(MaterialTheme.spacing.large)
                 )
-            },
-            onSelect = { index, _ ->
-                selectedTabIndex = index
-            },
+            }
         )
         HorizontalPager(
             state = pagerState,
