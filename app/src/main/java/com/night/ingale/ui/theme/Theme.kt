@@ -117,9 +117,9 @@ fun IngaleTheme(
                 if(isSystemInDarkTheme()) ColorSchemeDark() else ColorSchemeLight(),
         LocalNavigation provides koinInject(),
         LocalDialogNavigation provides koinInject(),
-        LocalDialogViewModelStoreOwner provides koinInject(),
         LocalBottomBarEffects provides koinInject(),
-        LocalBottomBarController provides koinInject()
+        LocalBottomBarController provides koinInject(),
+        LocalDialogViewModelStoreOwner provides koinInject()
     ) {
         MaterialTheme(
             colorScheme = colorScheme,

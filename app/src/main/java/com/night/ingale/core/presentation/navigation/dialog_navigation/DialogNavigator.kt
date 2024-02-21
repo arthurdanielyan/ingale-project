@@ -2,6 +2,7 @@ package com.night.ingale.core.presentation.navigation.dialog_navigation
 
 import androidx.compose.runtime.compositionLocalOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelStoreOwner
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -37,6 +38,10 @@ interface ActiveDialogHolder {
      * were activated and dismissed
      * */
     val activeDialog: StateFlow<DialogNavEvent<*, *>?>
+}
+
+interface DialogViewModelStore {
+    val currentViewModelStore: ViewModelStoreOwner
 }
 
 val LocalDialogNavigation = compositionLocalOf<ActiveDialogHolder> {

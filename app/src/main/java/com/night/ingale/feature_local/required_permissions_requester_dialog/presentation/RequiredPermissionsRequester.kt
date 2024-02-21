@@ -29,6 +29,7 @@ fun RequiredPermissionsRequesterDialog(
     val vm = ingaleDialogViewModels<RequiredPermissionsRequesterViewModel>(
         savedStateHandle = savedStateHandle
     )
+
     RequiredPermissionsRequesterDialogContent(
         state = vm.state.collectAsState().value,
         effects = vm.effect,
