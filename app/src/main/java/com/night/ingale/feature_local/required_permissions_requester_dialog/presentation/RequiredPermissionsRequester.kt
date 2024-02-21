@@ -12,7 +12,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.SavedStateHandle
 import com.night.ingale.core.di.ingaleDialogViewModels
 import com.night.ingale.core.presentation.flows.ObserveEffects
-import com.night.ingale.core.presentation.navigation.dialog_navigation.IngaleDialogBehaviour
 import com.night.ingale.feature_local.required_permissions_requester_dialog.presentation.ui_components.AudioPermissionDescriptionProvider
 import com.night.ingale.feature_local.required_permissions_requester_dialog.presentation.ui_components.NotificationPermissionDescriptionProvider
 import com.night.ingale.feature_local.required_permissions_requester_dialog.presentation.ui_components.PermissionNotGrantedDialog
@@ -27,16 +26,15 @@ import kotlinx.coroutines.flow.Flow
 fun RequiredPermissionsRequesterDialog(
     savedStateHandle: SavedStateHandle
 ) {
-    IngaleDialogBehaviour {
-        val vm = ingaleDialogViewModels<RequiredPermissionsRequesterViewModel>(
-            savedStateHandle = savedStateHandle
-        )
-        RequiredPermissionsRequesterDialogContent(
-            state = vm.state.collectAsState().value,
-            effects = vm.effect,
-            sendEvent = vm::sendEvent
-        )
-    }
+    val vm = ingaleDialogViewModels<RequiredPermissionsRequesterViewModel>(
+        savedStateHandle = savedStateHandle
+    )
+
+    RequiredPermissionsRequesterDialogContent(
+        state = vm.state.collectAsState().value,
+        effects = vm.effect,
+        sendEvent = vm::sendEvent
+    )
 }
 
 @Composable

@@ -5,17 +5,15 @@ import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class DialogNavigatorImpl : DialogNavigator, ActiveDialogHolder, DialogViewModelStore {
+class DialogNavigatorImpl : DialogNavigator, ActiveDialogHolder, ViewModelStoreOwner {
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
@@ -27,13 +25,11 @@ class DialogNavigatorImpl : DialogNavigator, ActiveDialogHolder, DialogViewModel
         .receiveAsFlow()
         .stateIn(scope, SharingStarted.Eagerly, null)
 
-    private val viewModelStoreOwners = mutableMapOf<DialogDestination, ViewModelStoreOwner>()
+    private val viewModelStores = mutableMapOf<DialogDestination, ViewModelStore>()
 
-    override val currentViewModelStore: ViewModelStoreOwner
+    override val viewModelStore: ViewModelStore
         get() {
-            val lastDestination = activeDialog.value?.destination
-                ?: throw IllegalAccessException("No active dialog")
-            return viewModelStoreOwners[lastDestination]
+            return viewModelStores[activeDialog.value?.destination]
                 ?: throw IllegalAccessException("No active dialog")
         }
 
@@ -41,7 +37,7 @@ class DialogNavigatorImpl : DialogNavigator, ActiveDialogHolder, DialogViewModel
     override fun dismiss() {
         scope.launch {
             activeDialog.value?.destination?.let {
-                viewModelStoreOwners.remove(it)
+                viewModelStores.remove(it)?.clear()
             }
             _activeDialog.send(null)
         }
@@ -81,9 +77,7 @@ class DialogNavigatorImpl : DialogNavigator, ActiveDialogHolder, DialogViewModel
                 )
             )
         }
-        viewModelStoreOwners[destination] = object : ViewModelStoreOwner {
-            override val viewModelStore = ViewModelStore()
-        }
+        viewModelStores[destination] = ViewModelStore()
     }
 }
 
