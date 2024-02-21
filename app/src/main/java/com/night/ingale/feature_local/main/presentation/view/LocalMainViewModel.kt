@@ -8,7 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewModelScope
 import com.night.ingale.core.audio_player.AudioPlayer
 import com.night.ingale.core.domain.model.Song
-import com.night.ingale.core.presentation.navigation.dialog_navigation.DialogDestination.LocalDialogDestination
+import com.night.ingale.core.presentation.navigation.dialog_navigation.DialogDestination
 import com.night.ingale.core.presentation.navigation.dialog_navigation.DialogNavigator
 import com.night.ingale.core.presentation.view.LoadingViewState
 import com.night.ingale.feature_local.local_navigation.screen_navigation.LocalScreenDestination
@@ -53,7 +53,7 @@ class LocalMainViewModel(
 
     init {
         dialogNavigator.activate<Boolean>(
-            LocalDialogDestination.RequiredPermissionRequester,
+            DialogDestination.RequiredPermissionRequester,
             onResult = {
                 loadSongs()
             }
