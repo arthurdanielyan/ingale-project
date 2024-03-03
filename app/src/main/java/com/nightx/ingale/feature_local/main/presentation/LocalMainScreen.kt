@@ -30,15 +30,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import com.nightx.ingale.core.presentation.flows.ObserveEffects
 import com.nightx.ingale.core.presentation.ui.DataPlaceholder
 import com.nightx.ingale.core.presentation.ui.LoadingStatePresenter
+import com.nightx.ingale.core.presentation.view.NestedScrollForMusicBarNotification
 import com.nightx.ingale.feature_local.local_core.domain.model.SongsSet
 import com.nightx.ingale.feature_local.local_core.presentation.SongsLazyList
 import com.nightx.ingale.feature_local.main.presentation.ui_components.SongsSetButton
@@ -48,7 +46,6 @@ import com.nightx.ingale.feature_local.main.presentation.view.LocalMainContract
 import com.nightx.ingale.feature_local.main.presentation.view.LocalMainContract.Effect
 import com.nightx.ingale.feature_local.main.presentation.view.LocalMainContract.Event
 import com.nightx.ingale.feature_local.main.presentation.view.LocalMainViewModel.Companion.PERMISSION_NOT_GRANTED_ERROR
-import com.nightx.ingale.main_navigation.bottom_bar_controls.BottomBarController
 import com.nightx.ingale.main_navigation.bottom_bar_controls.BottomBarEffect
 import com.nightx.ingale.main_navigation.bottom_bar_controls.LocalBottomBarController
 import com.nightx.ingale.main_navigation.bottom_bar_controls.SendBottomBarEffect
@@ -56,7 +53,6 @@ import com.nightx.ingale.mvi.wrappers.StableList
 import com.nightx.ingale.ui.theme.spacing
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import org.koin.java.KoinJavaComponent.inject
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -268,26 +264,6 @@ fun LocalMainScreen(
                 }
             }
         }
-    }
-}
-
-private object NestedScrollForMusicBarNotification : NestedScrollConnection {
-
-    private val bottomBarController by inject<BottomBarController>(BottomBarController::class.java)
-    override fun onPostScroll(
-        consumed: Offset,
-        available: Offset,
-        source: NestedScrollSource,
-    ): Offset {
-        if (consumed.y < -1f) {
-            BottomBarEffect.CollapseMusicInfo
-            bottomBarController.sendEffect(BottomBarEffect.CollapseMusicInfo)
-        } else if (consumed.y > 1f) {
-            BottomBarEffect.ExpandMusicInfo
-            bottomBarController.sendEffect(BottomBarEffect.ExpandMusicInfo)
-        }
-
-        return super.onPostScroll(consumed, available, source)
     }
 }
 
