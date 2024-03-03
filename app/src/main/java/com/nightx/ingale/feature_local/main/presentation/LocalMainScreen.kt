@@ -23,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -75,6 +76,10 @@ fun LocalMainScreen(
     val pagerState = rememberPagerState(
         pageCount = { state.sections.size }
     )
+    val bottomBarController = LocalBottomBarController.current
+    LaunchedEffect(pagerState.settledPage) {
+        bottomBarController.sendEffect(BottomBarEffect.ExpandMusicInfo)
+    }
     Column(
         modifier = Modifier
             .background(
