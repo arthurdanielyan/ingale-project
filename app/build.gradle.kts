@@ -16,11 +16,11 @@ kapt {
 }
 
 android {
-    namespace = "com.night.ingale"
+    namespace = "com.nightx.ingale"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.night.ingale"
+        applicationId = "com.nightx.ingale"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

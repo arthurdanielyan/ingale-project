@@ -1,0 +1,5 @@
+package com.nightx.ingale.feature_local.required_permissions_requester_dialog
+
+import com.nightx.ingale.feature_local.required_permissions_requester_dialog.presentation.presentationModule
+
+val permissionRequesterModule = presentationModule

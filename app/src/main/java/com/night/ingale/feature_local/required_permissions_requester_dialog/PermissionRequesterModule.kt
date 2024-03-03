@@ -1,5 +1,0 @@
-package com.night.ingale.feature_local.required_permissions_requester_dialog
-
-import com.night.ingale.feature_local.required_permissions_requester_dialog.presentation.presentationModule
-
-val permissionRequesterModule = presentationModule
