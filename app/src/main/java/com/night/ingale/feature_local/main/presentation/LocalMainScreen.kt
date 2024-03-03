@@ -23,11 +23,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
@@ -50,7 +45,6 @@ import com.night.ingale.feature_local.main.presentation.view.LocalMainContract.E
 import com.night.ingale.feature_local.main.presentation.view.LocalMainViewModel.Companion.PERMISSION_NOT_GRANTED_ERROR
 import com.night.ingale.main_navigation.bottom_bar_controls.BottomBarController
 import com.night.ingale.main_navigation.bottom_bar_controls.BottomBarEffect
-import com.night.ingale.main_navigation.bottom_bar_controls.LocalBottomBarController
 import com.night.ingale.main_navigation.bottom_bar_controls.SendBottomBarEffect
 import com.night.ingale.mvi.wrappers.StableList
 import com.night.ingale.ui.theme.spacing
