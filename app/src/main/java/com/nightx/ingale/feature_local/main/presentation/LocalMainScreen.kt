@@ -23,11 +23,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -77,24 +72,9 @@ fun LocalMainScreen(
         }
     }
 
-    var selectedTabIndex by rememberSaveable {
-        mutableIntStateOf(0)
-    }
     val pagerState = rememberPagerState(
         pageCount = { state.sections.size }
     )
-    val bottomBarController = LocalBottomBarController.current
-    LaunchedEffect(selectedTabIndex) {
-        bottomBarController.sendEffect(BottomBarEffect.ExpandMusicInfo)
-        pagerState.animateScrollToPage(
-            page = selectedTabIndex
-        )
-    }
-    LaunchedEffect(pagerState.currentPage, pagerState.isScrollInProgress) {
-        if (!pagerState.isScrollInProgress) {
-            selectedTabIndex = pagerState.currentPage
-        }
-    }
     Column(
         modifier = Modifier
             .background(
@@ -166,7 +146,7 @@ fun LocalMainScreen(
         Spacer(modifier = Modifier.height(16.dp))
         TabRow(
             modifier = Modifier.fillMaxWidth(),
-            selectedItemIndex = { selectedTabIndex },
+            pagerState = pagerState,
             items = state.sections,
             itemContent = { title ->
                 Text(
@@ -174,10 +154,7 @@ fun LocalMainScreen(
                     color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.padding(MaterialTheme.spacing.large)
                 )
-            },
-            onSelect = { index, _ ->
-                selectedTabIndex = index
-            },
+            }
         )
         HorizontalPager(
             state = pagerState,
