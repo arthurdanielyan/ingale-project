@@ -81,8 +81,8 @@ fun <T> TabRow(
             val currentBounds = tabsBounds[pagerState.currentPage]
             val targetBounds = tabsBounds[pagerState.currentPage-1]
             val diff = currentBounds.offset - targetBounds.offset
-            val progress = 1f-fraction.absoluteValue
-            dragWidth = currentBounds.width + progress*(targetBounds.width-currentBounds.width)
+            val progress = fraction.absoluteValue.reverseProgress()
+            dragWidth = currentBounds.width + progress.reverseProgress()*(targetBounds.width-currentBounds.width)
             targetBounds.offset + (progress*diff).roundToInt()
         } else { // fraction == 0
             dragWidth = tabsBounds[pagerState.currentPage].width
@@ -150,6 +150,11 @@ fun <T> TabRow(
             )
         }
     }
+}
+
+private fun Float.reverseProgress(): Float {
+    require(this in 0f..1f)
+    return 1f - this
 }
 
 private const val pageSettleDuration = 200

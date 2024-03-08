@@ -1,9 +1,12 @@
 package com.nightx.ingale.feature_local.main.presentation
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,19 +18,28 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.nightx.ingale.core.presentation.flows.ObserveEffects
 import com.nightx.ingale.core.presentation.ui.DataPlaceholder
@@ -89,7 +101,14 @@ fun LocalMainScreen(
                 top = 8.dp
             )
     ) {
+        val focusManager = LocalFocusManager.current
+        val interactionSource = remember { MutableInteractionSource() }
+        val isFocused by interactionSource.collectIsFocusedAsState()
+        BackHandler(enabled = isFocused) {
+            focusManager.clearFocus()
+        }
         OutlinedTextField(
+            interactionSource = interactionSource,
             placeholder = {
                 Text(
                     text = "Search",
@@ -100,7 +119,7 @@ fun LocalMainScreen(
             onValueChange = {
                 sendEvent(Event.Search(it))
             },
-            suffix = {
+            trailingIcon = {
                 Icon(
                     imageVector = Icons.Default.Close,
                     contentDescription = "Remove search text",
@@ -113,15 +132,11 @@ fun LocalMainScreen(
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp)
-                .border(
-                    width = 1.dp,
-                    color = Color(0xFF5C5C5C),
-                    shape = RoundedCornerShape(5000.dp)
-                )
-                .clip(
-                    shape = RoundedCornerShape(5000.dp)
-                ),
+                .padding(horizontal = 8.dp),
+            shape = CircleShape,
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Search
+            )
         )
         Row(
             modifier = Modifier
