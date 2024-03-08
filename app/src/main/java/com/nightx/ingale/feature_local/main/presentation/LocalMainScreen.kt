@@ -66,7 +66,7 @@ fun LocalMainScreen(
         when (effect) {
             Effect.ScrollToTop -> {
                 delay(100)
-                songsLazyColumnState.scrollToItem(0)
+                songsLazyColumnState.animateScrollToItem(0)
                 albumsGridsState.animateScrollToItem(0)
                 artistsGridsState.animateScrollToItem(0)
             }
