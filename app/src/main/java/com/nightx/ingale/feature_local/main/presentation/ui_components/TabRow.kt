@@ -126,7 +126,6 @@ fun <T> TabRow(
                                     )
                                 }
                                 if (selectedItemIndex == index) {
-//                                    dragOffset = tabsBounds[index].offset
                                     dragWidth = tabsBounds[index].width
                                 }
                             }
@@ -145,8 +144,7 @@ fun <T> TabRow(
                         )
                     }
                     .align(Alignment.BottomStart)
-//                    .width(dragWidth.dp)
-                    .width(40.dp)
+                    .width(dragWidth.dp)
                     .height(1.dp)
                     .background(MaterialTheme.colorScheme.onBackground)
             )
