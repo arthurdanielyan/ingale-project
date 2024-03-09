@@ -12,7 +12,6 @@ import androidx.lifecycle.SavedStateHandle
 import com.nightx.ingale.core.presentation.navigation.destination.getOnResultCallback
 import com.nightx.ingale.core.presentation.navigation.dialog_navigation.DialogNavigator
 import com.nightx.ingale.feature_local.required_permissions_requester_dialog.presentation.view.RequiredPermissionsRequesterContract.Effect
-import com.nightx.ingale.feature_local.required_permissions_requester_dialog.presentation.view.RequiredPermissionsRequesterContract.Event
 import com.nightx.ingale.feature_local.required_permissions_requester_dialog.presentation.view.RequiredPermissionsRequesterContract.State
 import com.nightx.ingale.mvi.BaseViewModel
 import com.nightx.ingale.mvi.wrappers.emptyStableList
@@ -29,7 +28,7 @@ class RequiredPermissionsRequesterViewModel(
     private val savedStateHandle: SavedStateHandle,
     private val dialogNavigator: DialogNavigator,
     private val applicationContext: Context,
-) : BaseViewModel<State, Event, Effect>() {
+) : BaseViewModel<State, Effect>(), RequiredPermissionsCallbacks {
 
     private val requiredPermissions = if (Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU) {
         arrayOf(Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.READ_MEDIA_AUDIO)
@@ -76,21 +75,18 @@ class RequiredPermissionsRequesterViewModel(
         }
     }
 
-    override fun handleEvent(event: Event) {
-        when (event) {
-            is Event.DialogEvent.GoToSettingsClick -> {
-                onGoToSettingsClick(event.permission)
-            }
-
-            is Event.DialogEvent.OkClick -> onOkClick(event.permission)
-
-            is Event.PermissionResult -> {
-                onPermissionResult(event.permission, event.isGranted)
-            }
+    override fun onPermissionResult(permission: String, isGranted: Boolean) {
+        if (!isGranted && requiredPermissionDialogs.value.firstOrNull { it == permission } == null) {
+            requiredPermissionDialogs.update { it + permission }
+        } else if (isGranted) {
+            requiredPermissionDialogs.update { it - permission }
+        }
+        if (permission == Manifest.permission.READ_MEDIA_AUDIO || permission == Manifest.permission.READ_EXTERNAL_STORAGE) {
+            savedStateHandle.getOnResultCallback<Boolean>()?.invoke(isGranted)
         }
     }
 
-    private fun onOkClick(permission: String) {
+    override fun onOkClick(permission: String) {
         // This forces the dialog to be updated with a different button
         // as the same element will be inserted again
         requiredPermissionDialogs.update { it - permission }
@@ -99,7 +95,7 @@ class RequiredPermissionsRequesterViewModel(
         }
     }
 
-    private fun onGoToSettingsClick(permission: String) {
+    override fun onGoToSettingsClick(permission: String) {
         requiredPermissionDialogs.update { it - permission }
         Intent(
             Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
@@ -110,17 +106,6 @@ class RequiredPermissionsRequesterViewModel(
         }
         if(requiredPermissionDialogs.value.isEmpty()) {
             dialogNavigator.dismiss()
-        }
-    }
-
-    private fun onPermissionResult(permission: String, isGranted: Boolean) {
-        if (!isGranted && requiredPermissionDialogs.value.firstOrNull { it == permission } == null) {
-            requiredPermissionDialogs.update { it + permission }
-        } else if (isGranted) {
-            requiredPermissionDialogs.update { it - permission }
-        }
-        if (permission == Manifest.permission.READ_MEDIA_AUDIO || permission == Manifest.permission.READ_EXTERNAL_STORAGE) {
-            savedStateHandle.getOnResultCallback<Boolean>()?.invoke(isGranted)
         }
     }
 

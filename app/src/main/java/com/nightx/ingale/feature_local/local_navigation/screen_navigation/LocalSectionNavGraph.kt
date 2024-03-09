@@ -1,20 +1,21 @@
 package com.nightx.ingale.feature_local.local_navigation.screen_navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.nightx.ingale.core.di.ingaleViewModels
 import com.nightx.ingale.core.presentation.flows.ComposeCollect
 import com.nightx.ingale.core.presentation.navigation.destination.putScreenData
 import com.nightx.ingale.feature_local.main.presentation.LocalMainScreen
-import com.nightx.ingale.feature_local.main.presentation.view.LocalMainViewModel
 import com.nightx.ingale.feature_local.songs_set.presentation.SongsSetScreen
-import com.nightx.ingale.feature_local.songs_set.presentation.view.SongsSetViewModel
 import com.nightx.ingale.main_navigation.Screens
 
+private val appDestinations = mapOf<LocalScreenDestination, @Composable (SavedStateHandle) -> Unit>(
+    LocalScreenDestination.MainScreen to { LocalMainScreen() },
+    LocalScreenDestination.SongsSetScreen to { SongsSetScreen(it) }
+)
 
 @Composable
 fun LocalSectionNavGraph() {
@@ -25,27 +26,12 @@ fun LocalSectionNavGraph() {
         navController = navController,
         startDestination = Screens.Local.MainScreen.route
     ) {
-        composable(
-            route = LocalScreenDestination.MainScreen.route
-        ) {
-            val vm = ingaleViewModels<LocalMainViewModel>()
-            LocalMainScreen(
-                state = vm.state.collectAsState().value,
-                sendEvent = vm::sendEvent,
-                effects = vm.effect
-            )
-        }
-
-        composable(
-            route = LocalScreenDestination.SongsSetScreen.route
-        ) {
-            val vm = ingaleViewModels<SongsSetViewModel>(
-                savedStateHandle = it.savedStateHandle
-            )
-            SongsSetScreen(
-                state = vm.state.collectAsState().value,
-                sendEvent = vm::sendEvent
-            )
+        appDestinations.forEach { (destination, composable) ->
+            composable(
+                route = destination.route
+            ) {
+                composable(it.savedStateHandle)
+            }
         }
     }
 }

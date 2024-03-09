@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -21,6 +20,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.nightx.ingale.R
+import com.nightx.ingale.core.presentation.ui.IngaleBottomSheet
 import com.nightx.ingale.feature_local.local_core.domain.model.SongOperations
 import com.nightx.ingale.feature_local.local_core.domain.model.SongOperations.ADD_TO_QUEUE
 import com.nightx.ingale.feature_local.local_core.domain.model.SongOperations.DELETE
@@ -34,11 +34,13 @@ import com.nightx.ingale.ui.theme.spacing
 @Composable
 fun SongOperationsBottomSheet(
     onOperation: (SongOperations) -> Unit,
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
 ) {
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
 
-    ModalBottomSheet(
+    IngaleBottomSheet(
         sheetState = sheetState,
         onDismissRequest = onDismissRequest
     ) {

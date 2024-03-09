@@ -3,7 +3,6 @@ package com.nightx.ingale.feature_local.main.presentation
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
@@ -19,7 +18,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -27,20 +25,18 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.nightx.ingale.core.di.ingaleViewModels
 import com.nightx.ingale.core.presentation.flows.ObserveEffects
 import com.nightx.ingale.core.presentation.ui.DataPlaceholder
 import com.nightx.ingale.core.presentation.ui.LoadingStatePresenter
@@ -50,9 +46,10 @@ import com.nightx.ingale.feature_local.local_core.presentation.SongsLazyList
 import com.nightx.ingale.feature_local.main.presentation.ui_components.SongsSetButton
 import com.nightx.ingale.feature_local.main.presentation.ui_components.TabRow
 import com.nightx.ingale.feature_local.main.presentation.ui_components.songs_section.CommonSongSetsGrid
+import com.nightx.ingale.feature_local.main.presentation.view.LocalMainCallbacks
 import com.nightx.ingale.feature_local.main.presentation.view.LocalMainContract
 import com.nightx.ingale.feature_local.main.presentation.view.LocalMainContract.Effect
-import com.nightx.ingale.feature_local.main.presentation.view.LocalMainContract.Event
+import com.nightx.ingale.feature_local.main.presentation.view.LocalMainViewModel
 import com.nightx.ingale.feature_local.main.presentation.view.LocalMainViewModel.Companion.PERMISSION_NOT_GRANTED_ERROR
 import com.nightx.ingale.main_navigation.bottom_bar_controls.BottomBarEffect
 import com.nightx.ingale.main_navigation.bottom_bar_controls.LocalBottomBarController
@@ -62,11 +59,21 @@ import com.nightx.ingale.ui.theme.spacing
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 
+@Composable
+fun LocalMainScreen() {
+    val vm = ingaleViewModels<LocalMainViewModel>()
+    LocalMainScreen(
+        state = vm.state.collectAsState().value,
+        callbacks = vm,
+        effects = vm.effect
+    )
+}
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun LocalMainScreen(
+private fun LocalMainScreen(
     state: LocalMainContract.State,
-    sendEvent: (event: Event) -> Unit,
+    callbacks: LocalMainCallbacks,
     effects: Flow<Effect>,
 ) {
     val songsLazyColumnState = rememberLazyListState()
@@ -116,16 +123,14 @@ fun LocalMainScreen(
                 )
             },
             value = state.searchTextField,
-            onValueChange = {
-                sendEvent(Event.Search(it))
-            },
+            onValueChange = callbacks::onSearchType,
             trailingIcon = {
                 Icon(
                     imageVector = Icons.Default.Close,
                     contentDescription = "Remove search text",
                     tint = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.clickable {
-                        sendEvent(Event.Search(""))
+                        callbacks.onSearchType("")
                     }
                 )
             },
@@ -193,9 +198,7 @@ fun LocalMainScreen(
                                 songs = state.allSongs,
                                 query = state.searchTextField,
                                 isLoading = state.songLoadingState.isLoading,
-                                onSongClick = { song ->
-                                    sendEvent(Event.PlaySong(song))
-                                }
+                                onSongClick = callbacks::onSongClick
                             )
                         },
                         errorView = { error ->
@@ -210,9 +213,7 @@ fun LocalMainScreen(
                                     if (error.message == PERMISSION_NOT_GRANTED_ERROR) {
                                         PERMISSION_NOT_GRANTED_MESSAGE
                                     } else null,
-                                onAction = {
-                                    sendEvent(Event.Refresh)
-                                }
+                                onAction = callbacks::refresh
                             )
                         }
                     )
@@ -231,9 +232,7 @@ fun LocalMainScreen(
                                 icon = null
                             )
                         }),
-                        onClick = { songsSet ->
-                            sendEvent(Event.AlbumClicked(songsSet))
-                        },
+                        onClick = callbacks::onAlbumClick,
                         isLoading = state.songLoadingState.isLoading,
                         query = state.searchTextField
                     )
@@ -252,9 +251,7 @@ fun LocalMainScreen(
                                 icon = null
                             )
                         }),
-                        onClick = { songsSet ->
-                            sendEvent(Event.ArtistClicked(songsSet))
-                        },
+                        onClick = callbacks::onArtistClick,
                         isLoading = state.songLoadingState.isLoading,
                         query = state.searchTextField
                     )

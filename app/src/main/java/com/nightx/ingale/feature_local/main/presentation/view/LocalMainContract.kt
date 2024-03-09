@@ -1,29 +1,19 @@
 package com.nightx.ingale.feature_local.main.presentation.view
 
 import androidx.compose.runtime.Immutable
-import com.nightx.ingale.feature_local.local_core.domain.model.SongsSet
-import com.nightx.ingale.feature_local.main.domain.model.Album
-import com.nightx.ingale.feature_local.main.domain.model.Artist
 import com.nightx.ingale.core.domain.model.Song
 import com.nightx.ingale.core.presentation.view.LoadingViewState
+import com.nightx.ingale.feature_local.main.domain.model.Album
+import com.nightx.ingale.feature_local.main.domain.model.Artist
 import com.nightx.ingale.feature_local.main.presentation.view.LocalMainViewModel.Companion.SECTION_ALBUMS
 import com.nightx.ingale.feature_local.main.presentation.view.LocalMainViewModel.Companion.SECTION_ARTISTS
 import com.nightx.ingale.feature_local.main.presentation.view.LocalMainViewModel.Companion.SECTION_SONGS
 import com.nightx.ingale.mvi.UiEffect
-import com.nightx.ingale.mvi.UiEvent
 import com.nightx.ingale.mvi.UiState
 import com.nightx.ingale.mvi.wrappers.StableList
 import com.nightx.ingale.mvi.wrappers.stableListOf
 
 interface LocalMainContract {
-
-    sealed interface Event : UiEvent {
-        data object Refresh : Event
-        class AlbumClicked(val songsSet: SongsSet) : Event
-        class ArtistClicked(val songsSet: SongsSet) : Event
-        class Search(val query: String) : Event
-        class PlaySong(val song: Song) : Event
-    }
 
     sealed interface Effect : UiEffect {
         data object ScrollToTop : Effect

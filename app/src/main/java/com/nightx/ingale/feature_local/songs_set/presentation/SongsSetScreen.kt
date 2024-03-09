@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,20 +33,37 @@ import androidx.constraintlayout.compose.ExperimentalMotionApi
 import androidx.constraintlayout.compose.MotionLayout
 import androidx.constraintlayout.compose.MotionScene
 import androidx.constraintlayout.solver.widgets.Optimizer
+import androidx.lifecycle.SavedStateHandle
 import com.nightx.ingale.R
+import com.nightx.ingale.core.di.ingaleViewModels
 import com.nightx.ingale.core.presentation.view.NestedScrollForMusicBarNotification
 import com.nightx.ingale.feature_local.local_core.domain.model.SongsSet
 import com.nightx.ingale.feature_local.local_core.presentation.SongsLazyList
 import com.nightx.ingale.feature_local.local_core.presentation.song_item.SongIcon
 import com.nightx.ingale.feature_local.songs_set.presentation.view.LocalSongsSetContract
+import com.nightx.ingale.feature_local.songs_set.presentation.view.SongsSetCallbacks
+import com.nightx.ingale.feature_local.songs_set.presentation.view.SongsSetViewModel
+import com.nightx.ingale.main_navigation.Screens
 import com.nightx.ingale.main_navigation.bottom_bar_controls.BottomBarEffect
 import com.nightx.ingale.main_navigation.bottom_bar_controls.SendBottomBarEffect
 import kotlin.math.abs
 
 @Composable
-fun SongsSetScreen(
+fun SongsSetScreen(savedStateHandle: SavedStateHandle) {
+    val vm = ingaleViewModels<SongsSetViewModel>(
+        savedStateHandle = savedStateHandle
+    )
+
+    SongsSetScreen(
+        state = vm.state.collectAsState().value,
+        callbacks = vm
+    )
+}
+
+@Composable
+private fun SongsSetScreen(
     state: LocalSongsSetContract.State,
-    sendEvent: (LocalSongsSetContract.Event) -> Unit,
+    callbacks: SongsSetCallbacks
 ) {
     SendBottomBarEffect(BottomBarEffect.HideBottomBar)
     val lazyListState = rememberLazyListState()
@@ -73,9 +91,7 @@ fun SongsSetScreen(
             lazyListState = lazyListState,
             songs = state.songsSetInfo.songs,
             isLoading = false,
-            onSongClick = {
-                sendEvent(LocalSongsSetContract.Event.PlaySong(it))
-            }
+            onSongClick = callbacks::onSongClick
         )
     }
 }

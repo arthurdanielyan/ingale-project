@@ -11,8 +11,9 @@ import com.nightx.ingale.core.domain.model.Song
 import com.nightx.ingale.core.presentation.navigation.dialog_navigation.DialogDestination
 import com.nightx.ingale.core.presentation.navigation.dialog_navigation.DialogNavigator
 import com.nightx.ingale.core.presentation.view.LoadingViewState
-import com.nightx.ingale.feature_local.local_navigation.screen_navigation.LocalScreenDestination
+import com.nightx.ingale.feature_local.local_core.domain.model.SongsSet
 import com.nightx.ingale.feature_local.local_navigation.screen_navigation.LocalNavigator
+import com.nightx.ingale.feature_local.local_navigation.screen_navigation.LocalScreenDestination
 import com.nightx.ingale.feature_local.main.domain.model.Album
 import com.nightx.ingale.feature_local.main.domain.model.Artist
 import com.nightx.ingale.feature_local.main.domain.model.SongsSeparation
@@ -20,7 +21,6 @@ import com.nightx.ingale.feature_local.main.domain.usecases.FilterUseCase
 import com.nightx.ingale.feature_local.main.domain.usecases.GetSongsUseCase
 import com.nightx.ingale.feature_local.main.domain.usecases.OrganizeSongsUseCase
 import com.nightx.ingale.feature_local.main.presentation.view.LocalMainContract.Effect
-import com.nightx.ingale.feature_local.main.presentation.view.LocalMainContract.Event
 import com.nightx.ingale.feature_local.main.presentation.view.LocalMainContract.State
 import com.nightx.ingale.mvi.BaseViewModel
 import com.nightx.ingale.mvi.wrappers.StableList
@@ -36,7 +36,7 @@ class LocalMainViewModel(
     private val organizeSongsUseCase: OrganizeSongsUseCase,
     private val filterUseCase: FilterUseCase,
     private val applicationContext: Context,
-) : BaseViewModel<State, Event, Effect>() {
+) : BaseViewModel<State, Effect>(), LocalMainCallbacks {
 
     companion object {
         const val SECTION_SONGS = "Songs"
@@ -68,22 +68,6 @@ class LocalMainViewModel(
             artists = emptyStableList(),
             songLoadingState = LoadingViewState.Loading
         )
-
-
-    override fun handleEvent(event: Event) {
-        when (event) {
-            Event.Refresh -> loadSongs()
-            is Event.AlbumClicked ->
-                navigator.navigate(LocalScreenDestination.SongsSetScreen, event.songsSet)
-
-            is Event.ArtistClicked ->
-                navigator.navigate(LocalScreenDestination.SongsSetScreen, event.songsSet)
-
-            is Event.Search -> search(event.query)
-            is Event.PlaySong ->
-                AudioPlayer.play(allSongs, allSongs.indexOf(event.song))
-        }
-    }
 
     private fun loadSongs() {
         viewModelScope.launch {
@@ -159,4 +143,24 @@ class LocalMainViewModel(
                 audioPermission
             ) == PackageManager.PERMISSION_GRANTED
         }
+
+    override fun refresh() {
+        loadSongs()
+    }
+
+    override fun onAlbumClick(songsSet: SongsSet) {
+        navigator.navigate(LocalScreenDestination.SongsSetScreen, songsSet)
+    }
+
+    override fun onArtistClick(songsSet: SongsSet) {
+        navigator.navigate(LocalScreenDestination.SongsSetScreen, songsSet)
+    }
+
+    override fun onSearchType(query: String) {
+        search(query)
+    }
+
+    override fun onSongClick(song: Song) {
+        AudioPlayer.play(allSongs, allSongs.indexOf(song))
+    }
 }

@@ -16,15 +16,15 @@ import com.nightx.ingale.feature_local.required_permissions_requester_dialog.pre
 import com.nightx.ingale.feature_local.required_permissions_requester_dialog.presentation.ui_components.NotificationPermissionDescriptionProvider
 import com.nightx.ingale.feature_local.required_permissions_requester_dialog.presentation.ui_components.PermissionNotGrantedDialog
 import com.nightx.ingale.feature_local.required_permissions_requester_dialog.presentation.ui_components.StoragePermissionDescriptionProvider
+import com.nightx.ingale.feature_local.required_permissions_requester_dialog.presentation.view.RequiredPermissionsCallbacks
 import com.nightx.ingale.feature_local.required_permissions_requester_dialog.presentation.view.RequiredPermissionsRequesterContract
 import com.nightx.ingale.feature_local.required_permissions_requester_dialog.presentation.view.RequiredPermissionsRequesterContract.Effect
-import com.nightx.ingale.feature_local.required_permissions_requester_dialog.presentation.view.RequiredPermissionsRequesterContract.Event
 import com.nightx.ingale.feature_local.required_permissions_requester_dialog.presentation.view.RequiredPermissionsRequesterViewModel
 import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun RequiredPermissionsRequesterDialog(
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
 ) {
     val vm = ingaleDialogViewModels<RequiredPermissionsRequesterViewModel>(
         savedStateHandle = savedStateHandle
@@ -33,7 +33,7 @@ fun RequiredPermissionsRequesterDialog(
     RequiredPermissionsRequesterDialogContent(
         state = vm.state.collectAsState().value,
         effects = vm.effect,
-        sendEvent = vm::sendEvent
+        callbacks = vm
     )
 }
 
@@ -41,14 +41,12 @@ fun RequiredPermissionsRequesterDialog(
 private fun RequiredPermissionsRequesterDialogContent(
     state: RequiredPermissionsRequesterContract.State,
     effects: Flow<Effect>,
-    sendEvent: (RequiredPermissionsRequesterContract.Event) -> Unit,
+    callbacks: RequiredPermissionsCallbacks,
 ) {
     val permissionsResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
         onResult = { permissions ->
-            permissions.forEach { (permission, isGranted) ->
-                sendEvent(Event.PermissionResult(permission, isGranted))
-            }
+            permissions.forEach(callbacks::onPermissionResult)
         }
     )
     ObserveEffects(effects) { effect ->
@@ -70,10 +68,10 @@ private fun RequiredPermissionsRequesterDialogContent(
                 else -> NotificationPermissionDescriptionProvider()
             },
             onOkClick = {
-                sendEvent(Event.DialogEvent.OkClick(permission))
+                callbacks.onOkClick(permission)
             },
             onGoToAppSettings = {
-                sendEvent(Event.DialogEvent.GoToSettingsClick(permission))
+                callbacks.onGoToSettingsClick(permission)
             }
         )
     }
