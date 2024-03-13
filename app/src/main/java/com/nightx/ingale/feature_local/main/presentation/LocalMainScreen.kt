@@ -33,7 +33,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
@@ -58,6 +57,7 @@ import com.nightx.ingale.main_navigation.bottom_bar_controls.BottomBarEffect
 import com.nightx.ingale.main_navigation.bottom_bar_controls.LocalBottomBarController
 import com.nightx.ingale.main_navigation.bottom_bar_controls.SendBottomBarEffect
 import com.nightx.ingale.mvi.wrappers.StableList
+import com.nightx.ingale.ui.theme.colorScheme.ingaleColors
 import com.nightx.ingale.ui.theme.spacing
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -160,19 +160,19 @@ private fun LocalMainScreen(
         ) {
             SongsSetButton(
                 modifier = Modifier.weight(1f, true),
-                gradientWeak = Color(0xFF087700),
+                gradientWeak = MaterialTheme.ingaleColors.additional1,
                 text = "Playlists",
                 onClick = {}
             )
             SongsSetButton(
                 modifier = Modifier.weight(1f, true),
-                gradientWeak = Color(0xFFFF6F00),
+                gradientWeak = MaterialTheme.ingaleColors.additional2,
                 text = "Favourites",
                 onClick = {}
             )
             SongsSetButton(
                 modifier = Modifier.weight(1f, true),
-                gradientWeak = Color(0xFF0040E0),
+                gradientWeak = MaterialTheme.ingaleColors.additional3,
                 text = "History",
                 onClick = {}
             )

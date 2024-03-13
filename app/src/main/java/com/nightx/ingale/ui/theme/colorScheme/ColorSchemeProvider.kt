@@ -7,23 +7,18 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.Color
 
-interface ColorScheme {
-    val primary: Color
-    val primaryInverse: Color
-    val background: Color
-    val backgroundInverse: Color
-    val onBackground: Color
-    val backgroundLight: Color
-    val onBackgroundLight: Color
-    val secondaryText: Color
+interface IngaleColors {
+    val additional1: Color
+    val additional2: Color
+    val additional3: Color
 }
 
-val LocalColorScheme: ProvidableCompositionLocal<ColorScheme> = compositionLocalOf {
+val LocalIngaleColors: ProvidableCompositionLocal<IngaleColors> = compositionLocalOf {
     throw Exception("No theme provided")
 }
 
 @Suppress("UnusedReceiverParameter")
-val MaterialTheme.ingaleColors: ColorScheme
+val MaterialTheme.ingaleColors: IngaleColors
     @Composable
     @ReadOnlyComposable
-    get() = LocalColorScheme.current
+    get() = LocalIngaleColors.current

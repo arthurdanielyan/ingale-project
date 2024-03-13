@@ -16,9 +16,9 @@ import com.nightx.ingale.core.presentation.navigation.dialog_navigation.LocalDia
 import com.nightx.ingale.feature_local.local_navigation.screen_navigation.LocalNavigation
 import com.nightx.ingale.main_navigation.bottom_bar_controls.LocalBottomBarController
 import com.nightx.ingale.main_navigation.bottom_bar_controls.LocalBottomBarEffects
-import com.nightx.ingale.ui.theme.colorScheme.ColorSchemeDark
-import com.nightx.ingale.ui.theme.colorScheme.ColorSchemeLight
-import com.nightx.ingale.ui.theme.colorScheme.LocalColorScheme
+import com.nightx.ingale.ui.theme.colorScheme.IngaleColorsDark
+import com.nightx.ingale.ui.theme.colorScheme.IngaleColorsLight
+import com.nightx.ingale.ui.theme.colorScheme.LocalIngaleColors
 import org.koin.compose.koinInject
 
 
@@ -113,8 +113,8 @@ fun IngaleTheme(
 
     CompositionLocalProvider(
         LocalSpacing provides Spacing(),
-        LocalColorScheme provides
-                if(isSystemInDarkTheme()) ColorSchemeDark() else ColorSchemeLight(),
+        LocalIngaleColors provides
+                if(isSystemInDarkTheme()) IngaleColorsDark() else IngaleColorsLight(),
         LocalNavigation provides koinInject(),
         LocalDialogNavigation provides koinInject(),
         LocalBottomBarEffects provides koinInject(),
