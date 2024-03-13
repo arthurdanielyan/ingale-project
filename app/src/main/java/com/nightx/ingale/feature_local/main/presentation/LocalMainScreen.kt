@@ -26,10 +26,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -40,6 +42,7 @@ import com.nightx.ingale.core.di.ingaleViewModels
 import com.nightx.ingale.core.presentation.flows.ObserveEffects
 import com.nightx.ingale.core.presentation.ui.DataPlaceholder
 import com.nightx.ingale.core.presentation.ui.LoadingStatePresenter
+import com.nightx.ingale.core.presentation.view.LaunchedEffect
 import com.nightx.ingale.core.presentation.view.NestedScrollForMusicBarNotification
 import com.nightx.ingale.feature_local.local_core.domain.model.SongsSet
 import com.nightx.ingale.feature_local.local_core.presentation.SongsLazyList
@@ -96,8 +99,14 @@ private fun LocalMainScreen(
         pageCount = { state.sections.size }
     )
     val bottomBarController = LocalBottomBarController.current
+
+    var lastSettledPage by rememberSaveable {
+        mutableIntStateOf(pagerState.settledPage)
+    }
     LaunchedEffect(pagerState.settledPage) {
-        bottomBarController.sendEffect(BottomBarEffect.ExpandMusicInfo)
+        lastSettledPage = pagerState.settledPage
+        if (it != lastSettledPage)
+            bottomBarController.sendEffect(BottomBarEffect.ExpandMusicInfo)
     }
     Column(
         modifier = Modifier
@@ -204,15 +213,15 @@ private fun LocalMainScreen(
                         errorView = { error ->
                             DataPlaceholder(
                                 title =
-                                    if (error.message == PERMISSION_NOT_GRANTED_ERROR) {
-                                        PERMISSION_NOT_GRANTED_TITLE
-                                    } else {
-                                        NO_SONGS_FOUND_MESSAGE
-                                    },
+                                if (error.message == PERMISSION_NOT_GRANTED_ERROR) {
+                                    PERMISSION_NOT_GRANTED_TITLE
+                                } else {
+                                    NO_SONGS_FOUND_MESSAGE
+                                },
                                 description =
-                                    if (error.message == PERMISSION_NOT_GRANTED_ERROR) {
-                                        PERMISSION_NOT_GRANTED_MESSAGE
-                                    } else null,
+                                if (error.message == PERMISSION_NOT_GRANTED_ERROR) {
+                                    PERMISSION_NOT_GRANTED_MESSAGE
+                                } else null,
                                 onAction = callbacks::refresh
                             )
                         }

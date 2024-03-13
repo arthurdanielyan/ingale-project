@@ -38,9 +38,7 @@ class PlayerService : MediaBrowserServiceCompat() {
 
     var mediaPlayer = MediaPlayer().apply {
         setOnCompletionListener {
-            if (AudioPlayer.pointer == AudioPlayer.songQueue.size - 1) {
-                AudioPlayer.pointer = 0
-            } else AudioPlayer.pointer++
+            skipToNext()
         }
     }
 

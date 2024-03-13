@@ -186,7 +186,9 @@ fun BottomNavigation() {
 private fun CurrentMusicInfoButton(
     modifier: Modifier = Modifier,
 ) {
-    var isExpanded by remember { mutableStateOf(true) }
+    var isExpanded by rememberSaveable {
+        mutableStateOf(true)
+    }
     var fullWidth by remember { mutableStateOf(MusicInfoButtonHeight) }
     val cardWidth by animateDpAsState(
         targetValue = if(isExpanded) fullWidth else MusicInfoButtonHeight,
