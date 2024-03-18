@@ -35,7 +35,7 @@ import androidx.constraintlayout.compose.MotionScene
 import androidx.constraintlayout.solver.widgets.Optimizer
 import androidx.lifecycle.SavedStateHandle
 import com.nightx.ingale.R
-import com.nightx.ingale.core.di.ingaleViewModels
+import com.nightx.ingale.core.presentation.di.ingaleViewModels
 import com.nightx.ingale.core.presentation.view.NestedScrollForMusicBarNotification
 import com.nightx.ingale.feature_local.local_core.domain.model.SongsSet
 import com.nightx.ingale.feature_local.local_core.presentation.SongsLazyList

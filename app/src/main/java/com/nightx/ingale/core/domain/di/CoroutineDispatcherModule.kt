@@ -1,4 +1,4 @@
-package com.nightx.ingale.core.di
+package com.nightx.ingale.core.domain.di
 
 import kotlinx.coroutines.Dispatchers
 import org.koin.dsl.module

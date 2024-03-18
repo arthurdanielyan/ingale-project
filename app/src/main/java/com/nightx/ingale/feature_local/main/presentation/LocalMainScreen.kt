@@ -37,7 +37,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import com.nightx.ingale.core.di.ingaleViewModels
+import com.nightx.ingale.core.presentation.di.ingaleViewModels
 import com.nightx.ingale.core.presentation.flows.ObserveEffects
 import com.nightx.ingale.core.presentation.ui.DataPlaceholder
 import com.nightx.ingale.core.presentation.ui.LoadingStatePresenter

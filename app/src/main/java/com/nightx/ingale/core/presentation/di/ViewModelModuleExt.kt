@@ -1,4 +1,4 @@
-package com.nightx.ingale.core.di
+package com.nightx.ingale.core.presentation.di
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

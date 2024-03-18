@@ -10,15 +10,29 @@ import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
 import android.util.Size
+import com.nightx.ingale.core.data.model.SongRO
+import com.nightx.ingale.core.data.model.mapper.SongMapper
 import com.nightx.ingale.core.domain.model.Song
 import com.nightx.ingale.feature_local.main.domain.repository.LocalMainRepository
+import io.realm.kotlin.Realm
+import io.realm.kotlin.ext.query
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
 import java.io.File
 
 class LocalMainRepositoryImpl(
-    private val applicationContext: Context
+    private val applicationContext: Context,
+    private val songsDb: Realm,
+    private val dispatcher: CoroutineDispatcher,
+    private val songMapper: SongMapper
 ) : LocalMainRepository {
 
-    override fun getSongs(): List<Song> {
+    override fun getSongs(): Flow<List<Song>> {
+        return songsDb.query<SongRO>().asFlow()
+        applicationContext.filesDir
+    }
+
+    private suspend fun saveLocally() {
         val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
         val cursor = applicationContext.contentResolver.query(uri, null, null, null, null)
         val localSongs = mutableListOf<Song>()
@@ -115,7 +129,9 @@ class LocalMainRepositoryImpl(
                         lastModified = modificationDate
                     )
 
-                    localSongs += song
+                    songsDb.write {
+
+                    }
 
                 } catch (e: Exception) {
                     Log.e("fileReadingError", "Couldn't read the media file", e)

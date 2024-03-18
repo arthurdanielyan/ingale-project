@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.realm.kotlin)
 }
 
 kapt {
@@ -95,4 +96,7 @@ dependencies {
 
     // Media Notification
     implementation(libs.androidx.media)
+
+    // Realm
+    implementation(libs.realm.kotlin)
 }
