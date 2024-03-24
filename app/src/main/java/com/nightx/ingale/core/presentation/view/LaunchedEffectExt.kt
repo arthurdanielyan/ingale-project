@@ -2,12 +2,40 @@ package com.nightx.ingale.core.presentation.view
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.autoSaver
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun SingleLaunchedEffect(
     block: suspend CoroutineScope.() -> Unit
 ) = LaunchedEffect(Unit, block)
+
+/**
+ * Called when [key] changes. In contrast to [LaunchedEffect] this
+ * doesn't re-execute [block] when configuration change happens. However
+ * the cone is that [T] has to be saveable
+ * */
+@Composable
+fun <T> ObserveState(
+    key: T,
+    saver: Saver<T, out Any> = autoSaver(),
+    block: suspend CoroutineScope.(T) -> Unit,
+) {
+    var lastValue by rememberSaveable(stateSaver = saver) {
+        mutableStateOf(key)
+    }
+    LaunchedEffect(key) {
+        if(lastValue != key) {
+            block(key)
+        }
+        lastValue = key
+    }
+}
 
 @Composable
 fun <T1> LaunchedEffect(

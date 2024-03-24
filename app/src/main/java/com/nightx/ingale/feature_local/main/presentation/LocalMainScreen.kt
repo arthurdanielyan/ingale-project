@@ -1,9 +1,11 @@
 package com.nightx.ingale.feature_local.main.presentation
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -43,6 +45,7 @@ import com.nightx.ingale.core.presentation.ui.DataPlaceholder
 import com.nightx.ingale.core.presentation.ui.LoadingStatePresenter
 import com.nightx.ingale.core.presentation.view.LaunchedEffect
 import com.nightx.ingale.core.presentation.view.NestedScrollForMusicBarNotification
+import com.nightx.ingale.core.presentation.view.ObserveState
 import com.nightx.ingale.feature_local.local_core.domain.model.SongsSet
 import com.nightx.ingale.feature_local.local_core.presentation.SongsLazyList
 import com.nightx.ingale.feature_local.main.presentation.ui_components.SongsSetButton
@@ -87,6 +90,7 @@ private fun LocalMainScreen(
     ObserveEffects(effects) { effect ->
         when (effect) {
             Effect.ScrollToTop -> {
+                delay(100)
                 songsLazyColumnState.scrollToItem(0)
                 albumsGridsState.scrollToItem(0)
                 artistsGridsState.scrollToItem(0)
@@ -99,13 +103,8 @@ private fun LocalMainScreen(
     )
     val bottomBarController = LocalBottomBarController.current
 
-    var lastSettledPage by rememberSaveable {
-        mutableIntStateOf(pagerState.settledPage)
-    }
-    LaunchedEffect(pagerState.settledPage) {
-        lastSettledPage = pagerState.settledPage
-        if (it != lastSettledPage)
-            bottomBarController.sendEffect(BottomBarEffect.ExpandMusicInfo)
+    ObserveState(pagerState.settledPage) {
+        bottomBarController.sendEffect(BottomBarEffect.ExpandMusicInfo)
     }
     Column(
         modifier = Modifier
