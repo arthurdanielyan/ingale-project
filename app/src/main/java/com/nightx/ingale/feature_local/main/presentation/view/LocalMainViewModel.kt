@@ -26,11 +26,8 @@ import com.nightx.ingale.feature_local.main.presentation.view.LocalMainContract.
 import com.nightx.ingale.mvi.BaseViewModel
 import com.nightx.ingale.mvi.wrappers.emptyStableList
 import com.nightx.ingale.mvi.wrappers.toStableList
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNot
-import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 
@@ -74,7 +71,6 @@ class LocalMainViewModel(
             songLoadingState = LoadingViewState.Loading
         )
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     private fun loadSongs() {
         viewModelScope.launch {
             updateState {
@@ -136,7 +132,6 @@ class LocalMainViewModel(
         if (!this@LocalMainViewModel::allSongs.isInitialized
             || !::allAlbums.isInitialized
             || !::allArtists.isInitialized
-            || currentState.searchTextField.isBlank()
         ) return
         viewModelScope.launch {
             val songSeparation =
@@ -149,9 +144,9 @@ class LocalMainViewModel(
                 )
             }
             if(scrollToTop)
-            sendEffect {
-                Effect.ScrollToTop
-            }
+                sendEffect {
+                    Effect.ScrollToTop
+                }
         }
     }
 

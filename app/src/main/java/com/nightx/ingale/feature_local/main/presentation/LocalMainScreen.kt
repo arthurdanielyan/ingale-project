@@ -87,10 +87,9 @@ private fun LocalMainScreen(
     ObserveEffects(effects) { effect ->
         when (effect) {
             Effect.ScrollToTop -> {
-                delay(100)
-                songsLazyColumnState.animateScrollToItem(0)
-                albumsGridsState.animateScrollToItem(0)
-                artistsGridsState.animateScrollToItem(0)
+                songsLazyColumnState.scrollToItem(0)
+                albumsGridsState.scrollToItem(0)
+                artistsGridsState.scrollToItem(0)
             }
         }
     }

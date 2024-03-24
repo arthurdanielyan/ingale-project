@@ -16,7 +16,7 @@ fun String.highlight(highlight: String): AnnotatedString = buildAnnotatedString 
     val parts = this@highlight.splitBy(highlight)
     parts.forEach { part ->
         if(part.lowercase() == highlight.lowercase()) {
-            withStyle(SpanStyle(color = MaterialTheme.colorScheme.inverseSurface)) {
+            withStyle(SpanStyle(color = MaterialTheme.colorScheme.onTertiaryContainer)) {
                 append(part)
             }
         } else append(part)
