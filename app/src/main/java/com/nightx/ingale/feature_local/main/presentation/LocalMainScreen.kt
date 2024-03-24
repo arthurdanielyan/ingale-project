@@ -237,8 +237,7 @@ private fun LocalMainScreen(
                             SongsSet(
                                 id = album.albumId,
                                 songs = album.songs,
-                                title = album.albumName,
-                                icon = null
+                                title = album.albumName
                             )
                         }),
                         onClick = callbacks::onAlbumClick,
@@ -256,8 +255,7 @@ private fun LocalMainScreen(
                             SongsSet(
                                 id = artist.artistId,
                                 songs = artist.songs,
-                                title = artist.artistName,
-                                icon = null
+                                title = artist.artistName
                             )
                         }),
                         onClick = callbacks::onArtistClick,

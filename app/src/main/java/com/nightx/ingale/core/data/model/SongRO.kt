@@ -8,11 +8,11 @@ class SongRO : RealmObject {
     var id:             Long =   0L
     var title:          String = ""
     var album:          String = ""
-    var duration:       Int =    0
+    var duration:       Long =    0
     var artist:         String = ""
     var genre:          String = ""
     var path:           String = ""
-
+    var previewPath:    String = ""
     var artistId:       Long =   0L
     var albumId:        Long =   0L
     var lastModified:   Long =   0L

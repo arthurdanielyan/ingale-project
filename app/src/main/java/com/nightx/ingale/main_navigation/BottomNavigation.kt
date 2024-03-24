@@ -250,9 +250,7 @@ private fun CurrentMusicInfoButton(
                         this.rotationZ = musicImageRotation.value
                     }
             ) {
-                SongIcon(
-                    picture = null
-                )
+                SongIcon()
             }
         }
     }

@@ -10,32 +10,71 @@ import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
 import android.util.Size
+import com.nightx.ingale.core.data.mapToDomainList
+import com.nightx.ingale.core.domain.LoadState
 import com.nightx.ingale.core.data.model.SongRO
 import com.nightx.ingale.core.data.model.mapper.SongMapper
+import com.nightx.ingale.core.domain.CoroutineDispatchers
 import com.nightx.ingale.core.domain.model.Song
 import com.nightx.ingale.feature_local.main.domain.repository.LocalMainRepository
 import io.realm.kotlin.Realm
+import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.ext.query
-import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
 import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.util.LinkedList
+import kotlin.math.sqrt
+
 
 class LocalMainRepositoryImpl(
     private val applicationContext: Context,
     private val songsDb: Realm,
-    private val dispatcher: CoroutineDispatcher,
-    private val songMapper: SongMapper
+    private val dispatchers: CoroutineDispatchers,
+    private val songMapper: SongMapper,
 ) : LocalMainRepository {
 
-    override fun getSongs(): Flow<List<Song>> {
-        return songsDb.query<SongRO>().asFlow()
-        applicationContext.filesDir
+    companion object {
+        private const val MaxImageSizeByte = 1048576 // 1024*1024, 1 MB
+        private const val ImageExtension = "png"
+        private val ImageCompressFormat = Bitmap.CompressFormat.PNG
     }
 
-    private suspend fun saveLocally() {
+    @OptIn(ExperimentalCoroutinesApi::class, DelicateCoroutinesApi::class)
+    override suspend fun getSongs(): Flow<LoadState<List<Song>>> {
+        // If you don't like this use of GlobalScope, you're a nerd and fuck you btw
+        val savingDeferred = GlobalScope.async {
+            saveLocally()
+        }
+        return songsDb.query<SongRO>()
+            .asFlow()
+            .flatMapLatest {
+                flow {
+                    emit(LoadState.Loading())
+                    Log.d("myLogs", "taking from db")
+                    if(it.list.isEmpty()) {
+                        if(!savingDeferred.isCompleted) {
+                            savingDeferred.await()
+                        }
+                        emit(LoadState.Success(songMapper.mapToDomainList(it.list)))
+                    }
+                    emit(LoadState.Success(songMapper.mapToDomainList(it.list)))
+                }
+            }
+    }
+
+    private suspend fun saveLocally() = withContext(dispatchers.io) {
         val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
         val cursor = applicationContext.contentResolver.query(uri, null, null, null, null)
-        val localSongs = mutableListOf<Song>()
+        val localSongs = LinkedList<SongRO>() // only additions happens so LinkedList is faster
 
         if((cursor?.count ?: -1) > 0) {
             cursor!!
@@ -60,8 +99,8 @@ class LocalMainRepositoryImpl(
 
 
                     val durationColumnIndex = cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)
-                    val duration = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
-                        ?: cursor.getString(durationColumnIndex)
+                    val duration = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLongOrNull()
+                        ?: cursor.getLong(durationColumnIndex)
 
                     val artistNameColumnIndex = cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)
                     val artistName = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST)
@@ -70,6 +109,21 @@ class LocalMainRepositoryImpl(
 
                     val albumIdCol = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)
                     val albumId = cursor.getLong(albumIdCol)
+
+                    val genreNameColumnIndex =
+                        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.R)
+                            cursor.getColumnIndex(MediaStore.Audio.Media.GENRE)
+                        else -1
+                    val genre = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE)
+                        ?: if(genreNameColumnIndex >= 0)cursor.getString(genreNameColumnIndex) ?: "Unknown" else "Unknown"
+
+                    val artistIdCol = cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID)
+                    val artistId = cursor.getLong(artistIdCol)
+
+                    val modificationDate = File(songPath).lastModified()
+
+                    val embeddedPicture = metadataRetriever.embeddedPicture
+
                     var albumArt: Bitmap? =
                         try {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -79,7 +133,10 @@ class LocalMainRepositoryImpl(
 
                                 applicationContext.contentResolver.loadThumbnail(
                                     songUri,
-                                    Size(400, 400),
+                                    MaxImageSizeByte.let {
+                                        val side = sqrt(it.toFloat()).toInt()
+                                        Size(side, side)
+                                    },
                                     null
                                 )
                             } else {
@@ -95,52 +152,58 @@ class LocalMainRepositoryImpl(
                             }
                         } catch (e: Exception) { null }
 
-
-                    val genreNameColumnIndex =
-                        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.R)
-                            cursor.getColumnIndex(MediaStore.Audio.Media.GENRE)
-                        else -1
-                    val genre = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE)
-                        ?: if(genreNameColumnIndex >= 0)cursor.getString(genreNameColumnIndex) ?: "Unknown" else "Unknown"
-
-
-                    val embeddedPicture = metadataRetriever.embeddedPicture
-
                     if (albumArt == null && embeddedPicture != null && embeddedPicture.isNotEmpty()) {
-                        albumArt = BitmapFactory.decodeByteArray(embeddedPicture, 0, embeddedPicture.size)
+                        albumArt = BitmapFactory.decodeByteArray(embeddedPicture, 0, MaxImageSizeByte)
                     }
 
-                    val artistIdCol = cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID)
-                    val artistId = cursor.getLong(artistIdCol)
-
-                    val modificationDate = File(songPath).lastModified()
-
-                    val song = Song(
-                        title = title,
-                        album = if(albumName == "Download") "Unknown album" else albumName,
-                        duration = duration.toInt(),
-                        artist = if(artistName == "<unknown>") "Unknown artist" else artistName,
-                        genre = genre,
-                        path = songPath,
-                        picture = albumArt,
-                        id = id,
-                        albumId = albumId,
-                        artistId = artistId,
-                        lastModified = modificationDate
-                    )
-
-                    songsDb.write {
-
+                    var previewPath = ""
+                    if(albumArt != null) {
+                        try {
+                            val previewName = "$id.$ImageExtension"
+                            val appDataDir = applicationContext.filesDir.apply {
+                                mkdirs()
+                                setReadable(true, true)
+                            }
+                            val file = File(appDataDir, previewName)
+                            previewPath = "${appDataDir.path}/$previewName".also {
+                                Log.d("myLogs", it)
+                            }
+                            val fos = FileOutputStream(file)
+                            albumArt.compress(ImageCompressFormat, 100, fos)
+                            fos.close()
+                            Log.d("myLogs", file.exists().toString())
+                        } catch (e: IOException) {
+                            e.printStackTrace()
+                        }
                     }
 
+                    val song = SongRO().apply {
+                        this.id = id
+                        this.title = title
+                        this.album = if(albumName == "Download") "Unknown album" else albumName
+                        this.duration = duration
+                        this.artist = if(artistName == "<unknown>") "Unknown artist" else artistName
+                        this.genre = genre
+                        this.path = songPath
+                        this.previewPath = previewPath
+                        this.albumId = albumId
+                        this.artistId = artistId
+                        this.lastModified = modificationDate
+                    }
+
+                    localSongs.add(song)
                 } catch (e: Exception) {
                     Log.e("fileReadingError", "Couldn't read the media file", e)
                 }
 
             } while (cursor.moveToNext())
             cursor.close()
-
+            songsDb.write {
+                Log.d("myLogs", "saving to db")
+                localSongs.forEach {
+                    copyToRealm(it, UpdatePolicy.ALL)
+                }
+            }
         }
-        return localSongs
     }
 }

@@ -1,9 +1,7 @@
 package com.nightx.ingale.feature_local.local_core.presentation.song_item
 
 import android.content.res.Configuration
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -19,18 +17,22 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.imageLoader
+import coil.request.ImageRequest
 import com.nightx.ingale.R
+import com.nightx.ingale.core.presentation.view.SingleLaunchedEffect
 import com.nightx.ingale.ui.theme.IngaleTheme
 
 @Composable
 fun SongIcon(
     modifier: Modifier = Modifier,
     shape: Shape = CircleShape,
-    picture: Bitmap?,
+    picturePath: String = "",
 ) {
-    if (picture == null) {
+    if (picturePath.isBlank()) {
         val context = LocalContext.current
-        val pictureR = remember {
+        val pictureResource = remember {
             BitmapFactory.decodeResource(
                 context.resources,
                 R.mipmap.ic_launcher_foreground,
@@ -38,7 +40,7 @@ fun SongIcon(
             ).asImageBitmap()
         }
         Icon(
-            bitmap = pictureR,
+            bitmap = pictureResource,
             contentDescription = "Song picture",
             tint = MaterialTheme.colorScheme.onSurface,
             modifier = modifier
@@ -49,11 +51,17 @@ fun SongIcon(
                 .clip(shape)
         )
     } else {
-        val pictureR = remember {
-            picture
+        val context = LocalContext.current
+        val request = remember {
+            ImageRequest.Builder(context)
+                .data(picturePath)
+                .build()
         }
-        Image(
-            bitmap = pictureR.asImageBitmap(),
+        SingleLaunchedEffect {
+            context.imageLoader.enqueue(request)
+        }
+        AsyncImage(
+            model = request,
             contentDescription = "Song picture",
             modifier = modifier
                 .size(60.dp)
@@ -71,7 +79,7 @@ fun SongIcon(
 @Composable
 private fun SongIconPreviewDark() {
     IngaleTheme {
-        SongIcon(picture = null)
+        SongIcon()
     }
 }
 
@@ -79,6 +87,6 @@ private fun SongIconPreviewDark() {
 @Composable
 private fun SongIconPreviewLight() {
     IngaleTheme {
-        SongIcon(picture = null)
+        SongIcon()
     }
 }

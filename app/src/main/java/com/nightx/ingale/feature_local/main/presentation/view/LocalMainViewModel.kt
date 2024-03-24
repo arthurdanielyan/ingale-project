@@ -7,6 +7,7 @@ import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewModelScope
 import com.nightx.ingale.core.audio_player.AudioPlayer
+import com.nightx.ingale.core.domain.LoadState
 import com.nightx.ingale.core.domain.model.Song
 import com.nightx.ingale.core.presentation.navigation.dialog_navigation.DialogDestination
 import com.nightx.ingale.core.presentation.navigation.dialog_navigation.DialogNavigator
@@ -23,9 +24,13 @@ import com.nightx.ingale.feature_local.main.domain.usecases.OrganizeSongsUseCase
 import com.nightx.ingale.feature_local.main.presentation.view.LocalMainContract.Effect
 import com.nightx.ingale.feature_local.main.presentation.view.LocalMainContract.State
 import com.nightx.ingale.mvi.BaseViewModel
-import com.nightx.ingale.mvi.wrappers.StableList
 import com.nightx.ingale.mvi.wrappers.emptyStableList
 import com.nightx.ingale.mvi.wrappers.toStableList
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filterNot
+import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 
@@ -69,43 +74,60 @@ class LocalMainViewModel(
             songLoadingState = LoadingViewState.Loading
         )
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun loadSongs() {
         viewModelScope.launch {
             updateState {
                 copy(songLoadingState = LoadingViewState.Loading)
             }
-            val songs = getSongsUseCase()
-            if (songs.isNotEmpty()) {
-                val separatedSongs = organizeSongsUseCase(songs)
-                allSongs = songs
-                allAlbums = separatedSongs.albums
-                allArtists = separatedSongs.artists
-                updateState {
-                    copy(
-                        songLoadingState = LoadingViewState.Success,
-                        allSongs = StableList(songs),
-                        albums = separatedSongs.albums.toStableList(),
-                        artists = separatedSongs.artists.toStableList(),
-                    )
-                }
-                search(currentState.searchTextField)
-            } else {
-                updateState {
-                    copy(
-                        songLoadingState = LoadingViewState.Error(
-                            if (isAudioPermissionGranted) {
-                                NO_SONGS_FOUND_ERROR
-                            } else {
-                                PERMISSION_NOT_GRANTED_ERROR
+            getSongsUseCase()
+                .filterNot {
+                    it is LoadState.Loading
+                }.collectLatest { songsLoadState ->
+                    when(songsLoadState) {
+                        is LoadState.Error -> {
+
+                        }
+                        is LoadState.Loading -> {
+                            updateState {
+                                copy(songLoadingState = LoadingViewState.Loading)
                             }
-                        )
-                    )
+                        }
+                        is LoadState.Success -> {
+                            val songsSeparation = organizeSongsUseCase(songsLoadState.data)
+                            if (songsSeparation.songs.isNotEmpty()) {
+                                allSongs = songsSeparation.songs
+                                allAlbums = songsSeparation.albums
+                                allArtists = songsSeparation.artists
+                                updateState {
+                                    copy(
+                                        songLoadingState = LoadingViewState.Success,
+                                        allSongs = songsSeparation.songs.toStableList(),
+                                        albums = songsSeparation.albums.toStableList(),
+                                        artists = songsSeparation.artists.toStableList(),
+                                    )
+                                }
+                                search(currentState.searchTextField, false)
+                            } else {
+                                updateState {
+                                    copy(
+                                        songLoadingState = LoadingViewState.Error(
+                                            if (isAudioPermissionGranted) {
+                                                NO_SONGS_FOUND_ERROR
+                                            } else {
+                                                PERMISSION_NOT_GRANTED_ERROR
+                                            }
+                                        )
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
-            }
         }
     }
 
-    private fun search(query: String) {
+    private fun search(query: String, scrollToTop: Boolean) {
         updateState {
             copy(
                 searchTextField = query
@@ -114,6 +136,7 @@ class LocalMainViewModel(
         if (!this@LocalMainViewModel::allSongs.isInitialized
             || !::allAlbums.isInitialized
             || !::allArtists.isInitialized
+            || currentState.searchTextField.isBlank()
         ) return
         viewModelScope.launch {
             val songSeparation =
@@ -125,6 +148,7 @@ class LocalMainViewModel(
                     artists = songSeparation.artists.toStableList()
                 )
             }
+            if(scrollToTop)
             sendEffect {
                 Effect.ScrollToTop
             }
@@ -157,7 +181,7 @@ class LocalMainViewModel(
     }
 
     override fun onSearchType(query: String) {
-        search(query)
+        search(query, true)
     }
 
     override fun onSongClick(song: Song) {

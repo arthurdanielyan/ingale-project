@@ -43,7 +43,6 @@ import com.nightx.ingale.feature_local.local_core.presentation.song_item.SongIco
 import com.nightx.ingale.feature_local.songs_set.presentation.view.LocalSongsSetContract
 import com.nightx.ingale.feature_local.songs_set.presentation.view.SongsSetCallbacks
 import com.nightx.ingale.feature_local.songs_set.presentation.view.SongsSetViewModel
-import com.nightx.ingale.main_navigation.Screens
 import com.nightx.ingale.main_navigation.bottom_bar_controls.BottomBarEffect
 import com.nightx.ingale.main_navigation.bottom_bar_controls.SendBottomBarEffect
 import kotlin.math.abs
@@ -115,7 +114,7 @@ fun CollapsingTitle(
     var mlHeight by remember {
         mutableStateOf(0.dp)
     }
-    val icon = remember { songsSetInfo.icon }
+    val icon = remember { songsSetInfo.iconPath }
     val density = LocalDensity.current
     Column {
         MotionLayout(
@@ -141,7 +140,7 @@ fun CollapsingTitle(
                 }
             )
             SongIcon(
-                picture = icon,
+                picturePath = icon,
                 modifier = Modifier
                     .border(
                         width = 2.dp,

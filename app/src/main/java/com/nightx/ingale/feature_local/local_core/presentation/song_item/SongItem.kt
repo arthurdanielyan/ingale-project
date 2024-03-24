@@ -72,7 +72,7 @@ fun SongItem(
                 bottom.linkTo(parent.bottom)
                 start.linkTo(parent.start)
             },
-            picture = song.picture
+            picturePath = song.picturePath
         )
         Column(
             verticalArrangement = Arrangement.Center,

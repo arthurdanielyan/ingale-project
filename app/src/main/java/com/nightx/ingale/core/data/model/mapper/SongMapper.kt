@@ -29,7 +29,7 @@ class SongMapper : Mapper<Song, SongRO> {
             artist = from.artist,
             genre = from.genre,
             path = from.path,
-            picture = null,
+            picturePath = from.previewPath,
             artistId = from.artistId,
             albumId = from.albumId,
             lastModified = from.lastModified,

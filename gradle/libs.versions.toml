@@ -7,6 +7,7 @@ compose-bom = "2023.10.01"
 androidx-lifecycle = "2.6.2"
 koin = "3.5.3"
 realm = "1.14.0"
+coil = "2.6.0"
 
 [libraries]
 android-tools-build-gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "agp_version" }
@@ -38,6 +39,7 @@ koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin"
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
 realm-kotlin = { group = "io.realm.kotlin", name = "library-base", version.ref = "realm" }
+coil-compose = { group ="io.coil-kt", name = "coil-compose", version.ref = "coil" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp_version" }

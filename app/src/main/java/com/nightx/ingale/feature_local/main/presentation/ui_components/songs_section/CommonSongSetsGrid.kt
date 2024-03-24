@@ -132,7 +132,7 @@ private fun SongsSetCard(
     ) {
         SongIcon(
             modifier = Modifier.padding(MaterialTheme.spacing.normal),
-            picture = songsSet.icon,
+            picturePath = songsSet.iconPath,
             shape = RoundedCornerShape(10)
         )
         Text(
