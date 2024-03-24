@@ -29,8 +29,7 @@ class SongsSetViewModel(
             songsSetInfo = SongsSet(
                 id = -1,
                 title = "Loading...",
-                songs = emptyStableList(),
-                icon = null
+                songs = emptyStableList()
             )
         )
 

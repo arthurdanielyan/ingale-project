@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.graphics.BitmapFactory
 import android.media.MediaPlayer
 import android.os.Binder
 import android.os.Build
@@ -254,10 +253,7 @@ class PlayerService : MediaBrowserServiceCompat() {
         val metadataBuilder = MediaMetadataCompat.Builder()
             .putBitmap(
                 MediaMetadataCompat.METADATA_KEY_ART,
-                AudioPlayer.currentSong.picture ?: BitmapFactory.decodeResource(
-                    applicationContext.resources,
-                    R.mipmap.ic_launcher
-                )
+                AudioPlayer.currentSongBitmap
             )
             .putString(
                 MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE,
@@ -278,7 +274,7 @@ class PlayerService : MediaBrowserServiceCompat() {
             .putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, AudioPlayer.songCount)
             .putLong(
                 MediaMetadataCompat.METADATA_KEY_DURATION,
-                AudioPlayer.currentSong.duration.toLong()
+                AudioPlayer.currentSong.duration
             )
         mediaSession.setMetadata(metadataBuilder.build())
     }

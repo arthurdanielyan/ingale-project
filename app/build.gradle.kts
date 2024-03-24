@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.realm.kotlin)
 }
 
 kapt {
@@ -56,7 +57,6 @@ android {
 
 dependencies {
     implementation(libs.androidx.ktx)
-//    implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.9.0"))
     implementation(platform(libs.kotlin.bom))
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)
@@ -83,7 +83,7 @@ dependencies {
     // Compose Navigation
     implementation(libs.androidx.compose.navigation)
 
-    // Koin for Kotlin apps
+    // Koin
     implementation(libs.koin.core)
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
@@ -95,4 +95,10 @@ dependencies {
 
     // Media Notification
     implementation(libs.androidx.media)
+
+    // Realm
+    implementation(libs.realm.kotlin)
+
+    // Coil
+    implementation(libs.coil.compose)
 }

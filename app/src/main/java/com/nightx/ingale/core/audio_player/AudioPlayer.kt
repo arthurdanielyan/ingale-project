@@ -3,6 +3,7 @@ package com.nightx.ingale.core.audio_player
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.nightx.ingale.R
@@ -21,7 +22,7 @@ object AudioPlayer {
             .getDrawable(applicationContext, R.mipmap.ic_launcher)!!.toBitmap()
 
     val currentSongBitmap: Bitmap
-        get() = currentSong.picture ?: defaultSongBitmap
+        get() = BitmapFactory.decodeFile(currentSong.picturePath) ?: defaultSongBitmap
 
     val currentSong: Song
         get() {
@@ -34,9 +35,6 @@ object AudioPlayer {
         get() = songQueue.size.toLong()
 
     var songQueue: List<Song> = emptyList()
-        private set(value) {
-            field = value
-        }
 
     var pointer = 0
         set(value) {

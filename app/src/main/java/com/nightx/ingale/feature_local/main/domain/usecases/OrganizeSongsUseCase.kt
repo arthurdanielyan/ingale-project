@@ -1,19 +1,19 @@
 package com.nightx.ingale.feature_local.main.domain.usecases
 
+import com.nightx.ingale.core.domain.CoroutineDispatchers
+import com.nightx.ingale.core.domain.model.Song
 import com.nightx.ingale.feature_local.main.domain.model.Album
 import com.nightx.ingale.feature_local.main.domain.model.Artist
-import com.nightx.ingale.core.domain.model.Song
 import com.nightx.ingale.feature_local.main.domain.model.SongsSeparation
 import com.nightx.ingale.mvi.wrappers.stableListOf
 import com.nightx.ingale.mvi.wrappers.toStableList
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
 class OrganizeSongsUseCase(
-    private val dispatcher: CoroutineDispatcher
+    private val dispatchers: CoroutineDispatchers
 ) {
     suspend operator fun invoke(songs: List<Song>): SongsSeparation =
-        withContext(dispatcher) {
+        withContext(dispatchers.default) {
             SongsSeparation(
                 songs = songs,
                 albums = songs.let {

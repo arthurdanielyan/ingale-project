@@ -37,7 +37,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import com.nightx.ingale.core.di.ingaleViewModels
+import com.nightx.ingale.core.presentation.di.ingaleViewModels
 import com.nightx.ingale.core.presentation.flows.ObserveEffects
 import com.nightx.ingale.core.presentation.ui.DataPlaceholder
 import com.nightx.ingale.core.presentation.ui.LoadingStatePresenter
@@ -237,8 +237,7 @@ private fun LocalMainScreen(
                             SongsSet(
                                 id = album.albumId,
                                 songs = album.songs,
-                                title = album.albumName,
-                                icon = null
+                                title = album.albumName
                             )
                         }),
                         onClick = callbacks::onAlbumClick,
@@ -256,8 +255,7 @@ private fun LocalMainScreen(
                             SongsSet(
                                 id = artist.artistId,
                                 songs = artist.songs,
-                                title = artist.artistName,
-                                icon = null
+                                title = artist.artistName
                             )
                         }),
                         onClick = callbacks::onArtistClick,

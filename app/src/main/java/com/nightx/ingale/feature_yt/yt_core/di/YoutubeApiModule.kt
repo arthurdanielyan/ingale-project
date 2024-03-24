@@ -17,7 +17,7 @@ val youtubeApiModule = module {
 
             val request: Request = original.newBuilder()
                 .addHeader("key", "AIzaSyAY6hxar8pnsad3crSvPTLDkhKECUM1PN0")
-                .method(original.method(), original.body())
+                .method(original.method, original.body)
                 .build()
 
             chain.proceed(request)

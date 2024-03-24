@@ -1,16 +1,17 @@
 package com.nightx.ingale.feature_local.main.domain.usecases
 
+import com.nightx.ingale.core.domain.CoroutineDispatchers
 import com.nightx.ingale.feature_local.main.domain.model.SongsSeparation
 import com.nightx.ingale.mvi.wrappers.toStableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
 class FilterUseCase(
-    private val dispatcher: CoroutineDispatcher
+    private val dispatchers: CoroutineDispatchers
 ) {
 
     suspend operator fun invoke(query: String, songsSeparation: SongsSeparation): SongsSeparation =
-        withContext(dispatcher) {
+        withContext(dispatchers.default) {
             SongsSeparation (
                 songs = songsSeparation.songs.filter {
                     it.title.contains(query, true)

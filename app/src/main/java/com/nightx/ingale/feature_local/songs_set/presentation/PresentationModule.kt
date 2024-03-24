@@ -1,6 +1,6 @@
 package com.nightx.ingale.feature_local.songs_set.presentation
 
-import com.nightx.ingale.core.di.viewModelWithSavedStateHandle
+import com.nightx.ingale.core.presentation.di.viewModelWithSavedStateHandle
 import com.nightx.ingale.feature_local.songs_set.presentation.view.SongsSetViewModel
 import org.koin.dsl.module
 
