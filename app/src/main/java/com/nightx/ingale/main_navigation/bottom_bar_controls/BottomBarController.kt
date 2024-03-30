@@ -18,8 +18,8 @@ interface BottomBarEffectsHolder {
 sealed interface BottomBarEffect {
     data object ShowBottomBar : BottomBarEffect
     data object HideBottomBar : BottomBarEffect
-    data object CollapseMusicInfo : BottomBarEffect
-    data object ExpandMusicInfo : BottomBarEffect
+    data object CollapseMusicBar : BottomBarEffect
+    data object ExpandMusicBar : BottomBarEffect
 }
 
 @Composable

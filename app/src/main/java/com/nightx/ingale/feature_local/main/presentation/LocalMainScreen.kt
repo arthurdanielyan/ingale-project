@@ -1,11 +1,9 @@
 package com.nightx.ingale.feature_local.main.presentation
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -30,10 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
@@ -43,7 +38,6 @@ import com.nightx.ingale.core.presentation.di.ingaleViewModels
 import com.nightx.ingale.core.presentation.flows.ObserveEffects
 import com.nightx.ingale.core.presentation.ui.DataPlaceholder
 import com.nightx.ingale.core.presentation.ui.LoadingStatePresenter
-import com.nightx.ingale.core.presentation.view.LaunchedEffect
 import com.nightx.ingale.core.presentation.view.NestedScrollForMusicBarNotification
 import com.nightx.ingale.core.presentation.view.ObserveState
 import com.nightx.ingale.feature_local.local_core.domain.model.SongsSet
@@ -104,7 +98,7 @@ private fun LocalMainScreen(
     val bottomBarController = LocalBottomBarController.current
 
     ObserveState(pagerState.settledPage) {
-        bottomBarController.sendEffect(BottomBarEffect.ExpandMusicInfo)
+        bottomBarController.sendEffect(BottomBarEffect.ExpandMusicBar)
     }
     Column(
         modifier = Modifier

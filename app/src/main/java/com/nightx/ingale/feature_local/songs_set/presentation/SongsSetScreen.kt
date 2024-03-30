@@ -64,7 +64,6 @@ private fun SongsSetScreen(
     state: LocalSongsSetContract.State,
     callbacks: SongsSetCallbacks
 ) {
-    SendBottomBarEffect(BottomBarEffect.HideBottomBar)
     val lazyListState = rememberLazyListState()
     val animationEndIndex = remember { 2 }
     Column(

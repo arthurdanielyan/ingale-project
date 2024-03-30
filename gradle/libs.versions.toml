@@ -29,7 +29,7 @@ androidx-espresso = { group = "androidx.test.espresso", name ="espresso" }
 androidx-compose-junit = { group = "androidx.compose.ui", name ="ui-test-junit4" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name ="ui-tooling" }
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name ="ui-test-manifest" }
-androidx-compose-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version = "1.0.1" }
+androidx-compose-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version = "1.1.0-alpha13" }
 androidx-compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version = "2.6.0" }
 google-gson = { group = "com.google.code.gson", name = "gson", version = "2.10.1" }
 squareup-retrofit2 = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }

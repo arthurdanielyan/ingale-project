@@ -18,9 +18,9 @@ object NestedScrollForMusicBarNotification : NestedScrollConnection {
         source: NestedScrollSource,
     ): Offset {
         if (consumed.y < -1f) {
-            bottomBarController.sendEffect(BottomBarEffect.CollapseMusicInfo)
+            bottomBarController.sendEffect(BottomBarEffect.CollapseMusicBar)
         } else if (consumed.y > 1f) {
-            bottomBarController.sendEffect(BottomBarEffect.ExpandMusicInfo)
+            bottomBarController.sendEffect(BottomBarEffect.ExpandMusicBar)
         }
 
         return super.onPostScroll(consumed, available, source)

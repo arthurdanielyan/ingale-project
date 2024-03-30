@@ -10,7 +10,6 @@ import com.nightx.ingale.core.presentation.flows.ComposeCollect
 import com.nightx.ingale.core.presentation.navigation.destination.putScreenData
 import com.nightx.ingale.feature_local.main.presentation.LocalMainScreen
 import com.nightx.ingale.feature_local.songs_set.presentation.SongsSetScreen
-import com.nightx.ingale.main_navigation.Screens
 
 private val appDestinations = mapOf<LocalScreenDestination, @Composable (SavedStateHandle) -> Unit>(
     LocalScreenDestination.MainScreen to { LocalMainScreen() },
@@ -24,7 +23,7 @@ fun LocalSectionNavGraph() {
 
     NavHost(
         navController = navController,
-        startDestination = Screens.Local.MainScreen.route
+        startDestination = LocalScreenDestination.MainScreen.route
     ) {
         appDestinations.forEach { (destination, composable) ->
             composable(

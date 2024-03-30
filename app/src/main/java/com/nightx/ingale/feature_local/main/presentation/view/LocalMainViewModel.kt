@@ -23,6 +23,8 @@ import com.nightx.ingale.feature_local.main.domain.usecases.GetSongsUseCase
 import com.nightx.ingale.feature_local.main.domain.usecases.OrganizeSongsUseCase
 import com.nightx.ingale.feature_local.main.presentation.view.LocalMainContract.Effect
 import com.nightx.ingale.feature_local.main.presentation.view.LocalMainContract.State
+import com.nightx.ingale.main_navigation.bottom_bar_controls.BottomBarController
+import com.nightx.ingale.main_navigation.bottom_bar_controls.BottomBarEffect
 import com.nightx.ingale.mvi.BaseViewModel
 import com.nightx.ingale.mvi.wrappers.emptyStableList
 import com.nightx.ingale.mvi.wrappers.toStableList
@@ -37,6 +39,7 @@ class LocalMainViewModel(
     private val getSongsUseCase: GetSongsUseCase,
     private val organizeSongsUseCase: OrganizeSongsUseCase,
     private val filterUseCase: FilterUseCase,
+    private val bottomBarController: BottomBarController,
     private val applicationContext: Context,
 ) : BaseViewModel<State, Effect>(), LocalMainCallbacks {
 
@@ -168,10 +171,12 @@ class LocalMainViewModel(
     }
 
     override fun onAlbumClick(songsSet: SongsSet) {
+        bottomBarController.sendEffect(BottomBarEffect.HideBottomBar)
         navigator.navigate(LocalScreenDestination.SongsSetScreen, songsSet)
     }
 
     override fun onArtistClick(songsSet: SongsSet) {
+        bottomBarController.sendEffect(BottomBarEffect.HideBottomBar)
         navigator.navigate(LocalScreenDestination.SongsSetScreen, songsSet)
     }
 

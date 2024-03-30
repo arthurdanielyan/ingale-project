@@ -11,10 +11,10 @@ import android.provider.MediaStore
 import android.util.Log
 import android.util.Size
 import com.nightx.ingale.core.data.mapToDomainList
-import com.nightx.ingale.core.domain.LoadState
 import com.nightx.ingale.core.data.model.SongRO
 import com.nightx.ingale.core.data.model.mapper.SongMapper
 import com.nightx.ingale.core.domain.CoroutineDispatchers
+import com.nightx.ingale.core.domain.LoadState
 import com.nightx.ingale.core.domain.model.Song
 import com.nightx.ingale.feature_local.main.domain.repository.LocalMainRepository
 import io.realm.kotlin.Realm
@@ -59,7 +59,6 @@ class LocalMainRepositoryImpl(
             .flatMapLatest {
                 flow {
                     emit(LoadState.Loading())
-                    Log.d("myLogs", "taking from db")
                     if(it.list.isEmpty()) {
                         if(!savingDeferred.isCompleted) {
                             savingDeferred.await()
@@ -165,13 +164,10 @@ class LocalMainRepositoryImpl(
                                 setReadable(true, true)
                             }
                             val file = File(appDataDir, previewName)
-                            previewPath = "${appDataDir.path}/$previewName".also {
-                                Log.d("myLogs", it)
-                            }
+                            previewPath = "${appDataDir.path}/$previewName"
                             val fos = FileOutputStream(file)
                             albumArt.compress(ImageCompressFormat, 100, fos)
                             fos.close()
-                            Log.d("myLogs", file.exists().toString())
                         } catch (e: IOException) {
                             e.printStackTrace()
                         }
@@ -199,7 +195,6 @@ class LocalMainRepositoryImpl(
             } while (cursor.moveToNext())
             cursor.close()
             songsDb.write {
-                Log.d("myLogs", "saving to db")
                 localSongs.forEach {
                     copyToRealm(it, UpdatePolicy.ALL)
                 }

@@ -1,5 +1,6 @@
 package com.nightx.ingale.main_navigation
 
+import android.util.Log
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateDpAsState
@@ -56,29 +57,33 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BottomNavigation() {
+    var isBottomBarVisible by remember {
+        mutableStateOf(true)
+    }
+    val bottomBarOffset = remember(isBottomBarVisible) {
+        Log.d("myLogs", "remember $isBottomBarVisible")
+        if(isBottomBarVisible) {
+            0.dp
+        } else {
+            BottomBarHeight
+        }
+    }
 
-    var bottomBarOffset by remember { mutableStateOf(0.dp) }
     val bottomBarOffsetAnim by animateDpAsState(
         label = "bottom bar hiding and showing",
         targetValue = bottomBarOffset,
         animationSpec = tween(300)
     )
 
-    val hideBottomBar = {
-        bottomBarOffset = BottomBarHeight
-    }
-    val showBottomBar = {
-        bottomBarOffset = 0.dp
-    }
     ComposeCollect(
         flow = LocalBottomBarEffects.current.bottomBarEffect,
         latest = true
     ) {
         when (it) {
-            BottomBarEffect.ShowBottomBar -> showBottomBar()
-            BottomBarEffect.HideBottomBar -> hideBottomBar()
-            BottomBarEffect.CollapseMusicInfo -> {}
-            BottomBarEffect.ExpandMusicInfo -> {}
+            BottomBarEffect.ShowBottomBar -> isBottomBarVisible = true
+            BottomBarEffect.HideBottomBar -> isBottomBarVisible = false
+            BottomBarEffect.CollapseMusicBar -> {}
+            BottomBarEffect.ExpandMusicBar -> {}
         }
     }
 
@@ -114,9 +119,12 @@ fun BottomNavigation() {
                         modifier = Modifier.requiredSize(1.15 * BottomBarHeight),
                         selected = selected == item.title,
                         onClick = {
-                            selected = item.title
-                            scope.launch {
-                                pagerState.animateScrollToPage(index)
+                            if (isBottomBarVisible) {
+                                Log.d("myLogs", "onClick $bottomBarOffset, $isBottomBarVisible")
+                                selected = item.title
+                                scope.launch {
+                                    pagerState.animateScrollToPage(index)
+                                }
                             }
                         },
                         icon = {
@@ -173,7 +181,7 @@ fun BottomNavigation() {
                         }
                     }
                 }
-                CurrentMusicInfoButton(
+                MusicBar(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                 )
@@ -183,7 +191,7 @@ fun BottomNavigation() {
 }
 
 @Composable
-private fun CurrentMusicInfoButton(
+private fun MusicBar(
     modifier: Modifier = Modifier,
 ) {
     var isExpanded by rememberSaveable {
@@ -191,7 +199,7 @@ private fun CurrentMusicInfoButton(
     }
     var fullWidth by remember { mutableStateOf(MusicInfoButtonHeight) }
     val cardWidth by animateDpAsState(
-        targetValue = if(isExpanded) fullWidth else MusicInfoButtonHeight,
+        targetValue = if (isExpanded) fullWidth else MusicInfoButtonHeight,
         animationSpec = tween(durationMillis = MusicInfoButtonCollapsingDuration),
         label = "music card width animation"
     )
@@ -200,13 +208,15 @@ private fun CurrentMusicInfoButton(
         flow = LocalBottomBarEffects.current.bottomBarEffect,
         latest = true
     ) {
-        when(it) {
-            BottomBarEffect.ExpandMusicInfo -> {
+        when (it) {
+            BottomBarEffect.ExpandMusicBar -> {
                 isExpanded = true
             }
-            BottomBarEffect.CollapseMusicInfo -> {
+
+            BottomBarEffect.CollapseMusicBar -> {
                 isExpanded = false
             }
+
             BottomBarEffect.HideBottomBar -> {}
             BottomBarEffect.ShowBottomBar -> {}
         }
