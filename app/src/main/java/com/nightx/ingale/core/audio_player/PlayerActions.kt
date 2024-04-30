@@ -11,4 +11,6 @@ interface PlayerActions {
     fun skipToPrevious()
 
     fun seekTo(@FloatRange(0.0, 1.0) progress: Float)
+    fun changeFavoriteState()
+    fun stopService()
 }

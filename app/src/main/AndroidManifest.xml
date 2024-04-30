@@ -41,16 +41,19 @@
                 <action android:name="android.media.browse.MediaBrowserService"/>
             </intent-filter>
         </service>
-        <service android:name=".core.audio_player.actions_receivers.PlaybackActionService"/>
+        <service android:name=".core.audio_player.PlaybackActionService"/>
 
         <receiver
             android:exported="false"
-            android:name=".core.audio_player.actions_receivers.ReceiverTogglePlaying"/>
+            android:name=".core.audio_player.player_action_receivers.PlayerActionSkipToPrevious"/>
         <receiver
             android:exported="false"
-            android:name=".core.audio_player.actions_receivers.ReceiverSkipToNext"/>
+            android:name=".core.audio_player.player_action_receivers.PlayerActionTogglePlaybackReceiver"/>
         <receiver
             android:exported="false"
-            android:name=".core.audio_player.actions_receivers.ReceiverSkipToPrevious"/>
+            android:name=".core.audio_player.player_action_receivers.PlayerActionSkipToNextReceiver"/>
+        <receiver
+            android:exported="false"
+            android:name=".core.audio_player.player_action_receivers.PlayerActionStopServiceReceiver"/>
     </application>
 </manifest>

@@ -10,9 +10,9 @@ import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
 import android.util.Size
-import com.nightx.ingale.core.data.mapToDomainList
-import com.nightx.ingale.core.data.model.SongRO
-import com.nightx.ingale.core.data.model.mapper.SongMapper
+import com.nightx.ingale.core.data.mapList
+import com.nightx.ingale.core.data.model.SongRealm
+import com.nightx.ingale.core.data.model.mapper.SongRealmMapper
 import com.nightx.ingale.core.domain.CoroutineDispatchers
 import com.nightx.ingale.core.domain.LoadState
 import com.nightx.ingale.core.domain.model.Song
@@ -20,9 +20,8 @@ import com.nightx.ingale.feature_local.main.domain.repository.LocalMainRepositor
 import io.realm.kotlin.Realm
 import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.ext.query
-import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
@@ -39,7 +38,8 @@ class LocalMainRepositoryImpl(
     private val applicationContext: Context,
     private val songsDb: Realm,
     private val dispatchers: CoroutineDispatchers,
-    private val songMapper: SongMapper,
+    private val songRealmMapper: SongRealmMapper,
+    private val applicationScope: CoroutineScope
 ) : LocalMainRepository {
 
     companion object {
@@ -48,13 +48,12 @@ class LocalMainRepositoryImpl(
         private val ImageCompressFormat = Bitmap.CompressFormat.PNG
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class, DelicateCoroutinesApi::class)
+    @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun getSongs(): Flow<LoadState<List<Song>>> {
-        // If you don't like this use of GlobalScope, you're a nerd and fuck you btw
-        val savingDeferred = GlobalScope.async {
+        val savingDeferred = applicationScope.async {
             saveLocally()
         }
-        return songsDb.query<SongRO>()
+        return songsDb.query<SongRealm>()
             .asFlow()
             .flatMapLatest {
                 flow {
@@ -63,9 +62,8 @@ class LocalMainRepositoryImpl(
                         if(!savingDeferred.isCompleted) {
                             savingDeferred.await()
                         }
-                        emit(LoadState.Success(songMapper.mapToDomainList(it.list)))
                     }
-                    emit(LoadState.Success(songMapper.mapToDomainList(it.list)))
+                    emit(LoadState.Success(songRealmMapper.mapList(it.list)))
                 }
             }
     }
@@ -73,7 +71,7 @@ class LocalMainRepositoryImpl(
     private suspend fun saveLocally() = withContext(dispatchers.io) {
         val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
         val cursor = applicationContext.contentResolver.query(uri, null, null, null, null)
-        val localSongs = LinkedList<SongRO>() // only additions happens so LinkedList is faster
+        val localSongs = LinkedList<SongRealm>() // only additions happens so LinkedList is faster
 
         if((cursor?.count ?: -1) > 0) {
             cursor!!
@@ -173,7 +171,7 @@ class LocalMainRepositoryImpl(
                         }
                     }
 
-                    val song = SongRO().apply {
+                    val song = SongRealm().apply {
                         this.id = id
                         this.title = title
                         this.album = if(albumName == "Download") "Unknown album" else albumName

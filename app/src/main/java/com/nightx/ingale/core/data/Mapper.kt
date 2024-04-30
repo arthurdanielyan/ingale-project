@@ -1,18 +1,9 @@
 package com.nightx.ingale.core.data
 
-interface Mapper<DOMAIN, DATA> {
+interface Mapper<F, T> {
 
-    fun mapToData(from: DOMAIN): DATA
-
-    fun mapToDomain(from: DATA): DOMAIN
+    fun map(from: F): T
 }
 
-fun <DATA, DOMAIN> Mapper<DOMAIN, DATA>.mapToDomainList(list: List<DATA>): List<DOMAIN> =
-    list.map {
-        mapToDomain(it)
-    }
-
-fun <DATA, DOMAIN> Mapper<DOMAIN, DATA>.mapToDataList(list: List<DOMAIN>): List<DATA> =
-    list.map {
-        mapToData(it)
-    }
+fun <F, T> Mapper<F, T>.mapList(list: List<F>): List<T> =
+    list.map(::map)

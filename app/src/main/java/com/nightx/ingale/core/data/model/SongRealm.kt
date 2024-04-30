@@ -3,7 +3,7 @@ package com.nightx.ingale.core.data.model
 import io.realm.kotlin.types.RealmObject
 import io.realm.kotlin.types.annotations.PrimaryKey
 
-class SongRO : RealmObject {
+class SongRealm : RealmObject {
     @PrimaryKey
     var id:             Long =   0L
     var title:          String = ""
