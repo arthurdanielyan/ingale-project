@@ -26,6 +26,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -41,8 +42,8 @@ import com.nightx.ingale.core.presentation.flows.ObserveEffects
 import com.nightx.ingale.core.presentation.ui.DataPlaceholder
 import com.nightx.ingale.core.presentation.ui.LoadingStatePresenter
 import com.nightx.ingale.core.presentation.ui.marquee
-import com.nightx.ingale.core.presentation.view.NestedScrollForMusicBarNotification
 import com.nightx.ingale.core.presentation.view.ObserveState
+import com.nightx.ingale.core.presentation.view.rememberNestedScrollForMusicBarNotification
 import com.nightx.ingale.feature_local.local_core.domain.model.SongsSet
 import com.nightx.ingale.feature_local.local_core.presentation.SongsLazyList
 import com.nightx.ingale.feature_local.main.presentation.ui_components.SongsSetButton
@@ -100,8 +101,16 @@ private fun LocalMainScreen(
     )
     val bottomBarController = LocalBottomBarController.current
 
-    ObserveState(pagerState.settledPage) {
-        bottomBarController.sendEffect(BottomBarEffect.ExpandMusicBar)
+    val isPagerScrolling = remember {
+        derivedStateOf {
+            pagerState.currentPageOffsetFraction != 0f
+        }
+    }
+
+    ObserveState(isPagerScrolling.value) {
+        if(it) {
+            bottomBarController.sendEffect(BottomBarEffect.ExpandMusicBar)
+        }
     }
     Column(
         modifier = Modifier
@@ -204,7 +213,7 @@ private fun LocalMainScreen(
                         notErrorView = {
                             SongsLazyList(
                                 modifier = Modifier
-                                    .nestedScroll(NestedScrollForMusicBarNotification),
+                                    .nestedScroll(rememberNestedScrollForMusicBarNotification()),
                                 lazyListState = songsLazyColumnState,
                                 songs = state.allSongs,
                                 query = state.searchTextField,
@@ -233,7 +242,7 @@ private fun LocalMainScreen(
                 1 -> {
                     CommonSongSetsGrid(
                         modifier = Modifier
-                            .nestedScroll(NestedScrollForMusicBarNotification),
+                            .nestedScroll(rememberNestedScrollForMusicBarNotification()),
                         lazyGridState = albumsGridsState,
                         items = StableList(state.albums.map { album ->
                             SongsSet(
@@ -251,7 +260,7 @@ private fun LocalMainScreen(
                 2 -> {
                     CommonSongSetsGrid(
                         modifier = Modifier
-                            .nestedScroll(NestedScrollForMusicBarNotification),
+                            .nestedScroll(rememberNestedScrollForMusicBarNotification()),
                         lazyGridState = artistsGridsState,
                         items = StableList(state.artists.map { artist ->
                             SongsSet(

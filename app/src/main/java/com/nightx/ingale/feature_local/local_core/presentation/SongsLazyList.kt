@@ -32,7 +32,7 @@ fun SongsLazyList(
     if(!isLoading) {
         LazyColumn(
             modifier = modifier.fillMaxSize(),
-            state = lazyListState
+            state = lazyListState,
         ) {
             items(
                 items = songs,

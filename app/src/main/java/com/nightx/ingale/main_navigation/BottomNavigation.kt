@@ -1,6 +1,5 @@
 package com.nightx.ingale.main_navigation
 
-import android.util.Log
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateDpAsState
@@ -61,7 +60,6 @@ fun BottomNavigation() {
         mutableStateOf(true)
     }
     val bottomBarOffset = remember(isBottomBarVisible) {
-        Log.d("myLogs", "remember $isBottomBarVisible")
         if(isBottomBarVisible) {
             0.dp
         } else {
@@ -120,7 +118,6 @@ fun BottomNavigation() {
                         selected = selected == item.title,
                         onClick = {
                             if (isBottomBarVisible) {
-                                Log.d("myLogs", "onClick $bottomBarOffset, $isBottomBarVisible")
                                 selected = item.title
                                 scope.launch {
                                     pagerState.animateScrollToPage(index)

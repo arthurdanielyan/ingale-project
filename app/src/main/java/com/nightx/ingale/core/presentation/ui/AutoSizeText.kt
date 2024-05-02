@@ -1,6 +1,5 @@
 package com.nightx.ingale.core.presentation.ui
 
-import android.util.Log
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -113,7 +112,6 @@ fun AutoSizeText(
                     estimatedFontSize = min + 0.5f * (max - min)
                 }
             }
-            Log.d("myLogs", estimatedFontSize.toString())
         },
         style = style
     )

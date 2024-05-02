@@ -29,22 +29,19 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ExperimentalMotionApi
 import androidx.constraintlayout.compose.MotionLayout
 import androidx.constraintlayout.compose.MotionScene
 import androidx.constraintlayout.solver.widgets.Optimizer
 import androidx.lifecycle.SavedStateHandle
 import com.nightx.ingale.R
 import com.nightx.ingale.core.presentation.di.ingaleViewModels
-import com.nightx.ingale.core.presentation.view.NestedScrollForMusicBarNotification
+import com.nightx.ingale.core.presentation.view.rememberNestedScrollForMusicBarNotification
 import com.nightx.ingale.feature_local.local_core.domain.model.SongsSet
 import com.nightx.ingale.feature_local.local_core.presentation.SongsLazyList
 import com.nightx.ingale.feature_local.local_core.presentation.song_item.SongIcon
 import com.nightx.ingale.feature_local.songs_set.presentation.view.LocalSongsSetContract
 import com.nightx.ingale.feature_local.songs_set.presentation.view.SongsSetCallbacks
 import com.nightx.ingale.feature_local.songs_set.presentation.view.SongsSetViewModel
-import com.nightx.ingale.main_navigation.bottom_bar_controls.BottomBarEffect
-import com.nightx.ingale.main_navigation.bottom_bar_controls.SendBottomBarEffect
 import kotlin.math.abs
 
 @Composable
@@ -85,7 +82,7 @@ private fun SongsSetScreen(
         SongsLazyList(
             modifier = Modifier
                 .fillMaxSize()
-                .nestedScroll(NestedScrollForMusicBarNotification),
+                .nestedScroll(rememberNestedScrollForMusicBarNotification()),
             lazyListState = lazyListState,
             songs = state.songsSetInfo.songs,
             isLoading = false,
@@ -94,7 +91,6 @@ private fun SongsSetScreen(
     }
 }
 
-@OptIn(ExperimentalMotionApi::class)
 @Composable
 fun CollapsingTitle(
     songsSetInfo: SongsSet,
