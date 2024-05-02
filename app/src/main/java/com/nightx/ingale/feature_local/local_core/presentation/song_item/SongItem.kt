@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.nightx.ingale.core.domain.model.Song
-import com.nightx.ingale.core.presentation.ui.navigationClickable
 import com.nightx.ingale.feature_local.local_core.domain.functions.highlight
 import com.nightx.ingale.feature_local.local_core.domain.model.SongOperations
 import com.nightx.ingale.feature_local.local_core.presentation.SongOperationsBottomSheet
@@ -41,7 +40,7 @@ fun SongItem(
     song: Song,
     onSongClick: (Song) -> Unit,
     highlightedPart: String = "",
-    onSongOperation: (SongOperations) -> Unit
+    onSongOperation: (SongOperations) -> Unit,
 ) {
     var songOperationSheetExpanded by rememberSaveable { mutableStateOf(false) }
     ConstraintLayout(
@@ -53,11 +52,9 @@ fun SongItem(
                 color = MaterialTheme.colorScheme.background,
             )
             .clip(RoundedCornerShape(8.dp))
-            .navigationClickable(
-                onClick = {
-                    onSongClick(song)
-                }
-            )
+            .clickable {
+                onSongClick(song)
+            }
             .padding(
                 vertical = MaterialTheme.spacing.normal,
                 horizontal = MaterialTheme.spacing.large,
@@ -114,11 +111,11 @@ fun SongItem(
                 .clickable { songOperationSheetExpanded = true }
         )
     }
-    if(songOperationSheetExpanded)
-    SongOperationsBottomSheet(
-        onOperation = onSongOperation,
-        onDismissRequest = { songOperationSheetExpanded = false }
-    )
+    if (songOperationSheetExpanded)
+        SongOperationsBottomSheet(
+            onOperation = onSongOperation,
+            onDismissRequest = { songOperationSheetExpanded = false }
+        )
 }
 
 private val SongItemHeight = 80.dp

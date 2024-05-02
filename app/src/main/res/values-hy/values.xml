@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="section_songs">Երաժշտություններ</string>
+    <string name="section_albums">Ալբոմներ</string>
+    <string name="section_artist">Հեղինակներ</string>
+</resources>

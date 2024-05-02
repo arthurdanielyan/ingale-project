@@ -1,3 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Ingale</string>
+    <string name="app_name" translatable="false">Ingale</string>
+    <string name="section_songs">Songs</string>
+    <string name="section_albums">Albums</string>
+    <string name="section_artist">Artist</string>
 </resources>

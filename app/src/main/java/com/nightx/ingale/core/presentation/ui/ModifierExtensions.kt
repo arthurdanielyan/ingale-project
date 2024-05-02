@@ -6,8 +6,10 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.MarqueeSpacing
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -18,37 +20,21 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.semantics.Role
 
-fun Modifier.navigationClickable(
-    enabled: Boolean = true,
-    onClickLabel: String? = null,
-    role: Role? = null,
-    onClick: () -> Unit,
-): Modifier = composed {
-
-    val navigationClickListener = remember { NavigationClickListener(onClick) }
-
-    this.clickable(
-        enabled = enabled,
-        onClickLabel = onClickLabel,
-        role = role,
-        onClick = navigationClickListener::onNavigationClick
-    )
-}
-
-private class NavigationClickListener(
-    private val onClick: () -> Unit,
-) {
-    private var lastClick = -1L
-
-    fun onNavigationClick() {
-        if (System.currentTimeMillis() - lastClick > screenTransitionDuration + 500 || lastClick == -1L) {
-            onClick()
-            lastClick = System.currentTimeMillis()
+fun Modifier.modifyIf(condition: Boolean, modifier: Modifier.() -> Modifier) =
+    this.then(
+        if(condition) {
+            this.modifier()
+        } else {
+            Modifier
         }
-    }
-}
+    )
+
+@OptIn(ExperimentalFoundationApi::class)
+fun Modifier.marquee() = this.basicMarquee(
+    iterations = Int.MAX_VALUE,
+    spacing = MarqueeSpacing.fractionOfContainer(0.5f)
+)
 
 fun Modifier.shimmer(): Modifier = composed {
     var maxRadius by remember {

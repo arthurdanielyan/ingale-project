@@ -2,12 +2,12 @@ package com.nightx.ingale.feature_local.main.presentation.ui_components
 
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -21,7 +21,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.layout.onSizeChanged
-import com.nightx.ingale.core.presentation.ui.navigationClickable
+import com.nightx.ingale.core.presentation.ui.AutoSizeText
 import com.nightx.ingale.ui.theme.spacing
 import kotlin.math.max
 
@@ -53,13 +53,15 @@ fun SongsSetButton(
                 gradientRadius = max(it.height, it.width)
             }
             .clip(Shape)
-            .navigationClickable(onClick = onClick),
+            .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
-        Text(
+        AutoSizeText(
             modifier = Modifier.padding(MaterialTheme.spacing.large),
             text = text,
-            color = Color.White
+            maxLines = 1,
+            color = Color.White,
+            forceFit = true
         )
     }
 }

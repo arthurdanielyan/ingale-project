@@ -7,9 +7,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.requiredWidthIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material3.MaterialTheme
@@ -93,10 +95,13 @@ fun <T> TabRow(
     val scope = rememberCoroutineScope()
     val density = LocalDensity.current
 
-    Box(
+    BoxWithConstraints(
         modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
+        val maxWidth = remember(items.size) {
+            (maxWidth.value / items.size).dp
+        }
         Box {
             Row(
                 horizontalArrangement = Arrangement.Center,
@@ -105,6 +110,7 @@ fun <T> TabRow(
                 items.forEachIndexed { index, item ->
                     Box(
                         modifier = Modifier
+                            .requiredWidthIn(max = maxWidth)
                             .clickable {
                                 scope.launch {
                                     pagerState.animateScrollToPage(
@@ -128,7 +134,8 @@ fun <T> TabRow(
                                 if (selectedItemIndex == index) {
                                     dragWidth = tabsBounds[index].width
                                 }
-                            }
+                            },
+                        contentAlignment = Alignment.Center
                     ) {
                         itemContent(item)
                     }

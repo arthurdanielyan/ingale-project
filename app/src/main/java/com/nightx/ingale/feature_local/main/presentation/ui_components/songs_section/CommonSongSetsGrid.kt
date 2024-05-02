@@ -3,6 +3,7 @@ package com.nightx.ingale.feature_local.main.presentation.ui_components.songs_se
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -30,7 +31,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.nightx.ingale.core.presentation.ui.navigationClickable
 import com.nightx.ingale.core.presentation.ui.shimmer
 import com.nightx.ingale.feature_local.local_core.domain.functions.highlight
 import com.nightx.ingale.feature_local.local_core.domain.model.SongsSet
@@ -122,7 +122,7 @@ private fun SongsSetCard(
         modifier = modifier
             .requiredHeight(SongsSetCardHeight)
             .clip(RoundedCornerShape(10))
-            .navigationClickable {
+            .clickable {
                 onClick(songsSet)
             }
             .background(

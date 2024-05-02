@@ -26,18 +26,21 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.nightx.ingale.core.presentation.di.ingaleViewModels
 import com.nightx.ingale.core.presentation.flows.ObserveEffects
 import com.nightx.ingale.core.presentation.ui.DataPlaceholder
 import com.nightx.ingale.core.presentation.ui.LoadingStatePresenter
+import com.nightx.ingale.core.presentation.ui.marquee
 import com.nightx.ingale.core.presentation.view.NestedScrollForMusicBarNotification
 import com.nightx.ingale.core.presentation.view.ObserveState
 import com.nightx.ingale.feature_local.local_core.domain.model.SongsSet
@@ -63,7 +66,7 @@ import kotlinx.coroutines.flow.Flow
 fun LocalMainScreen() {
     val vm = ingaleViewModels<LocalMainViewModel>()
     LocalMainScreen(
-        state = vm.state.collectAsState().value,
+        state = vm.state.collectAsStateWithLifecycle().value,
         callbacks = vm,
         effects = vm.effect
     )
@@ -151,19 +154,22 @@ private fun LocalMainScreen(
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.normal)
         ) {
             SongsSetButton(
-                modifier = Modifier.weight(1f, true),
+                modifier = Modifier
+                    .weight(1f, true),
                 gradientWeak = MaterialTheme.ingaleColors.additional1,
                 text = "Playlists",
                 onClick = {}
             )
             SongsSetButton(
-                modifier = Modifier.weight(1f, true),
+                modifier = Modifier
+                    .weight(1f, true),
                 gradientWeak = MaterialTheme.ingaleColors.additional2,
                 text = "Favourites",
                 onClick = {}
             )
             SongsSetButton(
-                modifier = Modifier.weight(1f, true),
+                modifier = Modifier
+                    .weight(1f, true),
                 gradientWeak = MaterialTheme.ingaleColors.additional3,
                 text = "History",
                 onClick = {}
@@ -176,9 +182,13 @@ private fun LocalMainScreen(
             items = state.sections,
             itemContent = { title ->
                 Text(
-                    text = title,
+                    text = stringResource(id = title),
+                    textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier.padding(MaterialTheme.spacing.large)
+                    maxLines = 1,
+                    modifier = Modifier
+                        .padding(MaterialTheme.spacing.large)
+                        .marquee()
                 )
             }
         )
