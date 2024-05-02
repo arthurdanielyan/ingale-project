@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="section_songs">Երաժշտություններ</string>
+    <string name="section_albums">Ալբոմներ</string>
+    <string name="section_artist">Հեղինակներ</string>
+
+    <string name="playlists">Երգացանկեր</string>
+    <string name="favourites">Ընտրյալներ</string>
+    <string name="history">Պատմություն</string>
+
+    <string name="search">Որոնում</string>
+    <string name="local_music">Ներքին երաժշտություններ</string>
+
+    <string name="unknown">Անհայտ</string>
+    <string name="unknown_album">Անհայտ ալբոմ</string>
+    <string name="unknown_artist">Անհայտ հեղինակ</string>
+</resources>

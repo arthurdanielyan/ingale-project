@@ -3,10 +3,10 @@ package com.nightx.ingale.main_navigation
 import com.nightx.ingale.R
 
 sealed class BottomNavItem(
-    val title: String,
+    val titleKey: Int,
     val icon: Int
 ) {
 
-    object Local : BottomNavItem("Local Music", R.drawable.bottom_local)
-    object Youtube : BottomNavItem("Youtube", R.drawable.bottom_youtube)
+    object Local : BottomNavItem(R.string.local_music, R.drawable.bottom_local)
+    object Youtube : BottomNavItem(R.string.youtube, R.drawable.bottom_youtube)
 }

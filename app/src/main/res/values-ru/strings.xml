@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="section_songs">Песни</string>
+    <string name="section_albums">Альбомы</string>
+    <string name="section_artist">Авторы</string>
+
+    <string name="playlists">Плейлисты</string>
+    <string name="favourites">Избранное</string>
+    <string name="history">История</string>
+
+    <string name="search">Поиск</string>
+    <string name="local_music">Локальная музыка</string>
+
+    <string name="unknown">Неизвестный</string>
+    <string name="unknown_album">Неизвестный альбом</string>
+    <string name="unknown_artist">Неизвестный автор</string>
+</resources>

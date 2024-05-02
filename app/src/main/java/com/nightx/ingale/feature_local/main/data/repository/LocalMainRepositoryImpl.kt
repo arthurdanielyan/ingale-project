@@ -10,6 +10,7 @@ import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
 import android.util.Size
+import com.nightx.ingale.R
 import com.nightx.ingale.core.data.mapList
 import com.nightx.ingale.core.data.model.SongRealm
 import com.nightx.ingale.core.data.model.mapper.SongRealmMapper
@@ -39,7 +40,7 @@ class LocalMainRepositoryImpl(
     private val songsDb: Realm,
     private val dispatchers: CoroutineDispatchers,
     private val songRealmMapper: SongRealmMapper,
-    private val applicationScope: CoroutineScope
+    private val applicationScope: CoroutineScope,
 ) : LocalMainRepository {
 
     companion object {
@@ -58,8 +59,8 @@ class LocalMainRepositoryImpl(
             .flatMapLatest {
                 flow {
                     emit(LoadState.Loading())
-                    if(it.list.isEmpty()) {
-                        if(!savingDeferred.isCompleted) {
+                    if (it.list.isEmpty()) {
+                        if (!savingDeferred.isCompleted) {
                             savingDeferred.await()
                         }
                     }
@@ -73,7 +74,7 @@ class LocalMainRepositoryImpl(
         val cursor = applicationContext.contentResolver.query(uri, null, null, null, null)
         val localSongs = LinkedList<SongRealm>() // only additions happens so LinkedList is faster
 
-        if((cursor?.count ?: -1) > 0) {
+        if ((cursor?.count ?: -1) > 0) {
             cursor!!
             do {
                 try {
@@ -96,23 +97,32 @@ class LocalMainRepositoryImpl(
 
 
                     val durationColumnIndex = cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)
-                    val duration = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLongOrNull()
-                        ?: cursor.getLong(durationColumnIndex)
+                    val duration =
+                        metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+                            ?.toLongOrNull()
+                            ?: cursor.getLong(durationColumnIndex)
 
                     val artistNameColumnIndex = cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)
-                    val artistName = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST)
-                        ?: cursor.getString(artistNameColumnIndex)
+                    val artistName =
+                        metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST)
+                            ?: cursor.getString(artistNameColumnIndex)
 
 
                     val albumIdCol = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)
                     val albumId = cursor.getLong(albumIdCol)
 
                     val genreNameColumnIndex =
-                        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.R)
+                        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R)
                             cursor.getColumnIndex(MediaStore.Audio.Media.GENRE)
                         else -1
-                    val genre = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE)
-                        ?: if(genreNameColumnIndex >= 0)cursor.getString(genreNameColumnIndex) ?: "Unknown" else "Unknown"
+                    val genre =
+                        metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE)
+                            ?: if (genreNameColumnIndex >= 0) {
+                                cursor.getString(genreNameColumnIndex)
+                                    ?: applicationContext.resources.getString(R.string.unknown)
+                            } else {
+                                applicationContext.resources.getString(R.string.unknown)
+                            }
 
                     val artistIdCol = cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID)
                     val artistId = cursor.getLong(artistIdCol)
@@ -147,14 +157,17 @@ class LocalMainRepositoryImpl(
                                     albumArtUri
                                 )
                             }
-                        } catch (e: Exception) { null }
+                        } catch (e: Exception) {
+                            null
+                        }
 
                     if (albumArt == null && embeddedPicture != null && embeddedPicture.isNotEmpty()) {
-                        albumArt = BitmapFactory.decodeByteArray(embeddedPicture, 0, MaxImageSizeByte)
+                        albumArt =
+                            BitmapFactory.decodeByteArray(embeddedPicture, 0, MaxImageSizeByte)
                     }
 
                     var previewPath = ""
-                    if(albumArt != null) {
+                    if (albumArt != null) {
                         try {
                             val previewName = "$id.$ImageExtension"
                             val appDataDir = applicationContext.filesDir.apply {
@@ -174,9 +187,14 @@ class LocalMainRepositoryImpl(
                     val song = SongRealm().apply {
                         this.id = id
                         this.title = title
-                        this.album = if(albumName == "Download") "Unknown album" else albumName
+                        this.album = if (albumName == "Download") {
+                            applicationContext.getString(R.string.unknown_album)
+                        } else albumName
                         this.duration = duration
-                        this.artist = if(artistName == "<unknown>") "Unknown artist" else artistName
+                        this.artist =
+                            if (artistName == "<unknown>") {
+                                applicationContext.resources.getString(R.string.unknown_artist)
+                            } else artistName
                         this.genre = genre
                         this.path = songPath
                         this.previewPath = previewPath

@@ -37,6 +37,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.nightx.ingale.R
 import com.nightx.ingale.core.presentation.di.ingaleViewModels
 import com.nightx.ingale.core.presentation.flows.ObserveEffects
 import com.nightx.ingale.core.presentation.ui.DataPlaceholder
@@ -131,7 +132,7 @@ private fun LocalMainScreen(
             interactionSource = interactionSource,
             placeholder = {
                 Text(
-                    text = "Search",
+                    text = stringResource(R.string.search),
                     color = MaterialTheme.colorScheme.onBackground
                 )
             },
@@ -166,21 +167,21 @@ private fun LocalMainScreen(
                 modifier = Modifier
                     .weight(1f, true),
                 gradientWeak = MaterialTheme.ingaleColors.additional1,
-                text = "Playlists",
+                text = stringResource(R.string.playlists),
                 onClick = {}
             )
             SongsSetButton(
                 modifier = Modifier
                     .weight(1f, true),
                 gradientWeak = MaterialTheme.ingaleColors.additional2,
-                text = "Favourites",
+                text = stringResource(R.string.favourites),
                 onClick = {}
             )
             SongsSetButton(
                 modifier = Modifier
                     .weight(1f, true),
                 gradientWeak = MaterialTheme.ingaleColors.additional3,
-                text = "History",
+                text = stringResource(R.string.history),
                 onClick = {}
             )
         }

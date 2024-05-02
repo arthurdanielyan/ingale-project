@@ -4,4 +4,16 @@
     <string name="section_songs">Songs</string>
     <string name="section_albums">Albums</string>
     <string name="section_artist">Artist</string>
+
+    <string name="playlists">Playlists</string>
+    <string name="favourites">Favourites</string>
+    <string name="history">History</string>
+
+    <string name="search">Search</string>
+    <string name="local_music">Local Music</string>
+    <string name="youtube" translatable="false">YouTube</string>
+
+    <string name="unknown">Unknown</string>
+    <string name="unknown_album">Unknown album</string>
+    <string name="unknown_artist">Unknown artist</string>
 </resources>

@@ -33,6 +33,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -42,6 +43,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
@@ -90,7 +93,7 @@ fun BottomNavigation() {
         BottomNavItem.Youtube
     )
     var selected by rememberSaveable {
-        mutableStateOf(BottomNavItem.Local.title)
+        mutableIntStateOf(BottomNavItem.Local.titleKey)
     }
     val pagerState = rememberPagerState(
         pageCount = { bottomNavItems.size }
@@ -115,10 +118,10 @@ fun BottomNavigation() {
                             unselectedTextColor = MaterialTheme.colorScheme.onBackground
                         ),
                         modifier = Modifier.requiredSize(1.15 * BottomBarHeight),
-                        selected = selected == item.title,
+                        selected = selected == item.titleKey,
                         onClick = {
                             if (isBottomBarVisible) {
-                                selected = item.title
+                                selected = item.titleKey
                                 scope.launch {
                                     pagerState.animateScrollToPage(index)
                                 }
@@ -129,13 +132,15 @@ fun BottomNavigation() {
                                 modifier = Modifier
                                     .size(45.dp),
                                 painter = painterResource(item.icon),
-                                contentDescription = item.title
+                                contentDescription = stringResource(item.titleKey)
                             )
                         },
                         label = {
                             val offset = MaterialTheme.spacing.normal
                             Text(
-                                text = item.title,
+                                text = stringResource(item.titleKey),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
                                 modifier = Modifier.offset {
                                     IntOffset(0, offset.roundToPx())
                                 }
@@ -162,7 +167,7 @@ fun BottomNavigation() {
                 HorizontalPager(
                     modifier = Modifier.fillMaxSize(),
                     state = pagerState,
-                    key = { bottomNavItems[it].title },
+                    key = { bottomNavItems[it].titleKey },
                     userScrollEnabled = false
                 ) {
                     when (it) {
