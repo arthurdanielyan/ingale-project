@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.realm.kotlin)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 kapt {
@@ -70,7 +71,7 @@ dependencies {
     implementation(libs.androidx.media3)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso)
+//    androidTestImplementation(libs.androidx.espresso)
     androidTestImplementation(platform(libs.androidx.compose.bom))
 //    androidTestImplementation(platform("androidx.compose:compose-bom:2022.10.00"))
     androidTestImplementation(libs.androidx.compose.junit)

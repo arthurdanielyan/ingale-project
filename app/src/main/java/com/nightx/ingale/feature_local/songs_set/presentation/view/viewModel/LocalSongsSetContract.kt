@@ -1,0 +1,14 @@
+package com.nightx.ingale.feature_local.songs_set.presentation.view.viewModel
+
+import com.nightx.ingale.feature_local.local_core.domain.model.SongsSet
+import com.nightx.ingale.mvi.UiEffect
+import com.nightx.ingale.mvi.UiState
+
+interface LocalSongsSetContract {
+
+    sealed interface Effect : UiEffect
+
+    data class State(
+        val songsSetInfo: SongsSet,
+    ) : UiState
+}

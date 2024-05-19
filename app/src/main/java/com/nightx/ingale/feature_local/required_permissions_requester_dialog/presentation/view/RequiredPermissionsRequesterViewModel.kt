@@ -9,7 +9,8 @@ import android.os.Build
 import android.provider.Settings
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.SavedStateHandle
-import com.nightx.ingale.core.presentation.navigation.destination.getOnResultCallback
+import com.nightx.ingale.core.presentation.navigation.coreNavigation.sendResult
+import com.nightx.ingale.core.presentation.navigation.dialog_navigation.DialogDestination.RequiredPermissionRequesterDestination
 import com.nightx.ingale.core.presentation.navigation.dialog_navigation.DialogNavigator
 import com.nightx.ingale.feature_local.required_permissions_requester_dialog.presentation.view.RequiredPermissionsRequesterContract.Effect
 import com.nightx.ingale.feature_local.required_permissions_requester_dialog.presentation.view.RequiredPermissionsRequesterContract.State
@@ -21,7 +22,7 @@ import com.nightx.ingale.mvi.wrappers.stableListOf
 import com.nightx.ingale.mvi.wrappers.toStableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 
 class RequiredPermissionsRequesterViewModel(
@@ -42,13 +43,20 @@ class RequiredPermissionsRequesterViewModel(
         arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
     }
 
+    private val audioPermission: String
+        get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            Manifest.permission.READ_MEDIA_AUDIO
+        } else {
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        }
+
     override fun defineInitialState(): State = State()
 
     private val requiredPermissionDialogs = MutableStateFlow(emptyStableList<String>())
     override val state: StateFlow<State> =
-        combine(requiredPermissionDialogs) { requiredPermissionDialogs ->
+        requiredPermissionDialogs.map { requiredPermissionDialogs ->
             State(
-                requiredPermissionDialogs = requiredPermissionDialogs[0]
+                activePermissionDialog = requiredPermissionDialogs.firstOrNull()
             )
         }.viewModelState()
 
@@ -64,14 +72,16 @@ class RequiredPermissionsRequesterViewModel(
             ) == PackageManager.PERMISSION_DENIED
         }
         if (permissionsToRequest.isNotEmpty()) {
+            if(permissionsToRequest.contains(audioPermission)) {
+                savedStateHandle.sendResult(RequiredPermissionRequesterDestination.ResultData(
+                    audioPermissionGranted = false
+                ))
+            }
             sendEffect {
                 Effect.RequestPermission(permissionsToRequest.toStableList())
             }
         } else {
             dialogNavigator.dismiss()
-        }
-        if(isAudioPermissionGranted) {
-            savedStateHandle.getOnResultCallback<Boolean>()?.invoke(true)
         }
     }
 
@@ -81,14 +91,14 @@ class RequiredPermissionsRequesterViewModel(
         } else if (isGranted) {
             requiredPermissionDialogs.update { it - permission }
         }
-        if (permission == Manifest.permission.READ_MEDIA_AUDIO || permission == Manifest.permission.READ_EXTERNAL_STORAGE) {
-            savedStateHandle.getOnResultCallback<Boolean>()?.invoke(isGranted)
+        if (permission == audioPermission) {
+                savedStateHandle.sendResult(RequiredPermissionRequesterDestination.ResultData(
+                    audioPermissionGranted = isGranted
+                ))
         }
     }
 
     override fun onOkClick(permission: String) {
-        // This forces the dialog to be updated with a different button
-        // as the same element will be inserted again
         requiredPermissionDialogs.update { it - permission }
         sendEffect {
             Effect.RequestPermission(stableListOf(permission))
@@ -108,17 +118,4 @@ class RequiredPermissionsRequesterViewModel(
             dialogNavigator.dismiss()
         }
     }
-
-    private val isAudioPermissionGranted: Boolean
-        get() {
-            val audioPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                Manifest.permission.READ_MEDIA_AUDIO
-            } else {
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            }
-            return ContextCompat.checkSelfPermission(
-                applicationContext,
-                audioPermission
-            ) == PackageManager.PERMISSION_GRANTED
-        }
 }

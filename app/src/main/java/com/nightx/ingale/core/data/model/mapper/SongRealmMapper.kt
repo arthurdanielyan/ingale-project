@@ -1,12 +1,12 @@
 package com.nightx.ingale.core.data.model.mapper
 
-import com.nightx.ingale.core.data.Mapper
 import com.nightx.ingale.core.data.model.SongRealm
+import com.nightx.ingale.core.domain.Mapper
 import com.nightx.ingale.core.domain.model.Song
 
 class SongRealmMapper : Mapper<SongRealm, Song> {
 
-    override fun map(from: SongRealm): Song =
+    override operator fun invoke(from: SongRealm): Song =
         Song(
             id = from.id,
             title = from.title,

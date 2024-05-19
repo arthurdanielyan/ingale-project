@@ -1,10 +1,16 @@
 package com.nightx.ingale.feature_local.local_navigation
 
-import com.nightx.ingale.core.presentation.navigation.destination.NavEvent
-import com.nightx.ingale.feature_local.local_navigation.screen_navigation.LocalScreenDestination
 
-data class LocalNavEvent<A, R> (
-    override val destination: LocalScreenDestination,
-    override val argument: A?,
-    override val onResult: ((R) -> Unit)?
-): NavEvent<A, R>
+import android.os.Parcelable
+import com.nightx.ingale.core.presentation.navigation.coreNavigation.NavEvent
+import com.nightx.ingale.feature_local.local_navigation.destinations.LocalScreenDestination
+
+sealed interface LocalNavEvent : NavEvent
+
+data class LocalNavigateEvent<A: Parcelable, R: Parcelable>(
+    val destination: LocalScreenDestination,
+    val argument: A?,
+    val onResult: ((R) -> Unit)?,
+): LocalNavEvent
+
+data object LocalNavigateUpEvent : LocalNavEvent

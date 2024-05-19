@@ -12,15 +12,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
+import com.nightx.ingale.R
 import com.nightx.ingale.ui.theme.spacing
 
 @Composable
 fun DataPlaceholder(
     title: String,
     description: String? = null,
-    buttonText: String = "Refresh",
-    onAction: () -> Unit
+    actionButtonText: String = stringResource(R.string.refresh),
+    onAction: () -> Unit,
+    additionalButtonText: String? = null,
+    onAdditionalAction: (() -> Unit)? = null
 ) {
     Column(
         modifier = Modifier
@@ -28,20 +34,22 @@ fun DataPlaceholder(
             .background(MaterialTheme.colorScheme.background)
             .padding(MaterialTheme.spacing.large),
         verticalArrangement = Arrangement.spacedBy(
-            space = MaterialTheme.spacing.normal,
+            space = MaterialTheme.spacing.large,
             alignment = Alignment.CenterVertically
         ),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             text = title,
             fontSize = 28.sp,
+            textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onBackground
         )
         description?.let {
             Text(
                 text = description,
                 fontSize = 16.sp,
+                textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onBackground
             )
         }
@@ -50,8 +58,24 @@ fun DataPlaceholder(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = buttonText
+                text = actionButtonText,
+                maxLines = 1,
+                textAlign = TextAlign.Center,
+                overflow = TextOverflow.Ellipsis
             )
+        }
+        additionalButtonText?.let {
+            Button(
+                onClick = onAdditionalAction ?: {},
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = additionalButtonText,
+                    maxLines = 1,
+                    textAlign = TextAlign.Center,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
         }
     }
 }

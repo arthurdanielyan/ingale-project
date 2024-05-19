@@ -22,6 +22,7 @@ sealed interface LoadState<T> {
     fun getOrDefault(default: T): T =
         when(this) {
             is Success -> this.data
+            is Error -> this.lastSuccessfulData ?: default
             else -> default
         }
 }

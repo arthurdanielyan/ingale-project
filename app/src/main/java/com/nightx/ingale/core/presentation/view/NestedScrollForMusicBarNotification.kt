@@ -1,7 +1,6 @@
 package com.nightx.ingale.core.presentation.view
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.geometry.Offset
@@ -31,13 +30,8 @@ class NestedScrollForMusicBarNotification : NestedScrollConnection {
         available: Offset,
         source: NestedScrollSource,
     ): Offset {
-        /*
-        * 1 dp - density px
-        * ? dp - x px
-        * */
         val consumedDp = consumed.y / applicationContext.resources.displayMetrics.density
         startOffset += consumedDp
-        Log.d("myLogs", "consumed: $consumedDp, total: $startOffset")
 
         if (startOffset < -SignificantScrollSize) {
             bottomBarController.sendEffect(BottomBarEffect.CollapseMusicBar)

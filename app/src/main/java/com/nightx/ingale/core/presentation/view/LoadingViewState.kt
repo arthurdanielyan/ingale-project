@@ -7,7 +7,7 @@ sealed class LoadingViewState {
     val isSuccess: Boolean
         get() = this is Loading
     val isError: Boolean
-        get() = this is Loading
+        get() = this is Error
 
     data object Loading : LoadingViewState()
     data object Success : LoadingViewState()

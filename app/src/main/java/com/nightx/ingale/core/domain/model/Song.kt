@@ -1,7 +1,9 @@
 package com.nightx.ingale.core.domain.model
 
-import java.io.Serializable
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Song(
     val id: Long,
     val title: String,
@@ -14,4 +16,4 @@ data class Song(
     val artistId: Long,
     val albumId: Long,
     val lastModified: Long
-) : Serializable
+) : Parcelable

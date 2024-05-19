@@ -4,7 +4,6 @@ import androidx.compose.runtime.Immutable
 import com.nightx.ingale.mvi.UiEffect
 import com.nightx.ingale.mvi.UiState
 import com.nightx.ingale.mvi.wrappers.StableList
-import com.nightx.ingale.mvi.wrappers.emptyStableList
 
 interface RequiredPermissionsRequesterContract {
 
@@ -14,6 +13,6 @@ interface RequiredPermissionsRequesterContract {
 
     @Immutable
     data class State(
-        val requiredPermissionDialogs: StableList<String> = emptyStableList()
+        val activePermissionDialog: String? = null
     ) : UiState
 }

@@ -17,7 +17,13 @@ abstract class BaseViewModel<State : UiState, Effect : UiEffect> : ViewModel() {
     protected abstract fun defineInitialState(): State
 
     private val _state = MutableStateFlow(initialState)
-    open val state = _state.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), initialState)
+
+    /**
+     * Sometimes it is convenient to use a different approach to the ui state management.
+     * For example having multiple [MutableStateFlow]s and combining them into a single one.
+     * This is why this is an open property.
+     * */
+    open val state = _state.viewModelState()
 
     private val _effect = Channel<Effect>()
     val effect = _effect.receiveAsFlow()

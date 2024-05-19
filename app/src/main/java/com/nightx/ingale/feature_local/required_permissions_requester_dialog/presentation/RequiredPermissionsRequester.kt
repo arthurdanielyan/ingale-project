@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.SavedStateHandle
-import com.nightx.ingale.core.presentation.di.ingaleDialogViewModels
+import com.nightx.ingale.core.presentation.di.ingaleViewModels
 import com.nightx.ingale.core.presentation.flows.ObserveEffects
 import com.nightx.ingale.feature_local.required_permissions_requester_dialog.presentation.ui_components.AudioPermissionDescriptionProvider
 import com.nightx.ingale.feature_local.required_permissions_requester_dialog.presentation.ui_components.NotificationPermissionDescriptionProvider
@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.Flow
 fun RequiredPermissionsRequesterDialog(
     savedStateHandle: SavedStateHandle,
 ) {
-    val vm = ingaleDialogViewModels<RequiredPermissionsRequesterViewModel>(
+    val vm = ingaleViewModels<RequiredPermissionsRequesterViewModel>(
         savedStateHandle = savedStateHandle
     )
 
@@ -58,20 +58,20 @@ private fun RequiredPermissionsRequesterDialogContent(
     }
 
     val context = LocalContext.current
-    state.requiredPermissionDialogs.forEach { permission ->
+    if(state.activePermissionDialog != null) {
         PermissionNotGrantedDialog(
             isPermanentlyDeclined = context.getActivity()
-                ?.shouldShowRequestPermissionRationale(permission)?.not() ?: true,
-            descriptionProvider = when (permission) {
+                ?.shouldShowRequestPermissionRationale(state.activePermissionDialog)?.not() ?: true,
+            descriptionProvider = when (state.activePermissionDialog) {
                 Manifest.permission.READ_EXTERNAL_STORAGE -> StoragePermissionDescriptionProvider()
                 Manifest.permission.READ_MEDIA_AUDIO -> AudioPermissionDescriptionProvider()
                 else -> NotificationPermissionDescriptionProvider()
             },
             onOkClick = {
-                callbacks.onOkClick(permission)
+                callbacks.onOkClick(state.activePermissionDialog)
             },
             onGoToAppSettings = {
-                callbacks.onGoToSettingsClick(permission)
+                callbacks.onGoToSettingsClick(state.activePermissionDialog)
             }
         )
     }

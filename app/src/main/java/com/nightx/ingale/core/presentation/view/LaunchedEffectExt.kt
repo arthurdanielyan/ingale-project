@@ -8,12 +8,28 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.autoSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.eventFlow
+import com.nightx.ingale.core.presentation.flows.ComposeCollect
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun SingleLaunchedEffect(
     block: suspend CoroutineScope.() -> Unit
 ) = LaunchedEffect(Unit, block)
+
+@Composable
+fun OnLifecycleEvents(
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
+    block: (Lifecycle.Event) -> Unit
+) {
+    ComposeCollect(
+        flow = lifecycleOwner.lifecycle.eventFlow,
+        onEvent = block
+    )
+}
 
 /**
  * Called when [key] changes. In contrast to [LaunchedEffect] this

@@ -13,13 +13,14 @@ inline fun <reified T : ViewModel> ingaleViewModels(
     savedStateHandle: SavedStateHandle,
     viewModelStoreOwner: ViewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current) {
         "No ViewModelStoreOwner was provided via LocalViewModelStoreOwner"
-    }
+    },
+    parameters: Array<Any> = emptyArray<Any>()
 ) = koinViewModel<T>(
     viewModelStoreOwner = viewModelStoreOwner,
     key = T::class.simpleName,
     parameters = {
         parametersOf(
-            savedStateHandle
+            savedStateHandle, *parameters
         )
     }
 )
@@ -28,8 +29,12 @@ inline fun <reified T : ViewModel> ingaleViewModels(
 inline fun <reified T : ViewModel> ingaleViewModels(
     viewModelStoreOwner: ViewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current) {
         "No ViewModelStoreOwner was provided via LocalViewModelStoreOwner"
-    }
+    },
+    parameters: Array<Any> = emptyArray<Any>()
 ) = koinViewModel<T>(
     viewModelStoreOwner = viewModelStoreOwner,
-    key = T::class.simpleName
+    key = T::class.simpleName,
+    parameters = {
+        parametersOf(*parameters)
+    }
 )

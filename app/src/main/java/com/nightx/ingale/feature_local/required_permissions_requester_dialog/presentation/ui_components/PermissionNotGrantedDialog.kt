@@ -13,10 +13,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import com.nightx.ingale.R
 import com.nightx.ingale.ui.theme.spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,7 +46,7 @@ fun PermissionNotGrantedDialog(
                 ),
         ) {
             Text(
-                text = "Permission required",
+                text = stringResource(R.string.permission_required),
                 fontSize = 24.sp,
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(
@@ -58,12 +60,16 @@ fun PermissionNotGrantedDialog(
             ) {
                 Text(
                     modifier = Modifier.padding(24.dp),
-                    text = descriptionProvider.description,
+                    text = descriptionProvider.getDescription(),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Divider()
                 Text(
-                    text = if (isPermanentlyDeclined) "Go to settings" else "OK",
+                    text = if (isPermanentlyDeclined) {
+                        stringResource(R.string.go_to_settings)
+                    } else {
+                        stringResource(R.string.ok)
+                    },
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -80,20 +86,27 @@ fun PermissionNotGrantedDialog(
 }
 
 interface PermissionDescriptionProvider {
-    val description: String
+    @Composable
+    fun getDescription(): String
 }
 
 class AudioPermissionDescriptionProvider : PermissionDescriptionProvider {
-    override val description =
-        "Please grant audio permission access so that we could read your audio files"
+
+    @Composable
+    override fun getDescription(): String =
+        stringResource(id = R.string.audio_permission_not_granted_description)
 }
 
 class StoragePermissionDescriptionProvider : PermissionDescriptionProvider {
-    override val description =
-        "Please grant storage permission access so that we could read your audio files"
+
+    @Composable
+    override fun getDescription(): String =
+        stringResource(id = R.string.storage_permission_not_granted_permission)
 }
 
 class NotificationPermissionDescriptionProvider : PermissionDescriptionProvider {
-    override val description =
-        "Please grant notification permission so you can control audio playback on background"
+
+    @Composable
+    override fun getDescription(): String =
+        stringResource(id = R.string.notification_permission_not_granted_permission)
 }

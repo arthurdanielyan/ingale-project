@@ -1,9 +1,11 @@
 package com.nightx.ingale.core.presentation.navigation.dialog_navigation
 
-import com.nightx.ingale.core.presentation.navigation.destination.NavEvent
+import android.os.Parcelable
+import kotlinx.coroutines.CoroutineScope
 
-data class DialogNavEvent<A, R> (
-    override val destination: DialogDestination,
-    override val argument: A?,
-    override val onResult: ((R) -> Unit)?
-): NavEvent<A, R>
+data class DialogNavEvent<A: Parcelable, R: Parcelable> (
+    val destination: DialogDestination,
+    val argument: A?,
+    val onResult: ((R) -> Unit)?,
+    val scope: CoroutineScope
+)

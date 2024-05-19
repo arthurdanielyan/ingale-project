@@ -31,11 +31,9 @@ import com.nightx.ingale.core.audio_player.player_action_receivers.PlayerActionS
 import com.nightx.ingale.core.audio_player.player_action_receivers.PlayerActionSkipToPrevious
 import com.nightx.ingale.core.audio_player.player_action_receivers.PlayerActionStopServiceReceiver
 import com.nightx.ingale.core.audio_player.player_action_receivers.PlayerActionTogglePlaybackReceiver
-import java.lang.IllegalArgumentException
 import kotlin.math.roundToInt
 import androidx.core.app.NotificationCompat as AndroidNotificationCompat
 import androidx.media.app.NotificationCompat as MediaNotificationCompat
-
 
 class PlayerService : MediaBrowserServiceCompat() {
 
@@ -46,6 +44,8 @@ class PlayerService : MediaBrowserServiceCompat() {
 
         private const val STOP_ACTION_ID = "custom_action_stop_id"
         private const val FAVORITE_ACTION_ID = "custom_action_add_to_favorites_id"
+
+        private const val MinSkipToPreviousTimestamp = 3000
     }
 
     private var mediaPlayer = MediaPlayer().apply {
@@ -237,7 +237,7 @@ class PlayerService : MediaBrowserServiceCompat() {
         result.sendResult(items)
     }
 
-    // Player actions /////////////////////////////////////////////////////////////////////////////
+    // Player actions ///////////////////////////////////////////////////////////////////////////////////
     private fun seekTo(@FloatRange(0.0, 1.0) progress: Float) {
         mediaPlayer.seekTo((mediaPlayer.duration * progress.coerceIn(0f, 1f)).roundToInt())
     }
@@ -260,8 +260,13 @@ class PlayerService : MediaBrowserServiceCompat() {
     }
 
     private fun skipToPrevious() {
-        AudioPlayer.pointer--
-        onSongChanged()
+        if(mediaPlayer.currentPosition <= MinSkipToPreviousTimestamp) {
+            AudioPlayer.pointer--
+            onSongChanged()
+        } else {
+            seekTo(0f)
+            updateState(true)
+        }
     }
 
     private fun changeFavoriteState() {

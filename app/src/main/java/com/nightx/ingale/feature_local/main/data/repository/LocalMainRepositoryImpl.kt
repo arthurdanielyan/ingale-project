@@ -11,22 +11,23 @@ import android.provider.MediaStore
 import android.util.Log
 import android.util.Size
 import com.nightx.ingale.R
-import com.nightx.ingale.core.data.mapList
 import com.nightx.ingale.core.data.model.SongRealm
 import com.nightx.ingale.core.data.model.mapper.SongRealmMapper
 import com.nightx.ingale.core.domain.CoroutineDispatchers
 import com.nightx.ingale.core.domain.LoadState
+import com.nightx.ingale.core.domain.mapList
 import com.nightx.ingale.core.domain.model.Song
 import com.nightx.ingale.feature_local.main.domain.repository.LocalMainRepository
 import io.realm.kotlin.Realm
 import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.ext.query
+import io.realm.kotlin.notifications.ResultsChange
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
@@ -56,17 +57,14 @@ class LocalMainRepositoryImpl(
         }
         return songsDb.query<SongRealm>()
             .asFlow()
-            .flatMapLatest {
-                flow {
-                    emit(LoadState.Loading())
-                    if (it.list.isEmpty()) {
-                        if (!savingDeferred.isCompleted) {
-                            savingDeferred.await()
-                        }
+            .mapLatest<ResultsChange<SongRealm>, LoadState<List<Song>>> {
+                if (it.list.isEmpty()) {
+                    if (!savingDeferred.isCompleted) {
+                        savingDeferred.await()
                     }
-                    emit(LoadState.Success(songRealmMapper.mapList(it.list)))
                 }
-            }
+                LoadState.Success(songRealmMapper.mapList(it.list))
+            }.onStart { emit(LoadState.Loading()) }
     }
 
     private suspend fun saveLocally() = withContext(dispatchers.io) {

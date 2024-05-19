@@ -14,4 +14,15 @@
     <string name="unknown">Неизвестный</string>
     <string name="unknown_album">Неизвестный альбом</string>
     <string name="unknown_artist">Неизвестный автор</string>
+
+    <string name="refresh">Обновить</string>
+    <string name="grant_permission">Разрешить</string>
+    <string name="go_to_settings">Перейти в настройки</string>
+    <string name="no_songs_found">Песен не найдено</string>
+    <string name="audio_permission_not_granted_description">Пожалуйста предоставьте разрешение на доступ к аудио, чтобы мы могли читать ваши аудиофайлы.</string>
+    <string name="permission_required">Требуется разрешение</string>
+    <string name="ok">ОК</string>
+
+    <string name="storage_permission_not_granted_permission">Пожалуйста предоставьте доступ к хранилищу, чтобы мы могли прочитать ваши аудиофайлы.</string>
+    <string name="notification_permission_not_granted_permission">Пожалуйста предоставьте разришение уведомлений, чтобы вы могли управлять воспроизведением пока приложение закрыто</string>
 </resources>
