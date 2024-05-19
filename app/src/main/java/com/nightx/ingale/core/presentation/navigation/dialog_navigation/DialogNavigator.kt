@@ -2,15 +2,11 @@ package com.nightx.ingale.core.presentation.navigation.dialog_navigation
 
 import android.os.Parcelable
 import androidx.compose.runtime.compositionLocalOf
-import androidx.lifecycle.ViewModel
+import com.nightx.ingale.core.presentation.navigation.dialog_navigation.destinations.DialogDestination
 import kotlinx.coroutines.flow.StateFlow
 
 /**
- * Class for activating dialogs. Can be injected.
- * Each dialog has its own [ViewModel], which is destroyed at a proper moment, however
- * note that Dialog's lifecycle is not separate from its launcher's lifecycle. If you need to
- * have a separate lifecycle for dialog, add dialog to the NavHost at
- * [com/nightx/ingale/feature_local/local_navigation/screen_navigation/LocalSectionNavGraph.kt:26]
+ * Interface for activating dialogs. Can be injected.
  * */
 interface DialogNavigator {
 

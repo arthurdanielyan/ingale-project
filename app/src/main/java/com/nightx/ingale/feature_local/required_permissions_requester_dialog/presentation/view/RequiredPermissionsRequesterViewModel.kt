@@ -10,8 +10,8 @@ import android.provider.Settings
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.SavedStateHandle
 import com.nightx.ingale.core.presentation.navigation.coreNavigation.sendResult
-import com.nightx.ingale.core.presentation.navigation.dialog_navigation.DialogDestination.RequiredPermissionRequesterDestination
 import com.nightx.ingale.core.presentation.navigation.dialog_navigation.DialogNavigator
+import com.nightx.ingale.core.presentation.navigation.dialog_navigation.destinations.RequiredPermissionRequesterDestination
 import com.nightx.ingale.feature_local.required_permissions_requester_dialog.presentation.view.RequiredPermissionsRequesterContract.Effect
 import com.nightx.ingale.feature_local.required_permissions_requester_dialog.presentation.view.RequiredPermissionsRequesterContract.State
 import com.nightx.ingale.mvi.BaseViewModel
@@ -72,10 +72,12 @@ class RequiredPermissionsRequesterViewModel(
             ) == PackageManager.PERMISSION_DENIED
         }
         if (permissionsToRequest.isNotEmpty()) {
-            if(permissionsToRequest.contains(audioPermission)) {
-                savedStateHandle.sendResult(RequiredPermissionRequesterDestination.ResultData(
-                    audioPermissionGranted = false
-                ))
+            if (permissionsToRequest.contains(audioPermission)) {
+                savedStateHandle.sendResult(
+                    RequiredPermissionRequesterDestination.ResultData(
+                        audioPermissionGranted = false
+                    )
+                )
             }
             sendEffect {
                 Effect.RequestPermission(permissionsToRequest.toStableList())
@@ -92,9 +94,11 @@ class RequiredPermissionsRequesterViewModel(
             requiredPermissionDialogs.update { it - permission }
         }
         if (permission == audioPermission) {
-                savedStateHandle.sendResult(RequiredPermissionRequesterDestination.ResultData(
+            savedStateHandle.sendResult(
+                RequiredPermissionRequesterDestination.ResultData(
                     audioPermissionGranted = isGranted
-                ))
+                )
+            )
         }
     }
 
@@ -114,7 +118,7 @@ class RequiredPermissionsRequesterViewModel(
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
             applicationContext.startActivity(this)
         }
-        if(requiredPermissionDialogs.value.isEmpty()) {
+        if (requiredPermissionDialogs.value.isEmpty()) {
             dialogNavigator.dismiss()
         }
     }

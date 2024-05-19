@@ -5,8 +5,8 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.ContextCompat
-import com.nightx.ingale.core.presentation.navigation.dialog_navigation.DialogDestination.RequiredPermissionRequesterDestination
 import com.nightx.ingale.core.presentation.navigation.dialog_navigation.DialogNavigator
+import com.nightx.ingale.core.presentation.navigation.dialog_navigation.destinations.RequiredPermissionRequesterDestination
 
 class RequiredPermissionsInspector(
     private val applicationContext: Context,
@@ -24,8 +24,6 @@ class RequiredPermissionsInspector(
     } else {
         arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
     }
-
-    private var wasReloadCommandSent = false
 
     fun start(shouldReloadSongs: (Boolean) -> Unit) {
         checkPermissions(shouldReloadSongs)
@@ -49,11 +47,4 @@ class RequiredPermissionsInspector(
             shouldReloadSongs(true)
         }
     }
-
-    private val audioPermission: String
-        get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            Manifest.permission.READ_MEDIA_AUDIO
-        } else {
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        }
 }

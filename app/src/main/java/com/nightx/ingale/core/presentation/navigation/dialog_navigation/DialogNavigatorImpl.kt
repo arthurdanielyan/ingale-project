@@ -2,8 +2,10 @@ package com.nightx.ingale.core.presentation.navigation.dialog_navigation
 
 import android.os.Parcelable
 import androidx.compose.runtime.compositionLocalOf
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
+import com.nightx.ingale.core.presentation.navigation.dialog_navigation.destinations.DialogDestination
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -14,6 +16,12 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
+/**
+ * Each dialog has its own [ViewModel], which is destroyed at a proper moment, however
+ * note that Dialog's lifecycle is not separate from its launcher's lifecycle. If you need to
+ * have a separate lifecycle for dialog, add dialog to the NavHost at
+ * [com/nightx/ingale/feature_local/local_navigation/screen_navigation/LocalSectionNavGraph.kt:34]
+ * */
 class DialogNavigatorImpl : DialogNavigator, ActiveDialogHolder, ViewModelStoreOwner {
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
@@ -62,7 +70,6 @@ class DialogNavigatorImpl : DialogNavigator, ActiveDialogHolder, ViewModelStoreO
                     destination = destination,
                     argument = argument,
                     onResult = null,
-                    scope = scope
                 )
             )
         }
@@ -78,7 +85,6 @@ class DialogNavigatorImpl : DialogNavigator, ActiveDialogHolder, ViewModelStoreO
                     destination = destination,
                     argument = null,
                     onResult = onResult,
-                    scope = scope
                 )
             )
         }
@@ -91,7 +97,6 @@ class DialogNavigatorImpl : DialogNavigator, ActiveDialogHolder, ViewModelStoreO
                     destination = destination,
                     argument = null,
                     onResult = null,
-                    scope = scope
                 )
             )
         }
@@ -108,7 +113,6 @@ class DialogNavigatorImpl : DialogNavigator, ActiveDialogHolder, ViewModelStoreO
                     destination = destination,
                     argument = argument,
                     onResult = onResult,
-                    scope = scope
                 )
             )
         }
