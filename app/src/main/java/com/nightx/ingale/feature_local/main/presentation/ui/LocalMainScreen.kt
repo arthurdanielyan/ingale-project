@@ -80,10 +80,16 @@ private fun LocalMainScreen(
     ObserveEffects(effects) { effect ->
         when (effect) {
             Effect.ScrollToTop -> {
-                delay(100)
-                songsLazyColumnState.scrollToItem(0)
-                albumsGridsState.scrollToItem(0)
-                artistsGridsState.scrollToItem(0)
+                delay(100) // delay for the list to have time to update
+                if(songsLazyColumnState.canScrollBackward) {
+                    songsLazyColumnState.animateScrollToItem(0)
+                }
+                if(albumsGridsState.canScrollBackward) {
+                    albumsGridsState.animateScrollToItem(0)
+                }
+                if(artistsGridsState.canScrollBackward) {
+                    artistsGridsState.animateScrollToItem(0)
+                }
             }
         }
     }
