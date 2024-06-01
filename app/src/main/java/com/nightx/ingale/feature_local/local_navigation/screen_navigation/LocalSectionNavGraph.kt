@@ -11,6 +11,10 @@ import androidx.navigation.compose.rememberNavController
 import com.nightx.ingale.core.presentation.flows.ComposeCollect
 import com.nightx.ingale.core.presentation.navigation.coreNavigation.Destination
 import com.nightx.ingale.core.presentation.navigation.coreNavigation.putScreenData
+import com.nightx.ingale.core.presentation.ui.nothingEnter
+import com.nightx.ingale.core.presentation.ui.nothingExit
+import com.nightx.ingale.core.presentation.ui.slideInLeft
+import com.nightx.ingale.core.presentation.ui.slideOutRight
 import com.nightx.ingale.feature_local.local_navigation.LocalNavigateEvent
 import com.nightx.ingale.feature_local.local_navigation.LocalNavigateUpEvent
 import com.nightx.ingale.feature_local.local_navigation.destinations.LocalScreenDestination
@@ -33,13 +37,17 @@ fun LocalSectionNavGraph() {
 
     NavHost(
         navController = navController,
-        startDestination = MainScreenDestination.route
+        startDestination = MainScreenDestination.route,
+        enterTransition = { slideInLeft },
+        exitTransition = { nothingExit },
+        popEnterTransition = { nothingEnter },
+        popExitTransition = { slideOutRight }
     ) {
-        appDestinations.forEach { (destination, composable) ->
+        appDestinations.forEach { (destination, screenContent) ->
             composable(
                 route = destination.route
             ) {
-                composable(it.savedStateHandle)
+                screenContent(it.savedStateHandle)
             }
         }
     }
@@ -53,7 +61,9 @@ private fun ObserveNavigationEvents(navController: NavController) {
         when(navEvent) {
             is LocalNavigateEvent<*, *> -> {
                 val event = navEvent as LocalNavigateEvent<Parcelable, Parcelable>
-                navController.navigate(navEvent.destination.route)
+                navController.navigate(navEvent.destination.route) {
+                    launchSingleTop = true
+                }
 
                 navController.currentBackStackEntry?.savedStateHandle
                     ?.putScreenData(
@@ -69,6 +79,7 @@ private fun ObserveNavigationEvents(navController: NavController) {
                     }
                 }
             }
+
             LocalNavigateUpEvent -> {
                 navController.popBackStack()
             }

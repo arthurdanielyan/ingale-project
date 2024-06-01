@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import com.nightx.ingale.core.presentation.flows.ComposeCollect
 import com.nightx.ingale.core.presentation.ui.AutoSizeText
+import com.nightx.ingale.core.presentation.ui.screenTransitionDuration
 import com.nightx.ingale.feature_local.local_navigation.screen_navigation.LocalSectionNavGraph
 import com.nightx.ingale.main_navigation.bottomBarControls.BottomBarEffect
 import com.nightx.ingale.main_navigation.bottomBarControls.LocalBottomBarEffects
@@ -63,7 +64,7 @@ fun BottomNavigation() {
     val bottomBarOffsetAnim by animateDpAsState(
         label = "bottom bar hiding and showing",
         targetValue = bottomBarOffset,
-        animationSpec = tween(300)
+        animationSpec = tween(screenTransitionDuration)
     )
 
     ComposeCollect(

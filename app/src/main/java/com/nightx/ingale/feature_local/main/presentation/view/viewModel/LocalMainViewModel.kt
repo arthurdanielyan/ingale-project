@@ -26,8 +26,6 @@ import com.nightx.ingale.feature_local.main.presentation.view.RequiredPermission
 import com.nightx.ingale.feature_local.main.presentation.view.mappers.SongsSetToNavArgMapper
 import com.nightx.ingale.feature_local.main.presentation.view.viewModel.LocalMainContract.Effect
 import com.nightx.ingale.feature_local.main.presentation.view.viewModel.LocalMainContract.State
-import com.nightx.ingale.main_navigation.bottomBarControls.BottomBarController
-import com.nightx.ingale.main_navigation.bottomBarControls.BottomBarEffect
 import com.nightx.ingale.mvi.BaseViewModel
 import com.nightx.ingale.mvi.wrappers.emptyStableList
 import com.nightx.ingale.mvi.wrappers.toStableList
@@ -44,7 +42,6 @@ class LocalMainViewModel(
     private val getSongsUseCase: GetSongsUseCase,
     private val organizeSongsUseCase: OrganizeSongsUseCase,
     private val filterUseCase: FilterUseCase,
-    private val bottomBarController: BottomBarController,
     private val requiredPermissionsInspector: RequiredPermissionsInspector,
     private val songsSetToNavArgMapper: SongsSetToNavArgMapper,
     private val applicationContext: Context,
@@ -200,12 +197,10 @@ class LocalMainViewModel(
     }
 
     override fun onAlbumClick(songsSet: SongsSet) {
-        bottomBarController.sendEffect(BottomBarEffect.HideBottomBar)
         navigator.navigate(SongsSetScreenDestination, songsSetToNavArgMapper(songsSet))
     }
 
     override fun onArtistClick(songsSet: SongsSet) {
-        bottomBarController.sendEffect(BottomBarEffect.HideBottomBar)
         navigator.navigate(SongsSetScreenDestination, songsSetToNavArgMapper(songsSet))
     }
 
