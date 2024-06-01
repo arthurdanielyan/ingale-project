@@ -25,7 +25,7 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.unit.Dp
-import com.nightx.ingale.ui.theme.spacing
+import com.nightx.ingale.ui.theme.dimensions
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,8 +49,8 @@ fun IngaleBottomSheet(
         scrimColor = scrimColor,
         dragHandle = dragHandle,
         windowInsets = windowInsets,
-        cornerRadius = MaterialTheme.spacing.large,
-        bottomOffset = MaterialTheme.spacing.large,
+        cornerRadius = MaterialTheme.dimensions.large,
+        bottomOffset = MaterialTheme.dimensions.large,
         content = content
     )
 }
@@ -75,7 +75,7 @@ fun IngaleBottomSheet(
         onDismissRequest = onDismissRequest,
         modifier = Modifier
             .padding(
-                horizontal = MaterialTheme.spacing.large
+                horizontal = MaterialTheme.dimensions.large
             ),
         sheetState = sheetState,
         containerColor = containerColor,

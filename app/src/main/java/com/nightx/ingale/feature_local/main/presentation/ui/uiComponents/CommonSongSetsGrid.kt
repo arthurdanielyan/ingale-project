@@ -32,12 +32,12 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.nightx.ingale.core.presentation.ui.shimmer
+import com.nightx.ingale.core.presentation.ui.modifierExt.shimmer
 import com.nightx.ingale.feature_local.local_core.domain.functions.highlight
 import com.nightx.ingale.feature_local.local_core.domain.model.SongsSet
 import com.nightx.ingale.feature_local.local_core.presentation.song_item.SongIcon
 import com.nightx.ingale.mvi.wrappers.StableList
-import com.nightx.ingale.ui.theme.spacing
+import com.nightx.ingale.ui.theme.dimensions
 import kotlin.math.roundToInt
 
 /**
@@ -58,7 +58,7 @@ fun CommonSongSetsGrid(
             state = lazyGridState,
             columns = GridCells.Fixed(2),
             modifier = modifier.fillMaxSize(),
-            contentPadding = PaddingValues(MaterialTheme.spacing.normal)
+            contentPadding = PaddingValues(MaterialTheme.dimensions.normal)
         ) {
             items(
                 items = items,
@@ -79,7 +79,7 @@ fun CommonSongSetsGrid(
         }
     } else {
         var freeHeight by remember { mutableIntStateOf(1) }
-        val spacing = MaterialTheme.spacing
+        val spacing = MaterialTheme.dimensions
         val density = LocalDensity.current
         val itemHeight = remember {
             density.run {
@@ -93,13 +93,13 @@ fun CommonSongSetsGrid(
                 .onSizeChanged {
                     freeHeight = it.height
                 },
-            contentPadding = PaddingValues(MaterialTheme.spacing.normal)
+            contentPadding = PaddingValues(MaterialTheme.dimensions.normal)
         ) {
             items((2*freeHeight/itemHeight).coerceAtLeast(0)) {
                 Box(
                     modifier = Modifier
-                        .padding(MaterialTheme.spacing.small)
-                        .height(80.dp - MaterialTheme.spacing.small * 2)
+                        .padding(MaterialTheme.dimensions.small)
+                        .height(80.dp - MaterialTheme.dimensions.small * 2)
                         .clip(RoundedCornerShape(10))
                         .shimmer()
                 )
@@ -129,8 +129,8 @@ private fun SongsSetCard(
             ),
     ) {
         SongIcon(
-            modifier = Modifier.padding(MaterialTheme.spacing.normal),
-            picturePath = songsSet.iconPath,
+            modifier = Modifier.padding(MaterialTheme.dimensions.normal),
+            model = songsSet.iconPath,
             shape = RoundedCornerShape(10)
         )
         Text(

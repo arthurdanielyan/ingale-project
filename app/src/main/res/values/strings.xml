@@ -27,4 +27,6 @@
 
     <string name="storage_permission_not_granted_permission">Please grant storage permission access so that we could read your audio files</string>
     <string name="notification_permission_not_granted_permission">Please grant notification permission so you can control audio playback on background</string>
+
+    <string name="something_went_wrong">Something went wrong</string>
 </resources>

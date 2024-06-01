@@ -34,7 +34,7 @@ fun OnLifecycleEvents(
 /**
  * Called when [key] changes. In contrast to [LaunchedEffect] this
  * doesn't re-execute [block] when configuration change happens. However
- * the cone is that [T] has to be saveable
+ * note that [T] has to be saveable
  * */
 @Composable
 fun <T> ObserveState(

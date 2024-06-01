@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.nightx.ingale.R
 import com.nightx.ingale.ui.theme.colorScheme.ingaleColors
-import com.nightx.ingale.ui.theme.spacing
+import com.nightx.ingale.ui.theme.dimensions
 
 @Composable
 fun SongsSetButtons(
@@ -25,8 +25,8 @@ fun SongsSetButtons(
         modifier = Modifier
             .height(IntrinsicSize.Min)
             .fillMaxWidth()
-            .padding(MaterialTheme.spacing.normal),
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.normal)
+            .padding(MaterialTheme.dimensions.normal),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.normal)
     ) {
         SongsSetButton(
             modifier = Modifier

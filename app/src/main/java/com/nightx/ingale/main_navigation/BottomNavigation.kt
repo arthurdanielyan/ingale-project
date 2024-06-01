@@ -1,29 +1,19 @@
 package com.nightx.ingale.main_navigation
 
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredSize
-import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -41,19 +31,19 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import com.nightx.ingale.core.presentation.flows.ComposeCollect
-import com.nightx.ingale.feature_local.local_core.presentation.song_item.SongIcon
+import com.nightx.ingale.core.presentation.ui.AutoSizeText
 import com.nightx.ingale.feature_local.local_navigation.screen_navigation.LocalSectionNavGraph
-import com.nightx.ingale.main_navigation.bottom_bar_controls.BottomBarEffect
-import com.nightx.ingale.main_navigation.bottom_bar_controls.LocalBottomBarEffects
-import com.nightx.ingale.ui.theme.spacing
+import com.nightx.ingale.main_navigation.bottomBarControls.BottomBarEffect
+import com.nightx.ingale.main_navigation.bottomBarControls.LocalBottomBarEffects
+import com.nightx.ingale.main_navigation.musicBar.MusicBar
+import com.nightx.ingale.ui.theme.dimensions
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -63,7 +53,7 @@ fun BottomNavigation() {
         mutableStateOf(true)
     }
     val bottomBarOffset = remember(isBottomBarVisible) {
-        if(isBottomBarVisible) {
+        if (isBottomBarVisible) {
             0.dp
         } else {
             BottomBarHeight
@@ -136,14 +126,11 @@ fun BottomNavigation() {
                             )
                         },
                         label = {
-                            val offset = MaterialTheme.spacing.normal
+                            MaterialTheme.dimensions.normal
                             Text(
                                 text = stringResource(item.titleKey),
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.offset {
-                                    IntOffset(0, offset.roundToPx())
-                                }
                             )
                         }
                     )
@@ -154,122 +141,50 @@ fun BottomNavigation() {
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .background(color = MaterialTheme.colorScheme.background)
                 .padding(
                     top = innerPadding.calculateTopPadding(),
                     bottom = BottomBarHeight - bottomBarOffsetAnim
                 )
         ) {
-            Box(
-                modifier = Modifier
-                    .background(color = MaterialTheme.colorScheme.background)
-                    .fillMaxSize()
+            HorizontalPager(
+                modifier = Modifier.fillMaxSize(),
+                state = pagerState,
+                key = { bottomNavItems[it].titleKey },
+                userScrollEnabled = false,
             ) {
-                HorizontalPager(
-                    modifier = Modifier.fillMaxSize(),
-                    state = pagerState,
-                    key = { bottomNavItems[it].titleKey },
-                    userScrollEnabled = false
-                ) {
-                    when (it) {
-                        0 -> {
-                            LocalSectionNavGraph()
-                        }
+                when (it) {
+                    0 -> {
+                        LocalSectionNavGraph()
+                    }
 
-                        1 -> {
+                    1 -> {
+                        Box(
+                            modifier = Modifier
+                                .requiredSize(100.dp)
+                                .background(color = Color.Gray)
+                        ) {
                             Text(
-                                modifier = Modifier.fillMaxSize(),
-                                text = "Youtube"
+                                modifier = Modifier.fillMaxWidth(),
+                                text = "veow kbjren ij ewv 3ijjwg fv3iuewkg f3 fi32u gfeo2u f2qig f2oeg v3woieg 2og o23 goe goe goew",
+                                maxLines = 1,
+                                softWrap = false
+                            )
+                            AutoSizeText(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = "veow kbjren ij ewv 3ijjwg fv3iuewkg f3 fi32u gfeo2u f2qig f2oeg v3woieg 2og o23 goe goe goew",
+                                maxLines = 1
                             )
                         }
                     }
                 }
-                MusicBar(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                )
             }
-        }
-    }
-}
-
-@Composable
-private fun MusicBar(
-    modifier: Modifier = Modifier,
-) {
-    var isExpanded by rememberSaveable {
-        mutableStateOf(true)
-    }
-    var fullWidth by remember { mutableStateOf(MusicInfoButtonHeight) }
-    val cardWidth by animateDpAsState(
-        targetValue = if (isExpanded) fullWidth else MusicInfoButtonHeight,
-        animationSpec = tween(durationMillis = MusicInfoButtonCollapsingDuration),
-        label = "music card width animation"
-    )
-
-    ComposeCollect(
-        flow = LocalBottomBarEffects.current.bottomBarEffect,
-        latest = true
-    ) {
-        when (it) {
-            BottomBarEffect.ExpandMusicBar -> {
-                isExpanded = true
-            }
-
-            BottomBarEffect.CollapseMusicBar -> {
-                isExpanded = false
-            }
-
-            BottomBarEffect.HideBottomBar -> {}
-            BottomBarEffect.ShowBottomBar -> {}
-        }
-    }
-
-    val infiniteTransition = rememberInfiniteTransition(
-        label = "Music image rotation"
-    )
-    val musicImageRotation = infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(
-                durationMillis = MusicPreviewRotationDuration,
-                easing = LinearEasing
-            ),
-            repeatMode = RepeatMode.Restart,
-        ),
-        label = "Music image rotation"
-    )
-    BoxWithConstraints(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(MaterialTheme.spacing.normal)
-            .requiredHeight(MusicInfoButtonHeight)
-    ) {
-        fullWidth = maxWidth
-        Column(
-            modifier = Modifier
-                .requiredWidth(cardWidth)
-                .fillMaxHeight()
-                .background(
-                    color = MaterialTheme.colorScheme.inversePrimary,
-                    shape = CircleShape
-                )
-        ) {
-            Box(
+            MusicBar(
                 modifier = Modifier
-                    .padding(MaterialTheme.spacing.normal)
-                    .graphicsLayer {
-                        this.rotationZ = musicImageRotation.value
-                    }
-            ) {
-                SongIcon()
-            }
+                    .align(Alignment.BottomCenter)
+            )
         }
     }
 }
-
-private val MusicInfoButtonHeight = 50.dp
-private const val MusicInfoButtonCollapsingDuration = 500
-private const val MusicPreviewRotationDuration = 5000
 
 private val BottomBarHeight = 80.dp

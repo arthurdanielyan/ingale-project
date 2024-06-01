@@ -19,10 +19,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.layout.onSizeChanged
 import com.nightx.ingale.core.presentation.ui.AutoSizeText
-import com.nightx.ingale.ui.theme.spacing
+import com.nightx.ingale.core.presentation.ui.darken
+import com.nightx.ingale.ui.theme.dimensions
 import kotlin.math.max
 
 @Composable
@@ -43,7 +43,7 @@ fun SongsSetButton(
                     center = Offset.Zero,
                     colors = listOf(
                         gradientWeak,
-                        Color.Black.copy(alpha = DarkerAlpha).compositeOver(gradientWeak)
+                        gradientWeak.darken()
                     ),
                     radius = gradientRadius.toFloat()
                 ),
@@ -57,10 +57,10 @@ fun SongsSetButton(
         contentAlignment = Alignment.Center
     ) {
         AutoSizeText(
-            modifier = Modifier.padding(MaterialTheme.spacing.large),
             text = text,
-            maxLines = 1,
+            modifier = Modifier.padding(MaterialTheme.dimensions.large),
             color = Color.White,
+            maxLines = 1,
             forceFit = true
         )
     }

@@ -7,8 +7,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.unit.Velocity
-import com.nightx.ingale.main_navigation.bottom_bar_controls.BottomBarController
-import com.nightx.ingale.main_navigation.bottom_bar_controls.BottomBarEffect
+import com.nightx.ingale.main_navigation.bottomBarControls.BottomBarController
+import com.nightx.ingale.main_navigation.bottomBarControls.BottomBarEffect
 import org.koin.java.KoinJavaComponent.inject
 
 class NestedScrollForMusicBarNotification : NestedScrollConnection {
@@ -33,9 +33,9 @@ class NestedScrollForMusicBarNotification : NestedScrollConnection {
         val consumedDp = consumed.y / applicationContext.resources.displayMetrics.density
         startOffset += consumedDp
 
-        if (startOffset < -SignificantScrollSize) {
+        if (startOffset < -SignificantScrollSize || consumedDp < -SignificantScrollSize) {
             bottomBarController.sendEffect(BottomBarEffect.CollapseMusicBar)
-        } else if (startOffset > SignificantScrollSize) {
+        } else if (startOffset > SignificantScrollSize || consumedDp > SignificantScrollSize) {
             bottomBarController.sendEffect(BottomBarEffect.ExpandMusicBar)
         }
 

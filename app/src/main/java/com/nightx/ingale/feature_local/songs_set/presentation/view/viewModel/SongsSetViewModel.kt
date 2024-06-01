@@ -1,7 +1,7 @@
 package com.nightx.ingale.feature_local.songs_set.presentation.view.viewModel
 
 import androidx.lifecycle.SavedStateHandle
-import com.nightx.ingale.core.audio_player.AudioPlayer
+import com.nightx.ingale.core.audio_player.actions.PlayerUiActions
 import com.nightx.ingale.core.domain.model.Song
 import com.nightx.ingale.core.presentation.navigation.coreNavigation.getArgument
 import com.nightx.ingale.feature_local.local_core.domain.model.SongsSet
@@ -14,7 +14,8 @@ import com.nightx.ingale.mvi.wrappers.emptyStableList
 
 class SongsSetViewModel(
     savedStateHandle: SavedStateHandle,
-    songsSetNavArgMapper: SongsSetNavArgMapper
+    songsSetNavArgMapper: SongsSetNavArgMapper,
+    private val playerUiActions: PlayerUiActions
 ) : BaseViewModel<State, Effect>(), SongsSetCallbacks {
 
     init {
@@ -37,7 +38,7 @@ class SongsSetViewModel(
         )
 
     override fun onSongClick(song: Song) {
-        AudioPlayer.play(
+        playerUiActions.submitNewListAndPlay(
             currentState.songsSetInfo.songs,
             currentState.songsSetInfo.songs.indexOf(song)
         )

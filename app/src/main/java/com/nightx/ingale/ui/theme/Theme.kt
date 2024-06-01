@@ -14,8 +14,8 @@ import androidx.core.view.WindowCompat
 import com.nightx.ingale.core.presentation.navigation.dialog_navigation.LocalDialogNavigation
 import com.nightx.ingale.core.presentation.navigation.dialog_navigation.LocalDialogViewModelStoreOwner
 import com.nightx.ingale.feature_local.local_navigation.screen_navigation.LocalNavigation
-import com.nightx.ingale.main_navigation.bottom_bar_controls.LocalBottomBarController
-import com.nightx.ingale.main_navigation.bottom_bar_controls.LocalBottomBarEffects
+import com.nightx.ingale.main_navigation.bottomBarControls.LocalBottomBarController
+import com.nightx.ingale.main_navigation.bottomBarControls.LocalBottomBarEffects
 import com.nightx.ingale.ui.theme.colorScheme.IngaleColorsDark
 import com.nightx.ingale.ui.theme.colorScheme.IngaleColorsLight
 import com.nightx.ingale.ui.theme.colorScheme.LocalIngaleColors
@@ -112,7 +112,7 @@ fun IngaleTheme(
     }
 
     CompositionLocalProvider(
-        LocalSpacing provides Spacing(),
+        LocalDimensions provides DefaultDimensions(),
         LocalIngaleColors provides
                 if(isSystemInDarkTheme()) IngaleColorsDark() else IngaleColorsLight(),
         LocalNavigation provides koinInject(),

@@ -17,8 +17,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.nightx.ingale.core.presentation.ui.shimmer
-import com.nightx.ingale.ui.theme.spacing
+import com.nightx.ingale.core.presentation.ui.modifierExt.shimmer
+import com.nightx.ingale.ui.theme.dimensions
 
 
 @Composable
@@ -29,8 +29,8 @@ fun LoadingSongItem(
         modifier = modifier
             .fillMaxWidth()
             .padding(
-                vertical = MaterialTheme.spacing.normal,
-                horizontal = MaterialTheme.spacing.large,
+                vertical = MaterialTheme.dimensions.normal,
+                horizontal = MaterialTheme.dimensions.large,
             )
             .background(
                 color = Color.Transparent,

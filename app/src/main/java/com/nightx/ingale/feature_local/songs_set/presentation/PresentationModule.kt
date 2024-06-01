@@ -7,7 +7,7 @@ import org.koin.dsl.module
 
 val presentationModule = module {
     viewModelWithSavedStateHandle { savedStateHandle ->
-        SongsSetViewModel(savedStateHandle, get())
+        SongsSetViewModel(savedStateHandle, get(), get())
     }
     single {
         SongsSetNavArgMapper()

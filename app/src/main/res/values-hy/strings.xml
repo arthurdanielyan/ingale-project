@@ -25,4 +25,6 @@
 
     <string name="storage_permission_not_granted_permission">Խնդրում ենք տրամադրել պահեստի հասանելիության թույլտվություն Ձեր աուդիո ֆայլերը կարդալու համար</string>
     <string name="notification_permission_not_granted_permission">Խնդրում ենք տրամադրել ծանուցման թույլտվություն, որպեսզի կարողանաք կառավարել աուդիո նվագարկումը՝ հավելվածը փակված վիճակում</string>
+
+    <string name="something_went_wrong">Տեղի է ունեցել սխալ</string>
 </resources>

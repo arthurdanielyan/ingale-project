@@ -21,16 +21,20 @@ import androidx.annotation.FloatRange
 import androidx.media.MediaBrowserServiceCompat
 import com.nightx.ingale.IngaleApplication.Companion.MUSIC_PLAYER_NOTIFICATION_CHANNEL_ID
 import com.nightx.ingale.R
-import com.nightx.ingale.core.audio_player.PlaybackActionService.Companion.EXTRA_ACTION_CHANGE_FAVORITE_STATE
-import com.nightx.ingale.core.audio_player.PlaybackActionService.Companion.EXTRA_ACTION_SKIP_TO_NEXT
-import com.nightx.ingale.core.audio_player.PlaybackActionService.Companion.EXTRA_ACTION_SKIP_TO_PREVIOUS
-import com.nightx.ingale.core.audio_player.PlaybackActionService.Companion.EXTRA_ACTION_STOP_SERVICE
-import com.nightx.ingale.core.audio_player.PlaybackActionService.Companion.EXTRA_ACTION_TOGGLE_PLAYBACK
-import com.nightx.ingale.core.audio_player.player_action_receivers.PlayerActionChangeFavoriteStateReceiver
-import com.nightx.ingale.core.audio_player.player_action_receivers.PlayerActionSkipToNextReceiver
-import com.nightx.ingale.core.audio_player.player_action_receivers.PlayerActionSkipToPrevious
-import com.nightx.ingale.core.audio_player.player_action_receivers.PlayerActionStopServiceReceiver
-import com.nightx.ingale.core.audio_player.player_action_receivers.PlayerActionTogglePlaybackReceiver
+import com.nightx.ingale.core.audio_player.actions.CustomAction
+import com.nightx.ingale.core.audio_player.actions.PlayerActionType
+import com.nightx.ingale.core.audio_player.actions.PlayerActionType.ACTION_CHANGE_FAVORITE_STATE
+import com.nightx.ingale.core.audio_player.actions.PlayerActionType.ACTION_SKIP_TO_NEXT
+import com.nightx.ingale.core.audio_player.actions.PlayerActionType.ACTION_SKIP_TO_PREVIOUS
+import com.nightx.ingale.core.audio_player.actions.PlayerActionType.ACTION_STOP_SERVICE
+import com.nightx.ingale.core.audio_player.actions.PlayerActionType.ACTION_TOGGLE_PLAYBACK
+import com.nightx.ingale.core.audio_player.actions.PlayerServiceActions
+import com.nightx.ingale.core.audio_player.actions.player_action_receivers.PlayerActionChangeFavoriteStateReceiver
+import com.nightx.ingale.core.audio_player.actions.player_action_receivers.PlayerActionSkipToNextReceiver
+import com.nightx.ingale.core.audio_player.actions.player_action_receivers.PlayerActionSkipToPrevious
+import com.nightx.ingale.core.audio_player.actions.player_action_receivers.PlayerActionStopServiceReceiver
+import com.nightx.ingale.core.audio_player.actions.player_action_receivers.PlayerActionTogglePlaybackReceiver
+import org.koin.android.ext.android.get
 import kotlin.math.roundToInt
 import androidx.core.app.NotificationCompat as AndroidNotificationCompat
 import androidx.media.app.NotificationCompat as MediaNotificationCompat
@@ -47,6 +51,8 @@ class PlayerService : MediaBrowserServiceCompat() {
 
         private const val MinSkipToPreviousTimestamp = 3000
     }
+
+    private val audioPlayer = get<AudioPlayer>()
 
     private var mediaPlayer = MediaPlayer().apply {
         setOnCompletionListener {
@@ -141,7 +147,12 @@ class PlayerService : MediaBrowserServiceCompat() {
 
     // Overriding methods /////////////////////////////////////////////////////////////////////////////
     override fun onBind(intent: Intent?): IBinder =
-        object : Binder(), PlayerActions {
+        object : Binder(), PlayerServiceActions {
+
+            override fun initService() {
+                this@PlayerService.initService()
+            }
+
             override fun togglePlaying() {
                 if (mediaPlayer.isPlaying) {
                     this@PlayerService.pause()
@@ -200,13 +211,16 @@ class PlayerService : MediaBrowserServiceCompat() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        onSongChanged()
+        initService()
         return Service.START_STICKY
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        audioPlayer.isServiceRunning = false
+        audioPlayer.seekPosition = mediaPlayer.currentPosition
         mediaSession.release()
+        mediaPlayer.release()
     }
 
     override fun onGetRoot(
@@ -222,7 +236,7 @@ class PlayerService : MediaBrowserServiceCompat() {
     ) {
         val items = mutableListOf<MediaBrowserCompat.MediaItem>()
 
-        val albumList = AudioPlayer.songQueue
+        val albumList = audioPlayer.songQueue
         for (it in albumList) {
             val descriptionBuilder = MediaDescriptionCompat.Builder()
                 .setTitle(it.title)
@@ -242,6 +256,11 @@ class PlayerService : MediaBrowserServiceCompat() {
         mediaPlayer.seekTo((mediaPlayer.duration * progress.coerceIn(0f, 1f)).roundToInt())
     }
 
+    private fun initService() {
+        onSongChanged(audioPlayer.seekPosition)
+        audioPlayer.isServiceRunning = true
+    }
+
     private fun pause() {
         mediaPlayer.pause()
         updateState()
@@ -255,13 +274,13 @@ class PlayerService : MediaBrowserServiceCompat() {
     }
 
     private fun skipToNext() {
-        AudioPlayer.pointer++
+        audioPlayer.pointer++
         onSongChanged()
     }
 
     private fun skipToPrevious() {
         if(mediaPlayer.currentPosition <= MinSkipToPreviousTimestamp) {
-            AudioPlayer.pointer--
+            audioPlayer.pointer--
             onSongChanged()
         } else {
             seekTo(0f)
@@ -290,8 +309,10 @@ class PlayerService : MediaBrowserServiceCompat() {
                 }
                 .setState(
                     if (isNewSong || mediaPlayer.isPlaying) {
+                        audioPlayer.isPlaying = true
                         PlaybackStateCompat.STATE_PLAYING
                     } else {
+                        audioPlayer.isPlaying = false
                         PlaybackStateCompat.STATE_PAUSED
                     },
                     if(isNewSong){
@@ -316,41 +337,42 @@ class PlayerService : MediaBrowserServiceCompat() {
         val metadataBuilder = MediaMetadataCompat.Builder()
             .putBitmap(
                 MediaMetadataCompat.METADATA_KEY_ART,
-                AudioPlayer.currentSongBitmap
+                audioPlayer.currentSongBitmap
             )
             .putString(
                 MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE,
-                AudioPlayer.currentSong.title
+                audioPlayer.currentSong.title
             )
             .putString(
                 MediaMetadataCompat.METADATA_KEY_TITLE,
-                AudioPlayer.currentSong.title
+                audioPlayer.currentSong.title
             )
             .putString(
                 MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE,
-                AudioPlayer.currentSong.artist
+                audioPlayer.currentSong.artist
             )
             .putLong(
                 MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER,
-                AudioPlayer.currentSongNumber
+                audioPlayer.pointer.toLong()
             )
-            .putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, AudioPlayer.songCount)
+            .putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, audioPlayer.songCount)
             .putLong(
                 MediaMetadataCompat.METADATA_KEY_DURATION,
-                AudioPlayer.currentSong.duration
+                audioPlayer.currentSong.duration
             )
         mediaSession.setMetadata(metadataBuilder.build())
     }
 
-    private fun onSongChanged() {
+    private fun onSongChanged(seekPosition: Int = 0) {
         applyNewSongData()
         updateNotification()
         mediaPlayer.stop()
         mediaPlayer.reset()
-        mediaPlayer.setDataSource(AudioPlayer.currentSong.path)
+        mediaPlayer.setDataSource(audioPlayer.currentSong.path)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
             it.start()
+            it.seekTo(seekPosition)
             updateNotificationIfLowerTiramisu()
         }
     }
@@ -368,74 +390,75 @@ class PlayerService : MediaBrowserServiceCompat() {
 
 
         val togglePlayingIcon = if (mediaPlayer.isPlaying)
-            R.drawable.pause
+            R.drawable.ic_pause
         else {
-            R.drawable.play
+            R.drawable.ic_play
         }
 
         val notification =
             AndroidNotificationCompat.Builder(this, MUSIC_PLAYER_NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher_foreground)
-                .addAction(R.drawable.arrow_previous, "Previous",
-                    getPendingIntent(EXTRA_ACTION_SKIP_TO_PREVIOUS)
+                .addAction(R.drawable.ic_arrow_previous, "Previous",
+                    getPendingIntent(ACTION_SKIP_TO_PREVIOUS)
                 ) // #0
                 .addAction(togglePlayingIcon, "Pause",
-                    getPendingIntent(EXTRA_ACTION_TOGGLE_PLAYBACK)
+                    getPendingIntent(ACTION_TOGGLE_PLAYBACK)
                 ) // #1
-                .addAction(R.drawable.arrow_next, "Next",
-                    getPendingIntent(EXTRA_ACTION_SKIP_TO_NEXT)
+                .addAction(R.drawable.ic_arrow_next, "Next",
+                    getPendingIntent(ACTION_SKIP_TO_NEXT)
                 ) // #2
                 .addAction(R.drawable.ic_close_white, "Stop playback",
-                    getPendingIntent(EXTRA_ACTION_STOP_SERVICE)
+                    getPendingIntent(ACTION_STOP_SERVICE)
                 )
                 .setStyle(mediaStyle)
-                .setContentTitle(AudioPlayer.currentSong.title)
-                .setContentText(AudioPlayer.currentSong.artist)
-                .setLargeIcon(AudioPlayer.currentSongBitmap)
+                .setContentTitle(audioPlayer.currentSong.title)
+                .setContentText(audioPlayer.currentSong.artist)
+                .setLargeIcon(audioPlayer.currentSongBitmap)
                 .setDeleteIntent(onDismissedIntent)
                 .build()
 
         startForeground(MEDIA_NOTIFICATION_ID, notification)
     }
 
-    private fun getPendingIntent(action: String): PendingIntent =
+    private fun getPendingIntent(action: PlayerActionType): PendingIntent =
         when(action) {
-            EXTRA_ACTION_TOGGLE_PLAYBACK ->
+            ACTION_TOGGLE_PLAYBACK ->
                 PendingIntent.getBroadcast(
                     this,
                     0,
                     Intent(this, PlayerActionTogglePlaybackReceiver::class.java),
                     PendingIntent.FLAG_IMMUTABLE
                 )
-            EXTRA_ACTION_SKIP_TO_NEXT ->
+            ACTION_SKIP_TO_NEXT ->
                 PendingIntent.getBroadcast(
                     this,
                     0,
                     Intent(this, PlayerActionSkipToNextReceiver::class.java),
                     PendingIntent.FLAG_IMMUTABLE
                 )
-            EXTRA_ACTION_SKIP_TO_PREVIOUS ->
+            ACTION_SKIP_TO_PREVIOUS ->
                 PendingIntent.getBroadcast(
                     this,
                     0,
                     Intent(this, PlayerActionSkipToPrevious::class.java),
                     PendingIntent.FLAG_IMMUTABLE
                 )
-            EXTRA_ACTION_CHANGE_FAVORITE_STATE ->
+            ACTION_CHANGE_FAVORITE_STATE ->
                 PendingIntent.getBroadcast(
                     this,
                     0,
                     Intent(this, PlayerActionChangeFavoriteStateReceiver::class.java),
                     PendingIntent.FLAG_IMMUTABLE
                 )
-            EXTRA_ACTION_STOP_SERVICE ->
+            ACTION_STOP_SERVICE ->
                 PendingIntent.getBroadcast(
                     this,
                     0,
                     Intent(this, PlayerActionStopServiceReceiver::class.java),
                     PendingIntent.FLAG_IMMUTABLE
                 )
-            else -> throw IllegalArgumentException("Specified action $action doesn't exist")
+            PlayerActionType.ACTION_PLAY_SONG ->
+                throw IllegalAccessException("PlayerService is already started")
         }
 
     private val onDismissedIntent: PendingIntent

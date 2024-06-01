@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import com.nightx.ingale.R
-import com.nightx.ingale.ui.theme.spacing
+import com.nightx.ingale.ui.theme.dimensions
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,9 +50,9 @@ fun PermissionNotGrantedDialog(
                 fontSize = 24.sp,
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(
-                    top = MaterialTheme.spacing.large,
-                    start = MaterialTheme.spacing.large,
-                    end = MaterialTheme.spacing.large,
+                    top = MaterialTheme.dimensions.large,
+                    start = MaterialTheme.dimensions.large,
+                    end = MaterialTheme.dimensions.large,
                 )
             )
             Column(
@@ -77,7 +77,7 @@ fun PermissionNotGrantedDialog(
                             onClick = if (isPermanentlyDeclined) onGoToAppSettings
                             else onOkClick
                         )
-                        .padding(MaterialTheme.spacing.large),
+                        .padding(MaterialTheme.dimensions.large),
                     textAlign = TextAlign.Center
                 )
             }

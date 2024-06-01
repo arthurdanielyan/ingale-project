@@ -31,7 +31,7 @@ import com.nightx.ingale.core.domain.model.Song
 import com.nightx.ingale.feature_local.local_core.domain.functions.highlight
 import com.nightx.ingale.feature_local.local_core.domain.model.SongOperations
 import com.nightx.ingale.feature_local.local_core.presentation.SongOperationsBottomSheet
-import com.nightx.ingale.ui.theme.spacing
+import com.nightx.ingale.ui.theme.dimensions
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
@@ -56,8 +56,8 @@ fun SongItem(
                 onSongClick(song)
             }
             .padding(
-                vertical = MaterialTheme.spacing.normal,
-                horizontal = MaterialTheme.spacing.large,
+                vertical = MaterialTheme.dimensions.normal,
+                horizontal = MaterialTheme.dimensions.large,
             )
             .clip(RoundedCornerShape(100))
     ) {
@@ -69,7 +69,7 @@ fun SongItem(
                 bottom.linkTo(parent.bottom)
                 start.linkTo(parent.start)
             },
-            picturePath = song.picturePath
+            model = song.picturePath
         )
         Column(
             verticalArrangement = Arrangement.Center,

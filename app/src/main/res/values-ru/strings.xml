@@ -25,4 +25,6 @@
 
     <string name="storage_permission_not_granted_permission">Пожалуйста предоставьте доступ к хранилищу, чтобы мы могли прочитать ваши аудиофайлы.</string>
     <string name="notification_permission_not_granted_permission">Пожалуйста предоставьте разришение уведомлений, чтобы вы могли управлять воспроизведением пока приложение закрыто</string>
+
+    <string name="something_went_wrong">Что-то пошло не так</string>
 </resources>

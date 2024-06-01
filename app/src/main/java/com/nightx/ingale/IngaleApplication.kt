@@ -8,7 +8,8 @@ import android.os.Build
 import com.nightx.ingale.core.coreModule
 import com.nightx.ingale.feature_local.featureLocalModule
 import com.nightx.ingale.feature_yt.ytModule
-import com.nightx.ingale.main_navigation.bottom_bar_controls.bottomBarControllerModule
+import com.nightx.ingale.main_navigation.bottomBarControls.bottomBarControllerModule
+import com.nightx.ingale.main_navigation.musicBar.musicBarModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -26,6 +27,7 @@ class IngaleApplication : Application() {
             modules(
                 *coreModule.toTypedArray(),
                 bottomBarControllerModule,
+                musicBarModule,
                 *featureLocalModule.toTypedArray(),
                 ytModule
             )

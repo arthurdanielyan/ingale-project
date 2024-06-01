@@ -28,7 +28,7 @@ import com.nightx.ingale.core.presentation.di.ingaleViewModels
 import com.nightx.ingale.core.presentation.flows.ObserveEffects
 import com.nightx.ingale.core.presentation.ui.DataPlaceholder
 import com.nightx.ingale.core.presentation.ui.LoadingStatePresenter
-import com.nightx.ingale.core.presentation.ui.marquee
+import com.nightx.ingale.core.presentation.ui.modifierExt.marquee
 import com.nightx.ingale.core.presentation.view.ObserveState
 import com.nightx.ingale.core.presentation.view.OnLifecycleEvents
 import com.nightx.ingale.core.presentation.view.rememberNestedScrollForMusicBarNotification
@@ -42,11 +42,11 @@ import com.nightx.ingale.feature_local.main.presentation.view.viewModel.LocalMai
 import com.nightx.ingale.feature_local.main.presentation.view.viewModel.LocalMainContract
 import com.nightx.ingale.feature_local.main.presentation.view.viewModel.LocalMainContract.Effect
 import com.nightx.ingale.feature_local.main.presentation.view.viewModel.LocalMainViewModel
-import com.nightx.ingale.main_navigation.bottom_bar_controls.BottomBarEffect
-import com.nightx.ingale.main_navigation.bottom_bar_controls.LocalBottomBarController
-import com.nightx.ingale.main_navigation.bottom_bar_controls.SendBottomBarEffect
+import com.nightx.ingale.main_navigation.bottomBarControls.BottomBarEffect
+import com.nightx.ingale.main_navigation.bottomBarControls.LocalBottomBarController
+import com.nightx.ingale.main_navigation.bottomBarControls.SendBottomBarEffect
 import com.nightx.ingale.mvi.wrappers.StableList
-import com.nightx.ingale.ui.theme.spacing
+import com.nightx.ingale.ui.theme.dimensions
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 
@@ -119,13 +119,13 @@ private fun LocalMainScreen(
             text = state.searchTextField,
             onType = callbacks::onSearchType
         )
-        Spacer(modifier = Modifier.height(MaterialTheme.spacing.normal))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.normal))
         SongsSetButtons(
             onPlaylistsClick = callbacks::onPlaylistsClick,
             onFavouritesClick = callbacks::onFavouritesClick,
             onHistoryClick = callbacks::onHistoryClick
         )
-        Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.large))
         TabRow(
             modifier = Modifier.fillMaxWidth(),
             pagerState = pagerState,
@@ -138,7 +138,7 @@ private fun LocalMainScreen(
                 color = MaterialTheme.colorScheme.onBackground,
                 maxLines = 1,
                 modifier = Modifier
-                    .padding(MaterialTheme.spacing.large)
+                    .padding(MaterialTheme.dimensions.large)
                     .marquee()
             )
         }

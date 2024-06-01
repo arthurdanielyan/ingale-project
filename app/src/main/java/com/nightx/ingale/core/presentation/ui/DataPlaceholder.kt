@@ -17,7 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 import com.nightx.ingale.R
-import com.nightx.ingale.ui.theme.spacing
+import com.nightx.ingale.ui.theme.dimensions
 
 @Composable
 fun DataPlaceholder(
@@ -32,9 +32,9 @@ fun DataPlaceholder(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .padding(MaterialTheme.spacing.large),
+            .padding(MaterialTheme.dimensions.large),
         verticalArrangement = Arrangement.spacedBy(
-            space = MaterialTheme.spacing.large,
+            space = MaterialTheme.dimensions.large,
             alignment = Alignment.CenterVertically
         ),
         horizontalAlignment = Alignment.CenterHorizontally,

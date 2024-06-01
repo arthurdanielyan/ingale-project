@@ -6,6 +6,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -19,9 +20,10 @@ abstract class BaseViewModel<State : UiState, Effect : UiEffect> : ViewModel() {
     private val _state = MutableStateFlow(initialState)
 
     /**
-     * Sometimes it is convenient to use a different approach to the ui state management.
-     * For example having multiple [MutableStateFlow]s and combining them into a single one.
-     * This is why this is an open property.
+     * Sometimes (almost always) it is more convenient to use a different approach for the ui
+     * state management rather than using the [updateState] function. For example
+     * having multiple [MutableStateFlow]s and combining ([Flow.combine]) them into a
+     * single one. This is why this is an open property.
      * */
     open val state = _state.viewModelState()
 
@@ -29,7 +31,7 @@ abstract class BaseViewModel<State : UiState, Effect : UiEffect> : ViewModel() {
     val effect = _effect.receiveAsFlow()
 
     val currentState: State
-        get() = _state.value
+        get() = state.value
 
     protected fun sendEffect(builder: () -> Effect) {
         viewModelScope.launch {

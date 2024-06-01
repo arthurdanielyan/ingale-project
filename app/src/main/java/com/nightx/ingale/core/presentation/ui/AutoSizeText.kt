@@ -17,7 +17,6 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
@@ -40,7 +39,6 @@ fun AutoSizeText(
     textDecoration: TextDecoration? = null,
     textAlign: TextAlign? = null,
     lineHeight: TextUnit = TextUnit.Unspecified,
-    overflow: TextOverflow = TextOverflow.Clip,
     softWrap: Boolean = true,
     maxLines: Int = Int.MAX_VALUE,
     minLines: Int = 1,
@@ -92,7 +90,6 @@ fun AutoSizeText(
         textDecoration = textDecoration,
         textAlign = textAlign,
         lineHeight = lineHeight,
-        overflow = overflow,
         softWrap = softWrap,
         maxLines = maxLines,
         minLines = minLines,

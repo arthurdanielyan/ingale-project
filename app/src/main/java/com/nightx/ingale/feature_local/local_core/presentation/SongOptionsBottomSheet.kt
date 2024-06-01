@@ -28,7 +28,7 @@ import com.nightx.ingale.feature_local.local_core.domain.model.SongOperations.MO
 import com.nightx.ingale.feature_local.local_core.domain.model.SongOperations.PLAY_NEXT
 import com.nightx.ingale.feature_local.local_core.domain.model.SongOperations.SAVE_TO_FAVOURITES
 import com.nightx.ingale.feature_local.local_core.domain.model.SongOperations.SAVE_TO_PLAYLIST
-import com.nightx.ingale.ui.theme.spacing
+import com.nightx.ingale.ui.theme.dimensions
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,7 +84,7 @@ fun BottomSheetButton(
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
-            .padding(MaterialTheme.spacing.normal),
+            .padding(MaterialTheme.dimensions.normal),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
@@ -92,7 +92,7 @@ fun BottomSheetButton(
             painter = iconPainter,
             contentDescription = text
         )
-        Spacer(modifier = Modifier.width(MaterialTheme.spacing.normal))
+        Spacer(modifier = Modifier.width(MaterialTheme.dimensions.normal))
         Text(
             text = text
         )

@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ExperimentalMotionApi
 import androidx.constraintlayout.compose.MotionLayout
 import androidx.constraintlayout.compose.MotionScene
 import androidx.constraintlayout.solver.widgets.Optimizer
@@ -91,6 +92,7 @@ private fun SongsSetScreen(
     }
 }
 
+@OptIn(ExperimentalMotionApi::class)
 @Composable
 fun CollapsingTitle(
     songsSetInfo: SongsSet,
@@ -135,7 +137,7 @@ fun CollapsingTitle(
                 }
             )
             SongIcon(
-                picturePath = icon,
+                model = icon,
                 modifier = Modifier
                     .border(
                         width = 2.dp,

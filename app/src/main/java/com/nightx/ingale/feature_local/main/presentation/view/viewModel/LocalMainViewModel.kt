@@ -9,7 +9,7 @@ import android.os.Build
 import android.provider.Settings
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewModelScope
-import com.nightx.ingale.core.audio_player.AudioPlayer
+import com.nightx.ingale.core.audio_player.actions.PlayerUiActions
 import com.nightx.ingale.core.domain.LoadState
 import com.nightx.ingale.core.domain.model.Song
 import com.nightx.ingale.core.presentation.view.LoadingViewState
@@ -26,8 +26,8 @@ import com.nightx.ingale.feature_local.main.presentation.view.RequiredPermission
 import com.nightx.ingale.feature_local.main.presentation.view.mappers.SongsSetToNavArgMapper
 import com.nightx.ingale.feature_local.main.presentation.view.viewModel.LocalMainContract.Effect
 import com.nightx.ingale.feature_local.main.presentation.view.viewModel.LocalMainContract.State
-import com.nightx.ingale.main_navigation.bottom_bar_controls.BottomBarController
-import com.nightx.ingale.main_navigation.bottom_bar_controls.BottomBarEffect
+import com.nightx.ingale.main_navigation.bottomBarControls.BottomBarController
+import com.nightx.ingale.main_navigation.bottomBarControls.BottomBarEffect
 import com.nightx.ingale.mvi.BaseViewModel
 import com.nightx.ingale.mvi.wrappers.emptyStableList
 import com.nightx.ingale.mvi.wrappers.toStableList
@@ -48,6 +48,7 @@ class LocalMainViewModel(
     private val requiredPermissionsInspector: RequiredPermissionsInspector,
     private val songsSetToNavArgMapper: SongsSetToNavArgMapper,
     private val applicationContext: Context,
+    private val playerUiActions: PlayerUiActions,
 ) : BaseViewModel<State, Effect>(), LocalMainCallbacks {
 
     companion object {
@@ -213,7 +214,7 @@ class LocalMainViewModel(
     }
 
     override fun onSongClick(song: Song) {
-        AudioPlayer.play(allSongs, allSongs.indexOf(song))
+        playerUiActions.submitNewListAndPlay(allSongs, allSongs.indexOf(song))
     }
 
     override fun onPlaylistsClick() {
