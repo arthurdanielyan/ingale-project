@@ -14,8 +14,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -95,17 +93,10 @@ private fun LocalMainScreen(
     )
     val bottomBarController = LocalBottomBarController.current
 
-    val isPagerScrolling = remember {
-        derivedStateOf {
-            pagerState.currentPageOffsetFraction != 0f
-        }
+    ObserveState(pagerState.currentPage) {
+        bottomBarController.sendEffect(BottomBarEffect.ExpandMusicBar)
     }
 
-    ObserveState(isPagerScrolling.value) {
-        if (it) {
-            bottomBarController.sendEffect(BottomBarEffect.ExpandMusicBar)
-        }
-    }
     Column(
         modifier = Modifier
             .background(

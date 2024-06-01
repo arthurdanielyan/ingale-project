@@ -14,7 +14,7 @@ import org.koin.java.KoinJavaComponent.inject
 class NestedScrollForMusicBarNotification : NestedScrollConnection {
 
     companion object {
-        private const val SignificantScrollSize = 20 // in dp
+        private const val SignificantScrollSize = 1 // in dp
     }
 
     private val bottomBarController by inject<BottomBarController>(
@@ -33,9 +33,9 @@ class NestedScrollForMusicBarNotification : NestedScrollConnection {
         val consumedDp = consumed.y / applicationContext.resources.displayMetrics.density
         startOffset += consumedDp
 
-        if (startOffset < -SignificantScrollSize || consumedDp < -SignificantScrollSize) {
+        if(consumedDp < -SignificantScrollSize) {
             bottomBarController.sendEffect(BottomBarEffect.CollapseMusicBar)
-        } else if (startOffset > SignificantScrollSize || consumedDp > SignificantScrollSize) {
+        } else if (consumedDp > SignificantScrollSize) {
             bottomBarController.sendEffect(BottomBarEffect.ExpandMusicBar)
         }
 
