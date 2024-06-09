@@ -58,6 +58,8 @@ fun LocalMainScreen() {
         }
     }
 
+    SendBottomBarEffect(BottomBarEffect.ShowBottomBar)
+
     LocalMainScreen(
         state = vm.state.collectAsStateWithLifecycle().value,
         callbacks = vm,
@@ -76,7 +78,7 @@ private fun LocalMainScreen(
     val albumsGridsState = rememberLazyGridState()
     val artistsGridsState = rememberLazyGridState()
 
-    SendBottomBarEffect(BottomBarEffect.ShowBottomBar)
+
     ObserveEffects(effects) { effect ->
         when (effect) {
             Effect.ScrollToTop -> {

@@ -58,7 +58,7 @@ fun LocalSectionNavGraph() {
 private fun ObserveNavigationEvents(navController: NavController) {
     val navigation = LocalNavigation.current
     ComposeCollect(navigation.navigationEvent) { navEvent ->
-        when(navEvent) {
+        when (navEvent) {
             is LocalNavigateEvent<*, *> -> {
                 val event = navEvent as LocalNavigateEvent<Parcelable, Parcelable>
                 navController.navigate(navEvent.destination.route) {

@@ -4,43 +4,58 @@
       songs_icon: {
         width: 120,
         height: 120,
-        start: ['parent', 'start'],
-        end: ['parent', 'end'],
-        top: ['parent', 'top', 16],
+        start: ['header_background', 'start'],
+        end: ['header_background', 'end'],
+        top: ['header_background', 'top', 16],
       },
       songs_title: {
-        start: ['parent', 'start'],
-        end: ['parent', 'end'],
+        start: ['header_background', 'start'],
+        end: ['header_background', 'end'],
         top: ['songs_icon', 'bottom', 16],
       },
-      background: {
+      header_background: {
         width: "spread",
         height: "spread",
         start: ['parent', 'start'],
         end: ['parent', 'end'],
         top: ['parent', 'top'],
-        bottom: ['parent', 'bottom', -16],
+        bottom: ['songs_title', 'bottom', -16],
+      },
+      content: {
+        width: "spread",
+        height: "spread",
+        start: ['parent', 'start'],
+        end: ['parent', 'end'],
+        top: ['header_background', 'bottom'],
+        bottom: ['parent', 'bottom'],
       }
     },
     end: {
       songs_icon: {
         width: 50,
         height: 50,
-        start: ['parent', 'start', 16],
-        top: ['parent', 'top', 16],
-        bottom: ['parent', 'bottom', 16],
+        start: ['header_background', 'start', 16],
+        top: ['header_background', 'top', 16],
       },
       songs_title: {
         start: ['songs_icon', 'end', 8],
         top: ['songs_icon', 'top'],
         bottom: ['songs_icon', 'bottom'],
       },
-      background: {
+      header_background: {
         width: "spread",
         height: "spread",
         start: ['parent', 'start'],
         end: ['parent', 'end'],
         top: ['parent', 'top'],
+        bottom: ['songs_icon', 'bottom', -16],
+      },
+      content: {
+        width: "spread",
+        height: "spread",
+        start: ['parent', 'start'],
+        end: ['parent', 'end'],
+        top: ['header_background', 'bottom'],
         bottom: ['parent', 'bottom'],
       }
     }
@@ -49,7 +64,7 @@
     default: {
       from: 'start',
       to: 'end',
-      pathMotionArc: 'startVertical'
+      pathMotionArc: 'startVertical' // move in quarter ellipse arcs
     }
   }
 }

@@ -91,6 +91,7 @@ fun BottomNavigation() {
     )
     val scope = rememberCoroutineScope()
     Scaffold(
+        modifier = Modifier.fillMaxSize(),
         bottomBar = {
             NavigationBar(
                 modifier = Modifier

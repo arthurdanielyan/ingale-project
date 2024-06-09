@@ -1,7 +1,7 @@
 package com.nightx.ingale.main_navigation.bottomBarControls
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.staticCompositionLocalOf
 import com.nightx.ingale.core.presentation.view.SingleLaunchedEffect
 import kotlinx.coroutines.flow.Flow
 
@@ -32,10 +32,10 @@ fun SendBottomBarEffect(
     }
 }
 
-val LocalBottomBarEffects = compositionLocalOf<BottomBarEffectsHolder> {
+val LocalBottomBarEffects = staticCompositionLocalOf<BottomBarEffectsHolder> {
     error("No BottomBarEffectsHolder provided")
 }
 
-val LocalBottomBarController = compositionLocalOf<BottomBarController> {
+val LocalBottomBarController = staticCompositionLocalOf<BottomBarController> {
     error("No BottomBarController provided")
 }
