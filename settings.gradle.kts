@@ -12,5 +12,9 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 rootProject.name = "Ingale"
-include ':app'
+includeBuild("gradlePlugins")
+include(":app")
+include(":core")

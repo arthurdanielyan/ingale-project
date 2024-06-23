@@ -1,0 +1,6 @@
+package com.nightx.gradlePlugins
+
+object LibraryProjectConfig {
+    const val compileSdk = 34
+    const val minSdk = 24
+}
