@@ -173,6 +173,7 @@ class LocalMainRepositoryImpl(
                                 setReadable(true, true)
                             }
                             val file = File(appDataDir, previewName)
+                            if (doesFileExist(file)) continue
                             previewPath = "${appDataDir.path}/$previewName"
                             val fos = FileOutputStream(file)
                             albumArt.compress(ImageCompressFormat, 100, fos)
@@ -215,4 +216,7 @@ class LocalMainRepositoryImpl(
             }
         }
     }
+
+    private fun doesFileExist(file: File) =
+        file.exists()
 }
