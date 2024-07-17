@@ -173,12 +173,10 @@ class LocalMainRepositoryImpl(
                                 setReadable(true, true)
                             }
                             val file = File(appDataDir, previewName)
-                            if (isFileValid(file)) continue
-                                previewPath = "${appDataDir.path}/$previewName"
-                                val fos = FileOutputStream(file)
-                                albumArt.compress(ImageCompressFormat, 100, fos)
-                                fos.close()
-
+                            previewPath = "${appDataDir.path}/$previewName"
+                            val fos = FileOutputStream(file)
+                            albumArt.compress(ImageCompressFormat, 100, fos)
+                            fos.close()
                         } catch (e: IOException) {
                             e.printStackTrace()
                         }
@@ -216,15 +214,5 @@ class LocalMainRepositoryImpl(
                 }
             }
         }
-    }
-
-    private fun isFileValid(file: File): Boolean {
-        // Check if the file exists
-        if (!file.exists()) {
-            return false
-        }
-
-        // Check if the file size is greater than 0 bytes (not empty)
-        return file.length() != 0L
     }
 }
