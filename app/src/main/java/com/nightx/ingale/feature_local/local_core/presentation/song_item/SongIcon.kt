@@ -1,6 +1,7 @@
 package com.nightx.ingale.feature_local.local_core.presentation.song_item
 
 import android.content.res.Configuration
+import android.graphics.Bitmap
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -22,9 +23,9 @@ import com.nightx.ingale.ui.theme.IngaleTheme
 fun SongIcon(
     modifier: Modifier = Modifier,
     shape: Shape = CircleShape,
-    model: String? = null,
+    model: Bitmap? = null,
 ) {
-    if (model.isNullOrBlank()) {
+    if (model == null) {
         Icon(
             painter = painterResource(R.mipmap.ic_launcher_foreground),
             contentDescription = "Song picture",

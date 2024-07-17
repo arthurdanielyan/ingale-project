@@ -1,5 +1,6 @@
 package com.nightx.ingale.feature_local.songs_set.presentation.ui
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -88,7 +89,7 @@ private fun SongsSetScreen(
             onSongClick = callbacks::onSongClick,
         )
         SongsSetHeader(
-            icon = state.songsSetInfo.iconPath,
+            icon = state.songsSetInfo.icon,
             title = state.songsSetInfo.title
         )
     }
@@ -96,7 +97,7 @@ private fun SongsSetScreen(
 
 @Composable
 private fun MotionLayoutScope.SongsSetHeader(
-    icon: String?,
+    icon: Bitmap?,
     title: String,
 ) {
     Box(

@@ -3,6 +3,7 @@ package com.nightx.ingale.core.data.model.mapper
 import com.nightx.ingale.core.data.model.SongRealm
 import com.nightx.ingale.core.domain.Mapper
 import com.nightx.ingale.core.domain.model.Song
+import com.nightx.ingale.feature_local.main.data.helper.decodeBase64
 
 class SongRealmMapper : Mapper<SongRealm, Song> {
 
@@ -15,7 +16,7 @@ class SongRealmMapper : Mapper<SongRealm, Song> {
             artist = from.artist,
             genre = from.genre,
             path = from.path,
-            picturePath = from.previewPath,
+            thumbnail = decodeBase64(from.previewPath),
             artistId = from.artistId,
             albumId = from.albumId,
             lastModified = from.lastModified,

@@ -1,5 +1,6 @@
 package com.nightx.ingale.feature_local.local_navigation.destinations
 
+import android.graphics.Bitmap
 import android.os.Parcelable
 import com.nightx.ingale.core.domain.model.Song
 import kotlinx.parcelize.Parcelize
@@ -13,6 +14,6 @@ data object SongsSetScreenDestination : LocalScreenDestination {
         val id: Long,
         val title: String,
         val songs: List<Song>,
-        val iconPath: String = ""
+        val icon: Bitmap? = null
     ): Parcelable
 }

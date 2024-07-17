@@ -122,7 +122,7 @@ fun MusicBar(
                         .graphicsLayer {
                             this.rotationZ = musicImageRotation.value
                         },
-                    model = state.currentSongInfo.currentSongPreviewPath
+                    model = state.currentSongInfo.currentSongThumbnail
                 )
                 BoxWithConstraints(
                     modifier = Modifier

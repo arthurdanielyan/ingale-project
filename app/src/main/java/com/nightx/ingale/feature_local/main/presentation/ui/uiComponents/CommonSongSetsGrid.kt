@@ -130,7 +130,7 @@ private fun SongsSetCard(
     ) {
         SongIcon(
             modifier = Modifier.padding(MaterialTheme.dimensions.normal),
-            model = songsSet.iconPath,
+            model = songsSet.icon,
             shape = RoundedCornerShape(10)
         )
         Text(

@@ -1,5 +1,6 @@
 package com.nightx.ingale.core.domain.model
 
+import android.graphics.Bitmap
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
@@ -12,7 +13,7 @@ data class Song(
     val artist: String,
     val genre: String,
     val path: String,
-    val picturePath: String,
+    val thumbnail: Bitmap?,
     val artistId: Long,
     val albumId: Long,
     val lastModified: Long

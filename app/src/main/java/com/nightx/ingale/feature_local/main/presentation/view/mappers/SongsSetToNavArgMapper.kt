@@ -11,7 +11,7 @@ class SongsSetToNavArgMapper : Mapper<SongsSet, SongsSetScreenDestination.SongsS
             id = from.id,
             title = from.title,
             songs = from.songs,
-            iconPath = from.iconPath
+            icon = from.icon
         )
     }
 }

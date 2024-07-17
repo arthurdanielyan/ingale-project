@@ -69,7 +69,7 @@ fun SongItem(
                 bottom.linkTo(parent.bottom)
                 start.linkTo(parent.start)
             },
-            model = song.picturePath
+            model = song.thumbnail
         )
         Column(
             verticalArrangement = Arrangement.Center,

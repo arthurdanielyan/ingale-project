@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.IBinder
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
@@ -68,9 +67,7 @@ class AudioPlayer(
         get() = songQueue.size.toLong()
 
     val currentSongBitmap: Bitmap
-        get() = getCurrentSongPreviewPath()?.let {
-            BitmapFactory.decodeFile(it)
-        } ?: defaultSongBitmap
+        get() = getCurrentSongThumbnail() ?: defaultSongBitmap
 
     private fun initService() {
         if(isServiceRunning.not()) {
@@ -124,12 +121,12 @@ class AudioPlayer(
         applicationContext.bindService(serviceIntent, getConnection(action), 0)
     }
 
-    private fun getCurrentSongPreviewPath(): String? =
-        songQueue.getOrNull(pointer)?.picturePath
+    private fun getCurrentSongThumbnail(): Bitmap? =
+        songQueue.getOrNull(pointer)?.thumbnail
 
     private fun createMusicBarState(): CurrentSongInfo =
         CurrentSongInfo(
-            currentSongPreviewPath = getCurrentSongPreviewPath(),
+            currentSongThumbnail = getCurrentSongThumbnail(),
             isPlaying = isPlaying,
             songName = getCurrentSongOrNull()?.title,
             artistName = getCurrentSongOrNull()?.artist
