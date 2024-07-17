@@ -173,10 +173,12 @@ class LocalMainRepositoryImpl(
                                 setReadable(true, true)
                             }
                             val file = File(appDataDir, previewName)
-                            previewPath = "${appDataDir.path}/$previewName"
-                            val fos = FileOutputStream(file)
-                            albumArt.compress(ImageCompressFormat, 100, fos)
-                            fos.close()
+                            if ( file.exists().not()) {
+                                previewPath = "${appDataDir.path}/$previewName"
+                                val fos = FileOutputStream(file)
+                                albumArt.compress(ImageCompressFormat, 100, fos)
+                                fos.close()
+                            }
                         } catch (e: IOException) {
                             e.printStackTrace()
                         }
@@ -215,4 +217,5 @@ class LocalMainRepositoryImpl(
             }
         }
     }
+
 }
