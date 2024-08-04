@@ -1,0 +1,19 @@
+plugins {
+    alias(libs.plugins.ingale.android.library)
+}
+
+android {
+    namespace = "com.nightx.ingale.core.audioPlayer.impl"
+}
+
+dependencies {
+
+    api(projects.core.audioPlayer.api)
+
+    implementation(libs.androidx.media)
+    implementation(libs.androidx.ktx)
+    implementation(libs.koin.android)
+
+    implementation(projects.core.domainModel)
+    implementation(projects.resources.icon)
+}

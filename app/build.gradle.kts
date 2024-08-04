@@ -10,7 +10,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.realm.kotlin)
-    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kotlinx.parcelize)
 }
 
 kapt {
@@ -49,7 +49,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.4"
+        kotlinCompilerExtensionVersion = "1.5.14"
     }
     kotlinOptions {
         jvmTarget = "17"
@@ -69,7 +69,6 @@ dependencies {
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material3)
     implementation(libs.google.material)
-    implementation(libs.androidx.media3)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
 //    androidTestImplementation(libs.androidx.espresso)
@@ -103,4 +102,17 @@ dependencies {
 
     // Coil
     implementation(libs.coil.compose)
+
+    implementation(projects.core.ui)
+    implementation(projects.bottomBar.impl)
+    implementation(projects.musicBar)
+    implementation(projects.core.audioPlayer.impl)
+    implementation(projects.core.dataModel)
+    implementation(projects.core.utils)
+    implementation(projects.featureLocal.core.viewState)
+    implementation(projects.featureLocal.featureHome.data)
+    implementation(projects.featureLocal.featureHome.domain)
+    implementation(projects.featureLocal.featureHome.presentation)
+    implementation(projects.featureLocal.featureSongsSet.presentation)
+    implementation(projects.featureLocal.navigation.impl)
 }

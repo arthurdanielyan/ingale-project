@@ -31,6 +31,18 @@ class IngaleApplication : Application() {
                 *featureLocalModule.toTypedArray(),
                 ytModule
             )
+            modules(
+                com.nightx.ingale.bottomBar.impl.bottomBarControllerModule,
+                com.nightx.ingale.core.audioPlayer.impl.audioPlayerModule,
+                com.nightx.ingale.core.dataModel.di.mappersModule,
+                com.nightx.ingale.core.dataModel.di.realmModule,
+                com.nightx.ingale.core.utils.di.coroutinesModule,
+                com.nightx.featureLocal.core.viewState.featureLocalViewStateModule,
+                com.nightx.ingale.featureLocal.featureHome.data.dataModule,
+                com.nightx.ingale.featureLocal.featureHome.domain.domainModule,
+                *com.nightx.ingale.featureLocal.featureHome.presentation.presentationModule.toTypedArray(),
+
+            )
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

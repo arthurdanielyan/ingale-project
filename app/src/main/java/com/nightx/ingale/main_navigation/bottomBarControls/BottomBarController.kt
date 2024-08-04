@@ -5,6 +5,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import com.nightx.ingale.core.presentation.view.SingleLaunchedEffect
 import kotlinx.coroutines.flow.Flow
 
+//moved package
 interface BottomBarController {
 
     fun sendEffect(effect: BottomBarEffect)

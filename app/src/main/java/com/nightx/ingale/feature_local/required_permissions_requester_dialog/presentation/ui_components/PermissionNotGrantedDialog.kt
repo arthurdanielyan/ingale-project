@@ -5,9 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,21 +15,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.nightx.ingale.R
 import com.nightx.ingale.ui.theme.dimensions
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PermissionNotGrantedDialog(
-    modifier: Modifier = Modifier,
     isPermanentlyDeclined: Boolean,
     descriptionProvider: PermissionDescriptionProvider,
     onOkClick: () -> Unit,
     onGoToAppSettings: () -> Unit
 ) {
-    AlertDialog(
-        modifier = modifier,
+    Dialog(
         onDismissRequest = {},
         properties = DialogProperties(
             dismissOnBackPress = false,
@@ -63,7 +59,7 @@ fun PermissionNotGrantedDialog(
                     text = descriptionProvider.getDescription(),
                     color = MaterialTheme.colorScheme.onSurface
                 )
-                Divider()
+                HorizontalDivider()
                 Text(
                     text = if (isPermanentlyDeclined) {
                         stringResource(R.string.go_to_settings)

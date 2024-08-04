@@ -9,8 +9,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.nightx.ingale.core.presentation.navigation.dialog_navigation.DialogView
-import com.nightx.ingale.ui.theme.IngaleTheme
 
 class MainActivity : ComponentActivity() {
 
@@ -27,8 +25,8 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        BottomNavigation()
-                        DialogView()
+                        com.nightx.ingale.bottomBar.impl.BottomNavigation()
+//                        DialogView()
                     }
                 }
             }

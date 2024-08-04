@@ -1,0 +1,36 @@
+package com.nightx.ingale.core.navigation
+
+import android.os.Parcelable
+import kotlinx.coroutines.flow.Flow
+
+/**
+ * Base interface that provides functionality for navigation between given
+ * [T] destinations.
+ * */
+interface Navigator<in T: Destination> {
+
+    /**
+     * For UI to collect and handle [E] events
+     * */
+    val navigationEvent: Flow<NavEvent>
+
+    fun <A: Parcelable, R: Parcelable> navigate(
+        destination: T,
+        argument: A,
+        onResult: (R) -> Unit
+    )
+
+    fun <A: Parcelable> navigate(
+        destination: T,
+        argument: A
+    )
+
+    fun <R: Parcelable> navigate(
+        destination: T,
+        onResult: (R) -> Unit
+    )
+
+    fun navigate(destination: T)
+
+    fun navigateUp()
+}

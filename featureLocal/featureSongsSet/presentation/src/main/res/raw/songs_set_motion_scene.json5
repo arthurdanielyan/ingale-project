@@ -1,0 +1,70 @@
+{
+  ConstraintSets: {
+    start: {
+      songs_icon: {
+        width: 120,
+        height: 120,
+        start: ['header_background', 'start'],
+        end: ['header_background', 'end'],
+        top: ['header_background', 'top', 16],
+      },
+      songs_title: {
+        start: ['header_background', 'start'],
+        end: ['header_background', 'end'],
+        top: ['songs_icon', 'bottom', 16],
+      },
+      header_background: {
+        width: "spread",
+        height: "spread",
+        start: ['parent', 'start'],
+        end: ['parent', 'end'],
+        top: ['parent', 'top'],
+        bottom: ['songs_title', 'bottom', -16],
+      },
+      content: {
+        width: "spread",
+        height: "spread",
+        start: ['parent', 'start'],
+        end: ['parent', 'end'],
+        top: ['header_background', 'bottom'],
+        bottom: ['parent', 'bottom'],
+      }
+    },
+    end: {
+      songs_icon: {
+        width: 50,
+        height: 50,
+        start: ['header_background', 'start', 16],
+        top: ['header_background', 'top', 16],
+      },
+      songs_title: {
+        start: ['songs_icon', 'end', 8],
+        top: ['songs_icon', 'top'],
+        bottom: ['songs_icon', 'bottom'],
+      },
+      header_background: {
+        width: "spread",
+        height: "spread",
+        start: ['parent', 'start'],
+        end: ['parent', 'end'],
+        top: ['parent', 'top'],
+        bottom: ['songs_icon', 'bottom', -16],
+      },
+      content: {
+        width: "spread",
+        height: "spread",
+        start: ['parent', 'start'],
+        end: ['parent', 'end'],
+        top: ['header_background', 'bottom'],
+        bottom: ['parent', 'bottom'],
+      }
+    }
+  },
+  Transitions: {
+    default: {
+      from: 'start',
+      to: 'end',
+      pathMotionArc: 'startVertical' // move in quarter ellipse arcs
+    }
+  }
+}

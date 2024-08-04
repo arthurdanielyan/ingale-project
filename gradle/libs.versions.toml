@@ -2,22 +2,29 @@
 ktx = "1.9.0"
 retrofit = "2.9.0"
 agp_version = "8.2.1"
-kotlin-version = "1.9.20"
+kotlin-version = "1.9.24"
 compose-bom = "2024.05.00"
-androidx-lifecycle = "2.6.2"
+androidx-lifecycle = "2.7.0"
 koin = "3.5.6"
 realm = "1.14.0"
 coil = "2.6.0"
+espresso-core-version = "3.5.1"
+appcompat-version = "1.7.0"
 
 [libraries]
 android-tools-build-gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "agp_version" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin-version" }
 androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
 kotlin-bom = { group = "org.jetbrains.kotlin", name = "kotlin-bom", version.ref = "ktx" }
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.7.3" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-viewmodel-savedstate = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-savedstate", version.ref = "androidx-lifecycle" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version = "1.8.2" }
+androidx-compose-runtime = { group = "androidx.compose.runtime", name ="runtime-android" }
 androidx-compose-ui = { group = "androidx.compose.ui", name ="ui" }
 androidx-compose-ui-graphics = { group = "androidx.compose.ui", name ="ui-graphics" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name ="ui-tooling-preview" }
@@ -31,7 +38,8 @@ androidx-junit = { group = "androidx.test.ext", name ="junit", version = "1.1.5"
 androidx-compose-junit = { group = "androidx.compose.ui", name ="ui-test-junit4" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name ="ui-tooling" }
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name ="ui-test-manifest" }
-androidx-compose-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version = "1.0.1" }
+androidx-compose-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout-solver", version = "2.0.4" }
+androidx-constraintlayout-solver = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version = "1.0.1" }
 androidx-compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version = "2.7.0" }
 google-gson = { group = "com.google.code.gson", name = "gson", version = "2.10.1" }
 squareup-retrofit2 = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
@@ -42,12 +50,16 @@ koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = 
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
 realm-kotlin = { group = "io.realm.kotlin", name = "library-base", version.ref = "realm" }
 coil-compose = { group ="io.coil-kt", name = "coil-compose", version.ref = "coil" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core-version" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat-version" }
 
 [plugins]
+ingale-android-library = { id = "nightx.ingale.android.library", version = "1.0.0" }
+ingale-realm = { id = "nightx.ingale.realm", version = "1.0.0" }
 android-application = { id = "com.android.application", version.ref = "agp_version" }
 android-library = { id = "com.android.library", version.ref = "agp_version" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin-version" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin-version" }
 realm-kotlin = { id = "io.realm.kotlin", version.ref = "realm" }
-kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin-version" }
+kotlinx-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin-version" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }

@@ -11,6 +11,12 @@ gradlePlugin {
         create("ingaleAndroidPlugin") {
             id = "nightx.ingale.android.library"
             implementationClass = "com.nightx.gradlePlugins.IngaleAndroidLibraryPlugin"
+            version = "1.0.0"
+        }
+        create("realmApplierPlugin") {
+            id = "nightx.ingale.realm"
+            implementationClass = "com.nightx.gradlePlugins.RealmPlugin"
+            version = "1.0.0"
         }
     }
 }

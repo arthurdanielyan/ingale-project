@@ -4,9 +4,6 @@ import com.android.build.gradle.LibraryExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.VersionCatalog
-import org.gradle.api.artifacts.VersionCatalogsExtension
-import kotlin.apply as kotlinApply
 
 class IngaleAndroidLibraryPlugin : Plugin<Project> {
 
@@ -16,19 +13,16 @@ class IngaleAndroidLibraryPlugin : Plugin<Project> {
     }
 
     private fun applyPlugins(project: Project) {
-        val libs = project
-            .extensions
-            .getByType(VersionCatalogsExtension::class.java)
-            .named("libs")
+        val libs = project.versionCatalog
 
-        project.pluginManager.kotlinApply {
-            apply(libs.getPluginId("android-library"))
-            apply(libs.getPluginId("jetbrains-kotlin-android"))
+        project.pluginManager.apply {
+            apply(libs.getPlugin("android-library"))
+            apply(libs.getPlugin("jetbrains-kotlin-android"))
         }
     }
 
     private fun setProjectConfig(project: Project) {
-        project.android().kotlinApply {
+        project.android().apply {
             compileSdk = LibraryProjectConfig.compileSdk
 
             defaultConfig {
@@ -53,7 +47,4 @@ class IngaleAndroidLibraryPlugin : Plugin<Project> {
     private fun Project.android(): LibraryExtension {
         return extensions.getByType(LibraryExtension::class.java)
     }
-
-    private fun VersionCatalog.getPluginId(alias: String): String =
-        findPlugin(alias).get().get().pluginId
 }

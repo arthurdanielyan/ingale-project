@@ -1,0 +1,25 @@
+plugins {
+    alias(libs.plugins.ingale.android.library)
+}
+
+android {
+    namespace = "com.nightx.ingale.featureLocal.featureHome.presentation"
+}
+
+dependencies{
+
+    api(projects.featureLocal.navigation.api)
+
+    implementation(projects.featureLocal.featureHome.domain)
+    implementation(projects.featureLocal.featureRequirePermissions)
+    implementation(projects.featureLocal.core.viewState)
+    implementation(projects.featureLocal.core.ui)
+    implementation(projects.musicBar)
+    implementation(projects.bottomBar.api)
+    implementation(projects.core.domainModel)
+    implementation(projects.core.audioPlayer.api)
+    implementation(projects.core.ui)
+    implementation(projects.core.presentation)
+    implementation(projects.core.utils)
+    implementation(projects.resources.strings)
+}

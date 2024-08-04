@@ -5,7 +5,7 @@ import androidx.compose.runtime.Immutable
 import com.nightx.ingale.core.domain.model.Song
 
 @Immutable
-interface PlayerUiActions {
+interface PlayerUiActions { // moved
 
     fun submitNewListAndPlay(songQueue: List<Song>, indexToPlay: Int)
     fun togglePlaying()

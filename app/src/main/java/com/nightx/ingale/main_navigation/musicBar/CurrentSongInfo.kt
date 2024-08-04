@@ -3,7 +3,7 @@ package com.nightx.ingale.main_navigation.musicBar
 import androidx.compose.runtime.Immutable
 
 @Immutable
-data class CurrentSongInfo(
+data class CurrentSongInfo( // moved
     val currentSongPreviewPath: String?,
     val isPlaying: Boolean,
     val songName: String?,

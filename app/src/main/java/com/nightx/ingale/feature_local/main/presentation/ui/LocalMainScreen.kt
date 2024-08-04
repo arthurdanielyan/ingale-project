@@ -52,6 +52,7 @@ import kotlinx.coroutines.flow.Flow
 fun LocalMainScreen() {
     val vm = ingaleViewModels<LocalMainViewModel>()
 
+
     OnLifecycleEvents { event ->
         if (event == Lifecycle.Event.ON_RESUME) {
             vm.onResume()

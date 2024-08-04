@@ -11,6 +11,7 @@ import com.nightx.ingale.main_navigation.bottomBarControls.BottomBarController
 import com.nightx.ingale.main_navigation.bottomBarControls.BottomBarEffect
 import org.koin.java.KoinJavaComponent.inject
 
+// moved
 class NestedScrollForMusicBarNotification : NestedScrollConnection {
 
     companion object {

@@ -7,12 +7,12 @@ import kotlinx.coroutines.flow.Flow
  * Base interface that provides functionality for navigation between given
  * [T] destinations.
  * */
-interface Navigator<in T: Destination, out E: NavEvent> {
+interface Navigator<in T: Destination> {
 
     /**
      * For UI to collect and handle [E] events
      * */
-    val navigationEvent: Flow<E>
+    val navigationEvent: Flow<NavEvent>
 
     fun <A: Parcelable, R: Parcelable> navigate(
         destination: T,

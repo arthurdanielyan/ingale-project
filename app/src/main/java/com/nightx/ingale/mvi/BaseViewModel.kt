@@ -20,7 +20,7 @@ abstract class BaseViewModel<State : UiState, Effect : UiEffect> : ViewModel() {
     private val _state = MutableStateFlow(initialState)
 
     /**
-     * Sometimes (almost always) it is more convenient to use a different approach for the ui
+     * Almost always it is more convenient to use a different approach for the ui
      * state management rather than using the [updateState] function. For example
      * having multiple [MutableStateFlow]s and combining ([Flow.combine]) them into a
      * single one. This is why this is an open property.

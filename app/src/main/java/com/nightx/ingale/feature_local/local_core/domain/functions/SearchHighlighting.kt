@@ -7,6 +7,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 
+// moved
 @Composable
 fun String.highlight(highlight: String): AnnotatedString = buildAnnotatedString {
     if(highlight.isBlank()) {
