@@ -1,8 +1,11 @@
 package com.nightx.ingale.main_navigation.bottomBarControls
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.staticCompositionLocalOf
-import com.nightx.ingale.core.presentation.view.SingleLaunchedEffect
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import kotlinx.coroutines.flow.Flow
 
 interface BottomBarController {
@@ -27,8 +30,18 @@ fun SendBottomBarEffect(
     effect: BottomBarEffect
 ) {
     val bottomBarController = LocalBottomBarController.current
-    SingleLaunchedEffect {
-        bottomBarController.sendEffect(effect)
+    val lifeCycleOwner = LocalLifecycleOwner.current
+
+    DisposableEffect(lifeCycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if(event == Lifecycle.Event.ON_START) {
+                bottomBarController.sendEffect(effect)
+            }
+        }
+        lifeCycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifeCycleOwner.lifecycle.removeObserver(observer)
+        }
     }
 }
 
