@@ -36,6 +36,8 @@ import com.nightx.ingale.core.presentation.ui.modifierExt.shimmer
 import com.nightx.ingale.feature_local.local_core.domain.functions.highlight
 import com.nightx.ingale.feature_local.local_core.domain.model.SongsSet
 import com.nightx.ingale.feature_local.local_core.presentation.song_item.SongIcon
+import com.nightx.ingale.main_navigation.bottomBarControls.BottomBarEffect
+import com.nightx.ingale.main_navigation.bottomBarControls.LocalBottomBarController
 import com.nightx.ingale.mvi.wrappers.StableList
 import com.nightx.ingale.ui.theme.dimensions
 import kotlin.math.roundToInt
@@ -53,6 +55,7 @@ fun CommonSongSetsGrid(
     isLoading: Boolean,
     query: String,
 ) {
+    val bottomBarController = LocalBottomBarController.current
     if(!isLoading) {
         LazyVerticalGrid(
             state = lazyGridState,
@@ -72,6 +75,9 @@ fun CommonSongSetsGrid(
                     )
                     ,
                     onClick = onClick,
+                    onCollapseMusicBar = {
+                        bottomBarController.sendEffect(BottomBarEffect.HideBottomBar)
+                    },
                     highlightedText = query,
                     songsSet = it
                 )
@@ -112,6 +118,7 @@ fun CommonSongSetsGrid(
 private fun SongsSetCard(
     modifier: Modifier = Modifier,
     onClick: (SongsSet) -> Unit,
+    onCollapseMusicBar: () -> Unit = {},
     highlightedText: String,
     songsSet: SongsSet
 ) {
@@ -122,6 +129,7 @@ private fun SongsSetCard(
             .clip(RoundedCornerShape(10))
             .clickable {
                 onClick(songsSet)
+                onCollapseMusicBar()
             }
             .background(
                 color = Color.Transparent,
