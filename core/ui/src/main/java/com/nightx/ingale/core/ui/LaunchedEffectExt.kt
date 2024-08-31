@@ -15,6 +15,9 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import kotlinx.coroutines.CoroutineScope
 
+/**
+ * Shorthand for [LaunchedEffect] with [Unit] key.
+ * */
 @Composable
 fun SingleLaunchedEffect(
     block: suspend CoroutineScope.() -> Unit
@@ -38,7 +41,7 @@ fun OnLifecycleEvents(
 }
 
 /**
- * Called when [key] changes. In contrast to [LaunchedEffect] this
+ * Calls [block] when [key] changes. In contrast to [LaunchedEffect] this
  * doesn't re-execute [block] when configuration change happens. Note that [T]
  * has to be saveable.
  * */

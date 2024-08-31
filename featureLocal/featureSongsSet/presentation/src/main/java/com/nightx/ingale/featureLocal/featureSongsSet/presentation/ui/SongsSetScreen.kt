@@ -28,7 +28,7 @@ import androidx.constraintlayout.solver.widgets.Optimizer
 import androidx.lifecycle.SavedStateHandle
 import com.nightx.featureLocal.core.viewState.SongsSetViewState
 import com.nightx.ingale.bottomBar.api.BottomBarEffect
-import com.nightx.ingale.bottomBar.api.SendBottomBarEffect
+import com.nightx.ingale.bottomBar.api.SetBottomBarState
 import com.nightx.ingale.core.presentation.diExt.ingaleViewModels
 import com.nightx.ingale.core.ui.SongIcon
 import com.nightx.ingale.featureLocal.core.ui.SongsLazyList
@@ -43,7 +43,7 @@ fun SongsSetScreen(savedStateHandle: SavedStateHandle) {
         savedStateHandle = savedStateHandle
     )
 
-    SendBottomBarEffect(BottomBarEffect.HideBottomBar)
+    SetBottomBarState(BottomBarEffect.HideBottomBar)
     SongsSetScreen(
         state = vm.state.collectAsState().value,
         callbacks = vm

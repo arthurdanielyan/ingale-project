@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.nightx.ingale.bottomBar.api.BottomBarEffect
-import com.nightx.ingale.bottomBar.api.SendBottomBarEffect
+import com.nightx.ingale.bottomBar.api.SetBottomBarState
 import com.nightx.ingale.core.presentation.diExt.ingaleViewModels
 import com.nightx.ingale.core.presentation.flows.ObserveEffects
 import com.nightx.ingale.core.ui.DataPlaceholder
@@ -58,7 +58,7 @@ fun LocalMainScreen() {
         }
     }
 
-    SendBottomBarEffect(BottomBarEffect.ShowBottomBar)
+    SetBottomBarState(BottomBarEffect.ShowBottomBar)
 
     RequiredPermissionsRequesterDialog(vm.permissionsDialogComponentHolder)
 

@@ -2,7 +2,8 @@ package com.nightx.ingale.bottomBar.api
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.staticCompositionLocalOf
-import com.nightx.ingale.core.ui.SingleLaunchedEffect
+import androidx.lifecycle.Lifecycle
+import com.nightx.ingale.core.ui.OnLifecycleEvents
 import kotlinx.coroutines.flow.Flow
 
 interface BottomBarController {
@@ -20,13 +21,18 @@ sealed interface BottomBarEffect {
     data object HideBottomBar : BottomBarEffect
 }
 
+/**
+ * Defines the BottomBar's state for the screen
+ * */
 @Composable
-fun SendBottomBarEffect(
-    effect: BottomBarEffect
+fun SetBottomBarState(
+    effect: BottomBarEffect,
 ) {
     val bottomBarController = LocalBottomBarController.current
-    SingleLaunchedEffect {
-        bottomBarController.sendEffect(effect)
+    OnLifecycleEvents { event ->
+        if (event == Lifecycle.Event.ON_START) {
+            bottomBarController.sendEffect(effect)
+        }
     }
 }
 
