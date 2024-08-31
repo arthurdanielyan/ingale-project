@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="section_songs">Երաժշտություններ</string>
+    <string name="section_albums">Ալբոմներ</string>
+    <string name="section_artist">Հեղինակներ</string>
+
+    <string name="playlists">Երգացանկեր</string>
+    <string name="favourites">Ընտրյալներ</string>
+    <string name="history">Պատմություն</string>
+
+    <string name="search">Որոնում</string>
+    <string name="local_music">Իմ երաժշտությունները</string>
+
+    <string name="unknown">Անհայտ</string>
+    <string name="unknown_album">Անհայտ ալբոմ</string>
+    <string name="unknown_artist">Անհայտ հեղինակ</string>
+
+    <string name="refresh">Թարմացնել</string>
+    <string name="grant_permission">Թույլատրել</string>
+    <string name="go_to_settings">Գնալ կարգավորումներ</string>
+    <string name="no_songs_found">Երաժշտություններ չեն գտնվել</string>
+    <string name="audio_permission_not_granted_description">Խնդրում ենք տրամադրել երաժշտություն և աուդիո օգտագործելու թույլտվություն Ձեր աուդիո ֆայլերը կարդալու համար</string>
+    <string name="permission_required">Պահանջվում է թույտվություն</string>
+    <string name="ok">Լավ</string>
+
+    <string name="storage_permission_not_granted_permission">Խնդրում ենք տրամադրել պահեստի հասանելիության թույլտվություն Ձեր աուդիո ֆայլերը կարդալու համար</string>
+    <string name="notification_permission_not_granted_permission">Խնդրում ենք տրամադրել ծանուցման թույլտվություն, որպեսզի կարողանաք կառավարել աուդիո նվագարկումը՝ հավելվածը փակված վիճակում</string>
+
+    <string name="something_went_wrong">Տեղի է ունեցել սխալ</string>
+</resources>

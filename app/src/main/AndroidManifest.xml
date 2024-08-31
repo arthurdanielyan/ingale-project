@@ -24,7 +24,7 @@
         tools:targetApi="31">
         <activity
             android:screenOrientation="portrait"
-            android:name=".main_navigation.MainActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Ingale">
             <intent-filter>
@@ -34,26 +34,27 @@
         </activity>
 
         <service
-            android:name=".core.audio_player.PlayerService"
+            android:name="com.nightx.ingale.core.audioPlayer.impl.PlayerService"
             android:foregroundServiceType="mediaPlayback"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.media.browse.MediaBrowserService"/>
             </intent-filter>
         </service>
-        <service android:name=".core.audio_player.actions.PlaybackActionService"/>
+
+        <service android:name="com.nightx.ingale.core.audioPlayer.impl.PlaybackActionService"/>
 
         <receiver
             android:exported="false"
-            android:name=".core.audio_player.actions.player_action_receivers.PlayerActionSkipToPrevious"/>
+            android:name="com.nightx.ingale.core.audioPlayer.impl.playerActionReceivers.PlayerActionSkipToPrevious"/>
         <receiver
             android:exported="false"
-            android:name=".core.audio_player.actions.player_action_receivers.PlayerActionTogglePlaybackReceiver"/>
+            android:name="com.nightx.ingale.core.audioPlayer.impl.playerActionReceivers.PlayerActionTogglePlaybackReceiver"/>
         <receiver
             android:exported="false"
-            android:name=".core.audio_player.actions.player_action_receivers.PlayerActionSkipToNextReceiver"/>
+            android:name="com.nightx.ingale.core.audioPlayer.impl.playerActionReceivers.PlayerActionSkipToNextReceiver"/>
         <receiver
             android:exported="false"
-            android:name=".core.audio_player.actions.player_action_receivers.PlayerActionStopServiceReceiver"/>
+            android:name="com.nightx.ingale.core.audioPlayer.impl.playerActionReceivers.PlayerActionStopServiceReceiver"/>
     </application>
 </manifest>

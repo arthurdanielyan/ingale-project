@@ -4,12 +4,62 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
+        <compositeConfiguration>
+          <compositeBuild compositeDefinitionSource="SCRIPT">
+            <builds>
+              <build path="$PROJECT_DIR$/gradlePlugins" name="gradlePlugins">
+                <projects>
+                  <project path="$PROJECT_DIR$/gradlePlugins" />
+                </projects>
+              </build>
+            </builds>
+          </compositeBuild>
+        </compositeConfiguration>
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/bottomBar" />
+            <option value="$PROJECT_DIR$/bottomBar/api" />
+            <option value="$PROJECT_DIR$/bottomBar/impl" />
+            <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/core/audioPlayer" />
+            <option value="$PROJECT_DIR$/core/audioPlayer/api" />
+            <option value="$PROJECT_DIR$/core/audioPlayer/impl" />
+            <option value="$PROJECT_DIR$/core/dataModel" />
+            <option value="$PROJECT_DIR$/core/domainModel" />
+            <option value="$PROJECT_DIR$/core/navigation" />
+            <option value="$PROJECT_DIR$/core/presentation" />
+            <option value="$PROJECT_DIR$/core/ui" />
+            <option value="$PROJECT_DIR$/core/utils" />
+            <option value="$PROJECT_DIR$/core/viewState" />
+            <option value="$PROJECT_DIR$/featureLocal" />
+            <option value="$PROJECT_DIR$/featureLocal/core" />
+            <option value="$PROJECT_DIR$/featureLocal/core/data" />
+            <option value="$PROJECT_DIR$/featureLocal/core/ui" />
+            <option value="$PROJECT_DIR$/featureLocal/core/viewState" />
+            <option value="$PROJECT_DIR$/featureLocal/featureHome" />
+            <option value="$PROJECT_DIR$/featureLocal/featureHome/data" />
+            <option value="$PROJECT_DIR$/featureLocal/featureHome/domain" />
+            <option value="$PROJECT_DIR$/featureLocal/featureHome/presentation" />
+            <option value="$PROJECT_DIR$/featureLocal/featureRequirePermissions" />
+            <option value="$PROJECT_DIR$/featureLocal/featureSongsSet" />
+            <option value="$PROJECT_DIR$/featureLocal/featureSongsSet/presentation" />
+            <option value="$PROJECT_DIR$/featureLocal/navigation" />
+            <option value="$PROJECT_DIR$/featureLocal/navigation/api" />
+            <option value="$PROJECT_DIR$/featureLocal/navigation/graph" />
+            <option value="$PROJECT_DIR$/featureLocal/navigation/impl" />
+            <option value="$PROJECT_DIR$/featureYoutube" />
+            <option value="$PROJECT_DIR$/gradlePlugins" />
+            <option value="$PROJECT_DIR$/musicBar" />
+            <option value="$PROJECT_DIR$/resources" />
+            <option value="$PROJECT_DIR$/resources/bottomBar" />
+            <option value="$PROJECT_DIR$/resources/icon" />
+            <option value="$PROJECT_DIR$/resources/playbackActions" />
+            <option value="$PROJECT_DIR$/resources/songOperations" />
+            <option value="$PROJECT_DIR$/resources/strings" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

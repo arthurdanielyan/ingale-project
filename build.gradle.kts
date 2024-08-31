@@ -3,6 +3,7 @@ buildscript {
     dependencies {
         classpath(libs.android.tools.build.gradle)
         classpath(libs.kotlin.gradle.plugin)
+        classpath(libs.realm.gradle.plugin)
     }
 }
 
@@ -12,5 +13,6 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android) apply false
     alias(libs.plugins.kotlin.kapt) apply false
     alias(libs.plugins.realm.kotlin) apply false
-    alias(libs.plugins.kotlin.parcelize) apply false
+    alias(libs.plugins.kotlinx.parcelize) apply false
+    alias(libs.plugins.kotlin.jvm) apply false
 }
