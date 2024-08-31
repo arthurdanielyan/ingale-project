@@ -16,4 +16,5 @@ dependencies {
 
     implementation(projects.core.domainModel)
     implementation(projects.resources.icon)
+    implementation(projects.resources.strings)
 }

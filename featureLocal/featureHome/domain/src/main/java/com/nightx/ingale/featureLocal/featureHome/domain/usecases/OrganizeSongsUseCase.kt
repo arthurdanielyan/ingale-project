@@ -2,9 +2,9 @@ package com.nightx.ingale.featureLocal.featureHome.domain.usecases
 
 import com.nightx.ingale.core.domainModel.Song
 import com.nightx.ingale.core.utils.CoroutineDispatchers
-import com.nightx.ingale.featureLocal.featureHome.domain.model.Album
-import com.nightx.ingale.featureLocal.featureHome.domain.model.Artist
 import com.nightx.ingale.featureLocal.featureHome.domain.model.SongsSeparation
+import com.nightx.ingale.featureLocal.featureHome.domain.model.SongsSet
+import com.nightx.ingale.featureLocal.featureHome.domain.model.SongsSetType
 import kotlinx.coroutines.withContext
 
 class OrganizeSongsUseCase(
@@ -15,9 +15,9 @@ class OrganizeSongsUseCase(
             SongsSeparation(
                 songs = songs,
                 albums = songs.let {
-                    val albums = mutableListOf<Album>()
+                    val albums = mutableListOf<SongsSet>()
                     it.forEach { song ->
-                        val albumIndex = albums.indexOfFirst { it.albumId == song.albumId }
+                        val albumIndex = albums.indexOfFirst { it.id == song.albumId }
                         if (albumIndex >= 0) {
                             albums[albumIndex] = albums[albumIndex].run {
                                 copy(
@@ -26,9 +26,10 @@ class OrganizeSongsUseCase(
                             }
                         } else {
                             albums.add(
-                                Album(
-                                    albumId = song.albumId,
-                                    albumName = song.album,
+                                SongsSet(
+                                    id = song.albumId,
+                                    type = SongsSetType.Album,
+                                    title = song.album,
                                     songs = listOf(song)
                                 )
                             )
@@ -37,9 +38,9 @@ class OrganizeSongsUseCase(
                     albums
                 },
                 artists = songs.let {
-                    val artists = mutableListOf<Artist>()
+                    val artists = mutableListOf<SongsSet>()
                     it.forEach { song ->
-                        val artistIndex = artists.indexOfFirst { it.artistId == song.artistId }
+                        val artistIndex = artists.indexOfFirst { it.id == song.artistId }
                         if (artistIndex >= 0) {
                             artists[artistIndex] = artists[artistIndex].run {
                                 copy(
@@ -48,9 +49,10 @@ class OrganizeSongsUseCase(
                             }
                         } else {
                             artists.add(
-                                Artist(
-                                    artistId = song.artistId,
-                                    artistName = song.artist,
+                                SongsSet(
+                                    id = song.artistId,
+                                    type = SongsSetType.Artist,
+                                    title = song.artist,
                                     songs = listOf(song)
                                 )
                             )

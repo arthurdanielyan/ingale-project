@@ -1,4 +1,4 @@
-package com.nightx.ingale.feature_local.local_core.presentation.song_item
+package com.nightx.ingale.featureLocal.core.ui.song_item
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,8 +17,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.nightx.ingale.core.presentation.ui.modifierExt.shimmer
-import com.nightx.ingale.ui.theme.dimensions
+import com.nightx.ingale.core.ui.modifierExt.shimmer
+import com.nightx.ingale.core.ui.theme.dimensions
 
 
 @Composable

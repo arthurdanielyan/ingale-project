@@ -1,4 +1,4 @@
-package com.nightx.ingale.feature_local.local_core.presentation.song_item
+package com.nightx.ingale.featureLocal.core.ui.song_item
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
@@ -27,19 +27,19 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.nightx.ingale.core.domain.model.Song
+import com.nightx.featureLocal.core.viewState.song.SongViewState
 import com.nightx.ingale.core.ui.SongIcon
+import com.nightx.ingale.core.ui.highlight
+import com.nightx.ingale.core.ui.theme.dimensions
+import com.nightx.ingale.featureLocal.core.ui.songOperationsBottomSheet.SongOperations
 import com.nightx.ingale.featureLocal.core.ui.songOperationsBottomSheet.SongOperationsBottomSheet
-import com.nightx.ingale.feature_local.local_core.domain.functions.highlight
-import com.nightx.ingale.feature_local.local_core.domain.model.SongOperations
-import com.nightx.ingale.ui.theme.dimensions
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun SongItem(
     modifier: Modifier = Modifier,
-    song: Song,
-    onSongClick: (Song) -> Unit,
+    song: SongViewState,
+    onSongClick: (SongViewState) -> Unit,
     highlightedPart: String = "",
     onSongOperation: (SongOperations) -> Unit,
 ) {

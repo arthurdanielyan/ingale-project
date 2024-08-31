@@ -36,6 +36,7 @@ private val appDestinations = mapOf<LocalScreenDestination, @Composable (SavedSt
 @Composable
 fun LocalSectionNavGraph() {
     val navController = rememberNavController()
+    ObserveNavigationEvents(navController = navController)
 
     NavHost(
         navController = navController,

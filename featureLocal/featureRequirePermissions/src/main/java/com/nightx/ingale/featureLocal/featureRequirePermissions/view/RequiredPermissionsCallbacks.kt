@@ -3,7 +3,7 @@ package com.nightx.ingale.featureLocal.featureRequirePermissions.view
 import androidx.compose.runtime.Immutable
 
 @Immutable
-interface RequiredPermissionsCallbacks {
+internal interface RequiredPermissionsCallbacks {
 
     fun onPermissionResult(permission: String, isGranted: Boolean)
     fun onOkClick(permission: String)

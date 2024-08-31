@@ -1,20 +1,6 @@
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
-    alias(libs.plugins.realm.kotlin)
-    alias(libs.plugins.kotlinx.parcelize)
-}
-
-kapt {
-    correctErrorTypes = true
 }
 
 android {
@@ -40,6 +26,7 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 //            signingConfig = signingConfigs.debug
         }
@@ -57,51 +44,11 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.ktx)
-    implementation(platform(libs.kotlin.bom))
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.foundation)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.google.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-//    androidTestImplementation(libs.androidx.espresso)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-//    androidTestImplementation(platform("androidx.compose:compose-bom:2022.10.00"))
-    androidTestImplementation(libs.androidx.compose.junit)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
-
-    // Compose constraint layout
-    implementation(libs.androidx.compose.constraintlayout)
-
-    // Compose Navigation
-    implementation(libs.androidx.compose.navigation)
 
     // Koin
     implementation(libs.koin.core)
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
-
-    // Retrofit
-    implementation(libs.google.gson)
-    implementation(libs.squareup.retrofit2)
-    implementation(libs.squareup.retrofit2.converter.gson)
-
-    // Media Notification
-    implementation(libs.androidx.media)
-
-    // Realm
-    implementation(libs.realm.kotlin)
-
-    // Coil
-    implementation(libs.coil.compose)
 
     implementation(projects.core.ui)
     implementation(projects.bottomBar.impl)
@@ -115,4 +62,5 @@ dependencies {
     implementation(projects.featureLocal.featureHome.presentation)
     implementation(projects.featureLocal.featureSongsSet.presentation)
     implementation(projects.featureLocal.navigation.impl)
+    implementation(projects.resources.strings)
 }

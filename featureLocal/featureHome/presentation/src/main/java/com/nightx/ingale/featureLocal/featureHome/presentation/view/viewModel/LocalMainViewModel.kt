@@ -11,10 +11,12 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewModelScope
 import com.nightx.featureLocal.core.viewState.SongsSetViewState
 import com.nightx.featureLocal.core.viewState.song.SongViewState
-import com.nightx.featureLocal.core.viewState.song.mapper.SongToViewStateMapper
+import com.nightx.featureLocal.core.viewState.song.mapper.SongViewStateMapper
 import com.nightx.ingale.core.audioPlayer.api.PlayerUiActions
+import com.nightx.ingale.core.domainModel.LoadState
 import com.nightx.ingale.core.domainModel.Song
 import com.nightx.ingale.core.presentation.viewModel.BaseViewModel
+import com.nightx.ingale.core.presentation.viewModel.updateIf
 import com.nightx.ingale.core.utils.mapList
 import com.nightx.ingale.core.viewState.LoadingViewState
 import com.nightx.ingale.core.viewState.emptyStableList
@@ -23,9 +25,8 @@ import com.nightx.ingale.core.viewState.toStableList
 import com.nightx.ingale.featureLocal.featureHome.domain.usecases.GetSongsUseCase
 import com.nightx.ingale.featureLocal.featureHome.domain.usecases.OrganizeSongsUseCase
 import com.nightx.ingale.featureLocal.featureHome.presentation.view.RequiredPermissionsInspector
-import com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.mappers.AlbumMapper
-import com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.mappers.ArtistMapper
 import com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.mappers.SongsSetToNavArgMapper
+import com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.mappers.SongsSetViewStateMapper
 import com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.viewState.LocalMainScreenViewState
 import com.nightx.ingale.featureLocal.navigation.api.LocalNavigator
 import com.nightx.ingale.feature_local.local_navigation.destinations.SongsSetScreenDestination
@@ -48,9 +49,8 @@ import kotlinx.coroutines.launch
 internal class LocalMainViewModel(
     private val navigator: LocalNavigator,
     private val getSongsUseCase: GetSongsUseCase,
-    private val songToViewStateMapper: SongToViewStateMapper,
-    private val albumMapper: AlbumMapper,
-    private val artistMapper: ArtistMapper,
+    private val songViewStateMapper: SongViewStateMapper,
+    private val songsSetViewStateMapper: SongsSetViewStateMapper,
     private val organizeSongsUseCase: OrganizeSongsUseCase,
     private val requiredPermissionsInspector: RequiredPermissionsInspector,
     private val songsSetToNavArgMapper: SongsSetToNavArgMapper,
@@ -65,9 +65,11 @@ internal class LocalMainViewModel(
         private const val QueryDebounce = 200L
     }
 
-    private lateinit var allSongs: List<Song>
-    private lateinit var allAlbums: List<SongsSetViewState>
-    private lateinit var allArtists: List<SongsSetViewState>
+    private lateinit var allSongsDomain: List<Song>
+
+    private var allSongs = emptyList<SongViewState>()
+    private var allAlbums = emptyList<SongsSetViewState>()
+    private var allArtists = emptyList<SongsSetViewState>()
 
     private var wasAudioPermissionGrantedReceived = false
 
@@ -84,6 +86,9 @@ internal class LocalMainViewModel(
     private val albums = MutableStateFlow(emptyStableList<SongsSetViewState>())
     private val artists = MutableStateFlow(emptyStableList<SongsSetViewState>())
     private val query = MutableStateFlow("")
+
+    val permissionsDialogComponentHolder
+        get() = requiredPermissionsInspector.permissionsDialogComponentHolder
 
     override val state = combine(
         loadingViewState,
@@ -105,6 +110,7 @@ internal class LocalMainViewModel(
     init {
         observeSongs()
         observeQuery()
+        refreshSongs() // triggers observation
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -113,41 +119,38 @@ internal class LocalMainViewModel(
             loadSongsRequest
                 .filter { isAudioPermissionGranted }
                 .flatMapLatest {
-                    updateState {
-                        copy(loadingState = LoadingViewState.Loading)
-                    }
+                    loadingViewState.update { LoadingViewState.Loading }
                     getSongsUseCase()
-                }.collectLatest { songsLoadState ->
-                    updateState {
-                        copy(
-                            loadingState = songsLoadState.toLoadingViewState(),
-                        )
+                }.filter { songsLoadState ->
+                    // if Success update later, only when the state is fully constructed
+                    loadingViewState.updateIf(songsLoadState !is LoadState.Success) {
+                        songsLoadState.toLoadingViewState()
                     }
-                    val songsSeparation = organizeSongsUseCase(songsLoadState.dataOrDefault(emptyList()))
+                    songsLoadState is LoadState.Success
+                }.mapLatest { songs ->
+                    val songsSeparation = organizeSongsUseCase(songs.dataOrDefault(emptyList()))
+                    allSongsDomain = songsSeparation.songs
+
                     if (songsSeparation.songs.isNotEmpty()) {
-                        allSongs = songsSeparation.songs
-                        allAlbums = albumMapper.mapList(songsSeparation.albums)
-                        allArtists = artistMapper.mapList(songsSeparation.artists)
-                        updateState {
-                            copy(
-                                loadingState = LoadingViewState.Success,
-                                songs = songToViewStateMapper.mapList(songsSeparation.songs).toStableList(),
-                                albums = albumMapper.mapList(songsSeparation.albums).toStableList(),
-                                artists = artistMapper.mapList(songsSeparation.artists).toStableList(),
-                            )
-                        }
+                        allSongs = songViewStateMapper.mapList(songsSeparation.songs)
+                        allAlbums = songsSetViewStateMapper.mapList(songsSeparation.albums)
+                        allArtists = songsSetViewStateMapper.mapList(songsSeparation.artists)
+                        Triple(
+                            allSongs.toStableList(),
+                            allAlbums.toStableList(),
+                            allArtists.toStableList(),
+                        )
                     } else {
-                        updateState {
-                            copy(
-                                loadingState = LoadingViewState.Error(
-                                    if (isAudioPermissionGranted) {
-                                        NO_SONGS_FOUND_ERROR
-                                    } else {
-                                        PERMISSION_NOT_GRANTED_ERROR
-                                    }
-                                )
-                            )
-                        }
+                        null
+                    }
+                }.collectLatest { songSeparation ->
+                    songSeparation?.let { (songsData, albumsData, artistsData) ->
+                        songs.update { songsData }
+                        albums.update { albumsData }
+                        artists.update { artistsData }
+                        loadingViewState.update { LoadingViewState.Success }
+                    } ?: loadingViewState.update {
+                        LoadingViewState.Error(NO_SONGS_FOUND_ERROR)
                     }
                 }
         }
@@ -159,14 +162,14 @@ internal class LocalMainViewModel(
             .debounce(QueryDebounce)
             .mapLatest { it.lowercase() }
             .onEach { query ->
-                songs.update { songs ->
-                    songs.filter { it.title.lowercase().contains(query) }.toStableList()
+                songs.update {
+                    allSongs.filter { it.title.lowercase().contains(query) }.toStableList()
                 }
-                albums.update { albums ->
-                    albums.filter { it.title.lowercase().contains(query) }.toStableList()
+                albums.update {
+                    allAlbums.filter { it.title.lowercase().contains(query) }.toStableList()
                 }
-                artists.update { artists ->
-                    artists.filter { it.title.lowercase().contains(query) }.toStableList()
+                artists.update {
+                    allArtists.filter { it.title.lowercase().contains(query) }.toStableList()
                 }
                 sendEffect { Effect.ScrollToTop }
             }.launchIn(viewModelScope)
@@ -189,16 +192,14 @@ internal class LocalMainViewModel(
         requiredPermissionsInspector.start(
             shouldReloadSongs = {
                 if (it) {
-                    if(!wasAudioPermissionGrantedReceived) {
+                    if (!wasAudioPermissionGrantedReceived) {
                         refreshSongs()
                         wasAudioPermissionGrantedReceived = true
                     }
                 } else {
-                    updateState {
-                        copy(
-                            loadingState = LoadingViewState.Error(
-                                PERMISSION_NOT_GRANTED_ERROR
-                            )
+                    loadingViewState.update {
+                        LoadingViewState.Error(
+                            PERMISSION_NOT_GRANTED_ERROR
                         )
                     }
                 }
@@ -220,8 +221,8 @@ internal class LocalMainViewModel(
 
     override fun onSongClick(song: SongViewState) {
         playerUiActions.submitNewListAndPlay(
-            songQueue = allSongs,
-            indexToPlay = allSongs
+            songQueue = allSongsDomain,
+            indexToPlay = allSongsDomain
                 .indexOfFirst { it.id == song.id }.coerceAtLeast(0)
         )
     }

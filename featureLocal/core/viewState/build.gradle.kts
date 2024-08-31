@@ -15,5 +15,6 @@ dependencies {
     implementation(projects.core.viewState)
     implementation(projects.core.presentation)
     implementation(projects.core.utils)
+    implementation(projects.resources.strings)
     implementation(libs.koin.core)
 }

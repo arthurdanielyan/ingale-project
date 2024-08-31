@@ -18,15 +18,19 @@ import com.nightx.ingale.core.audioPlayer.impl.PlayerActionType.ACTION_SKIP_TO_N
 import com.nightx.ingale.core.audioPlayer.impl.PlayerActionType.ACTION_SKIP_TO_PREVIOUS
 import com.nightx.ingale.core.audioPlayer.impl.PlayerActionType.ACTION_STOP_SERVICE
 import com.nightx.ingale.core.audioPlayer.impl.PlayerActionType.ACTION_TOGGLE_PLAYBACK
+import com.nightx.ingale.core.domainModel.DomainConstants
 import com.nightx.ingale.core.domainModel.Song
+import com.nightx.ingale.resources.strings.StringProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import com.nightx.ingale.resources.icon.R.mipmap as IconMipmap
+import com.nightx.ingale.resources.strings.R.string as Strings
 
 class AudioPlayer(
     private val applicationContext: Context,
-): PlayerUiActions, CurrentSongInfoStateProvider {
+    private val stringProvider: StringProvider,
+) : PlayerUiActions, CurrentSongInfoStateProvider {
 
     private val defaultSongBitmap: Bitmap
         get() = ContextCompat
@@ -71,7 +75,7 @@ class AudioPlayer(
         } ?: defaultSongBitmap
 
     private fun initService() {
-        if(isServiceRunning.not()) {
+        if (isServiceRunning.not()) {
             applicationContext.startService(Intent(applicationContext, PlayerService::class.java))
         } else {
             fireServiceAction(ACTION_PLAY_SONG)
@@ -111,7 +115,7 @@ class AudioPlayer(
     }
 
     private fun fireServiceAction(action: PlayerActionType) {
-        if(isServiceRunning.not()) {
+        if (isServiceRunning.not()) {
             applicationContext.startService(Intent(applicationContext, PlayerService::class.java))
         }
         val serviceIntent = Intent(applicationContext, PlayerService::class.java)
@@ -130,7 +134,12 @@ class AudioPlayer(
             currentSongPreviewPath = getCurrentSongPreviewPath(),
             isPlaying = isPlaying,
             songName = getCurrentSongOrNull()?.title,
-            artistName = getCurrentSongOrNull()?.artist
+            artistName =
+            if (getCurrentSongOrNull()?.artist == DomainConstants.UNKNOWN_SONG_DATA_ID) {
+                stringProvider.string(Strings.unknown_artist)
+            } else {
+                getCurrentSongOrNull()?.artist
+            }
         )
 
     private fun getCurrentSongOrNull(): Song? = songQueue.getOrNull(pointer)

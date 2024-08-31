@@ -5,14 +5,17 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
-import com.nightx.ingale.core.coreModule
-import com.nightx.ingale.feature_local.featureLocalModule
-import com.nightx.ingale.feature_yt.ytModule
-import com.nightx.ingale.main_navigation.bottomBarControls.bottomBarControllerModule
-import com.nightx.ingale.main_navigation.musicBar.musicBarModule
+import com.nightx.featureLocal.core.viewState.featureLocalViewStateModule
+import com.nightx.ingale.bottomBar.impl.bottomBarControllerModule
+import com.nightx.ingale.core.audioPlayer.impl.audioPlayerModule
+import com.nightx.ingale.core.dataModel.di.mappersModule
+import com.nightx.ingale.core.dataModel.di.realmModule
+import com.nightx.ingale.core.utils.di.coroutineDispatchersModule
+import com.nightx.ingale.featureLocal.navigation.impl.di.localNavigationModule
+import com.nightx.ingale.musicbar.musicBarModule
 import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
-
 
 class IngaleApplication : Application() {
 
@@ -24,24 +27,21 @@ class IngaleApplication : Application() {
         super.onCreate()
         startKoin {
             androidContext(applicationContext)
+            androidLogger()
             modules(
-                *coreModule.toTypedArray(),
                 bottomBarControllerModule,
+                audioPlayerModule,
+                mappersModule,
+                realmModule,
+                coroutineDispatchersModule,
+                featureLocalViewStateModule,
+                localNavigationModule,
                 musicBarModule,
-                *featureLocalModule.toTypedArray(),
-                ytModule
-            )
-            modules(
-                com.nightx.ingale.bottomBar.impl.bottomBarControllerModule,
-                com.nightx.ingale.core.audioPlayer.impl.audioPlayerModule,
-                com.nightx.ingale.core.dataModel.di.mappersModule,
-                com.nightx.ingale.core.dataModel.di.realmModule,
-                com.nightx.ingale.core.utils.di.coroutinesModule,
-                com.nightx.featureLocal.core.viewState.featureLocalViewStateModule,
+                com.nightx.ingale.resources.strings.module,
                 com.nightx.ingale.featureLocal.featureHome.data.dataModule,
                 com.nightx.ingale.featureLocal.featureHome.domain.domainModule,
                 *com.nightx.ingale.featureLocal.featureHome.presentation.presentationModule.toTypedArray(),
-
+                *com.nightx.ingale.featureLocal.featureSongsSet.presentation.presentationModule.toTypedArray(),
             )
         }
 

@@ -18,8 +18,7 @@ class RealmPlugin : Plugin<Project> {
         val libs = versionCatalog
 
         pluginManager.kotlinApply {
-            apply(libs.getPlugin("android-library"))
-            apply(libs.getPlugin("jetbrains-kotlin-android"))
+            apply(libs.getPlugin("realm-kotlin"))
         }
     }
 

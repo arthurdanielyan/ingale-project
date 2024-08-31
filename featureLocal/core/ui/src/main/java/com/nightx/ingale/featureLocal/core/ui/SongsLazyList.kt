@@ -18,8 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onSizeChanged
 import com.nightx.featureLocal.core.viewState.song.SongViewState
 import com.nightx.ingale.core.viewState.StableList
-import com.nightx.ingale.feature_local.local_core.presentation.song_item.LoadingSongItem
-import com.nightx.ingale.feature_local.local_core.presentation.song_item.SongItem
+import com.nightx.ingale.featureLocal.core.ui.song_item.LoadingSongItem
+import com.nightx.ingale.featureLocal.core.ui.song_item.SongItem
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

@@ -6,7 +6,7 @@ import org.koin.dsl.module
 
 val audioPlayerModule = module {
     single(createdAtStart = true) {
-        AudioPlayer(get())
+        AudioPlayer(get(), get())
     }
     single<CurrentSongInfoStateProvider> {
         get<AudioPlayer>()

@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.ingale.android.library)
+    alias(libs.plugins.ingale.uses.compose)
 }
 
 android {
@@ -18,5 +19,5 @@ dependencies {
     api(libs.koin.core)
     api(libs.koin.androidx.compose)
 
-    implementation(projects.core.utils)
+    implementation(projects.core.utils) // TODO: try to make this api
 }

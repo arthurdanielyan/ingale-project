@@ -1,6 +1,7 @@
 package com.nightx.ingale.core.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -10,9 +11,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.eventFlow
-import com.nightx.ingale.core.presentation.flows.ComposeCollect
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
@@ -25,16 +25,22 @@ fun OnLifecycleEvents(
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     block: (Lifecycle.Event) -> Unit
 ) {
-    ComposeCollect(
-        flow = lifecycleOwner.lifecycle.eventFlow,
-        onEvent = block
-    )
+    val lifecycle = lifecycleOwner.lifecycle
+    DisposableEffect(Unit) {
+        val observer = LifecycleEventObserver { _, event ->
+            block(event)
+        }
+        lifecycle.addObserver(observer)
+        onDispose {
+            lifecycle.removeObserver(observer)
+        }
+    }
 }
 
 /**
  * Called when [key] changes. In contrast to [LaunchedEffect] this
  * doesn't re-execute [block] when configuration change happens. Note that [T]
- * has to be saveable
+ * has to be saveable.
  * */
 @Composable
 fun <T> ObserveState(

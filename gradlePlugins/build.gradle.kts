@@ -18,6 +18,11 @@ gradlePlugin {
             implementationClass = "com.nightx.gradlePlugins.RealmPlugin"
             version = "1.0.0"
         }
+        create("usesComposePlugin") {
+            id = "nightx.ingale.uses.compose"
+            implementationClass = "com.nightx.gradlePlugins.UsesComposePlugin"
+            version = "1.0.0"
+        }
     }
 }
 

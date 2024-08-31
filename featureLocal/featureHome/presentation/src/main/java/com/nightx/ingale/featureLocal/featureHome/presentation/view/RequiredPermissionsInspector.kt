@@ -27,7 +27,7 @@ internal class RequiredPermissionsInspector(
         arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
     }
 
-    private val requiredPermissionsRequesterDialogComponent by dialogComponent(scope) {
+    val permissionsDialogComponentHolder = dialogComponent(scope) {
         RequiredPermissionsRequesterDialogComponent(
             applicationContext = applicationContext
         )
@@ -35,7 +35,6 @@ internal class RequiredPermissionsInspector(
 
     fun start(shouldReloadSongs: (Boolean) -> Unit) {
         checkPermissions(shouldReloadSongs)
-        subscribeDialogCallbacks(shouldReloadSongs)
     }
 
     private fun checkPermissions(shouldReloadSongs: (Boolean) -> Unit) {
@@ -46,14 +45,16 @@ internal class RequiredPermissionsInspector(
             ) == PackageManager.PERMISSION_DENIED
         }
         if (permissionsToRequest.isNotEmpty()) {
-            requiredPermissionsRequesterDialogComponent.show()
+            permissionsDialogComponentHolder.show()
+            subscribeDialogCallbacks(shouldReloadSongs)
         } else {
+            permissionsDialogComponentHolder.dismiss()
             shouldReloadSongs(true)
         }
     }
 
     private fun subscribeDialogCallbacks(shouldReloadSongs: (Boolean) -> Unit) {
-        requiredPermissionsRequesterDialogComponent
-            .subscribeToVmCallbacks(scope, shouldReloadSongs)
+        permissionsDialogComponentHolder.component
+            .subscribeToVmCallbacks(shouldReloadSongs)
     }
 }

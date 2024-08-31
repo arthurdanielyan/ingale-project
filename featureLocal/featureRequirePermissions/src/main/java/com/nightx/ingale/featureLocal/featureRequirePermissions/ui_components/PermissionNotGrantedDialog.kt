@@ -21,11 +21,11 @@ import com.nightx.ingale.core.ui.theme.dimensions
 import com.nightx.ingale.resources.strings.R.string as Strings
 
 @Composable
-fun PermissionNotGrantedDialog(
+internal fun PermissionNotGrantedDialog(
     isPermanentlyDeclined: Boolean,
     descriptionProvider: PermissionDescriptionProvider,
     onOkClick: () -> Unit,
-    onGoToAppSettings: () -> Unit
+    onGoToAppSettings: () -> Unit,
 ) {
     Dialog(
         onDismissRequest = {},

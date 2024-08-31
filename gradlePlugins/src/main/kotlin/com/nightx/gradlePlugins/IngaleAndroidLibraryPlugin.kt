@@ -1,6 +1,5 @@
 package com.nightx.gradlePlugins
 
-import com.android.build.gradle.LibraryExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -22,7 +21,7 @@ class IngaleAndroidLibraryPlugin : Plugin<Project> {
     }
 
     private fun setProjectConfig(project: Project) {
-        project.android().apply {
+        project.android {
             compileSdk = LibraryProjectConfig.compileSdk
 
             defaultConfig {
@@ -34,6 +33,9 @@ class IngaleAndroidLibraryPlugin : Plugin<Project> {
 
             buildTypes {
                 release {
+                    isMinifyEnabled = true
+                }
+                debug {
                     isMinifyEnabled = false
                 }
             }
@@ -42,9 +44,5 @@ class IngaleAndroidLibraryPlugin : Plugin<Project> {
                 targetCompatibility = JavaVersion.VERSION_17
             }
         }
-    }
-
-    private fun Project.android(): LibraryExtension {
-        return extensions.getByType(LibraryExtension::class.java)
     }
 }

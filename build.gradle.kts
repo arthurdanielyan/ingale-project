@@ -3,6 +3,7 @@ buildscript {
     dependencies {
         classpath(libs.android.tools.build.gradle)
         classpath(libs.kotlin.gradle.plugin)
+        classpath(libs.realm.gradle.plugin)
     }
 }
 

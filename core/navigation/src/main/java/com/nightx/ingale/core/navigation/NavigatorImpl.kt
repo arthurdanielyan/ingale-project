@@ -9,16 +9,16 @@ import kotlinx.coroutines.channels.Channel.Factory.UNLIMITED
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-abstract class NavigatorImpl<in T: Destination> {
+abstract class NavigatorImpl<in T : Destination> : Navigator<T> {
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     private val _navigationEvent = Channel<NavEvent>(
         capacity = UNLIMITED
     )
-    val navigationEvent = _navigationEvent.receiveAsFlow()
+    override val navigationEvent = _navigationEvent.receiveAsFlow()
 
-    fun <A: Parcelable, R: Parcelable> navigate(
+    override fun <A : Parcelable, R : Parcelable> navigate(
         destination: T,
         argument: A,
         onResult: (R) -> Unit,
@@ -26,22 +26,22 @@ abstract class NavigatorImpl<in T: Destination> {
         navigateCommon(destination, argument, onResult)
     }
 
-    fun <A: Parcelable> navigate(destination: T, argument: A) {
+    override fun <A : Parcelable> navigate(destination: T, argument: A) {
         navigateCommon<A, Nothing>(destination, argument)
     }
 
-    fun <R: Parcelable> navigate(
+    override fun <R : Parcelable> navigate(
         destination: T,
         onResult: (R) -> Unit,
     ) {
         navigateCommon<Nothing, R>(destination, onResult = onResult)
     }
 
-    fun navigate(destination: T) {
+    override fun navigate(destination: T) {
         navigateCommon<Nothing, Nothing>(destination)
     }
 
-    fun navigateUp() {
+    override fun navigateUp() {
         scope.launch {
             _navigationEvent.send(NavigateUpEvent)
         }

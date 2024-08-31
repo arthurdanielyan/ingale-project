@@ -4,7 +4,6 @@ import com.nightx.ingale.featureLocal.featureHome.data.repository.LocalMainRepos
 import com.nightx.ingale.featureLocal.featureHome.domain.repository.LocalMainRepository
 import org.koin.dsl.module
 
-
 val dataModule = module {
     single<LocalMainRepository> {
         LocalMainRepositoryImpl(get(), get(), get(), get(), get())

@@ -32,14 +32,15 @@ import com.nightx.ingale.core.ui.OnLifecycleEvents
 import com.nightx.ingale.core.ui.modifierExt.marquee
 import com.nightx.ingale.core.ui.theme.dimensions
 import com.nightx.ingale.featureLocal.core.ui.SongsLazyList
-import com.nightx.ingale.featureLocal.featureHome.presentation.ui.uiComponents.CommonSongSetsGrid
-import com.nightx.ingale.featureLocal.featureHome.presentation.ui.uiComponents.SearchTextField
-import com.nightx.ingale.featureLocal.featureHome.presentation.ui.uiComponents.SongsSetButtons
-import com.nightx.ingale.featureLocal.featureHome.presentation.ui.uiComponents.TabRow
+import com.nightx.ingale.featureLocal.featureHome.presentation.ui.components.CommonSongSetsGrid
+import com.nightx.ingale.featureLocal.featureHome.presentation.ui.components.SearchTextField
+import com.nightx.ingale.featureLocal.featureHome.presentation.ui.components.SongsSetButtons
+import com.nightx.ingale.featureLocal.featureHome.presentation.ui.components.TabRow
 import com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.Effect
 import com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.LocalMainCallbacks
 import com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.LocalMainViewModel
 import com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.viewState.LocalMainScreenViewState
+import com.nightx.ingale.featureLocal.featureRequirePermissions.RequiredPermissionsRequesterDialog
 import com.nightx.ingale.musicbar.musicBarControls.LocalMusicBarController
 import com.nightx.ingale.musicbar.musicBarControls.MusicBarEffect
 import com.nightx.ingale.musicbar.view.rememberNestedScrollForMusicBarNotification
@@ -58,6 +59,8 @@ fun LocalMainScreen() {
     }
 
     SendBottomBarEffect(BottomBarEffect.ShowBottomBar)
+
+    RequiredPermissionsRequesterDialog(vm.permissionsDialogComponentHolder)
 
     LocalMainScreen(
         state = vm.state.collectAsStateWithLifecycle().value,
@@ -82,13 +85,13 @@ private fun LocalMainScreen(
         when (effect) {
             Effect.ScrollToTop -> {
                 delay(100) // delay for the list to have time to update
-                if(songsLazyColumnState.canScrollBackward) {
+                if (songsLazyColumnState.canScrollBackward) {
                     songsLazyColumnState.animateScrollToItem(0)
                 }
-                if(albumsGridsState.canScrollBackward) {
+                if (albumsGridsState.canScrollBackward) {
                     albumsGridsState.animateScrollToItem(0)
                 }
-                if(artistsGridsState.canScrollBackward) {
+                if (artistsGridsState.canScrollBackward) {
                     artistsGridsState.animateScrollToItem(0)
                 }
             }
