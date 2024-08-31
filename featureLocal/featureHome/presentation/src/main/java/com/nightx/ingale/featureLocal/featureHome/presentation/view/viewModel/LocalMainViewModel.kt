@@ -29,7 +29,7 @@ import com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.ma
 import com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.mappers.SongsSetViewStateMapper
 import com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.viewState.LocalMainScreenViewState
 import com.nightx.ingale.featureLocal.navigation.api.LocalNavigator
-import com.nightx.ingale.feature_local.local_navigation.destinations.SongsSetScreenDestination
+import com.nightx.ingale.featureLocal.navigation.api.destinations.SongsSetScreenDestination
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.BufferOverflow

@@ -1,6 +1,7 @@
-package com.nightx.ingale.feature_local.local_navigation.destinations
+package com.nightx.ingale.featureLocal.navigation.api.destinations
 
 import android.os.Parcelable
+import com.nightx.ingale.feature_local.local_navigation.destinations.LocalScreenDestination
 import kotlinx.parcelize.Parcelize
 
 data object SongsSetScreenDestination : LocalScreenDestination {

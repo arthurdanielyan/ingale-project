@@ -2,7 +2,7 @@ package com.nightx.ingale.featureLocal.featureSongsSet.presentation.view.mappers
 
 import com.nightx.ingale.core.domainModel.Song
 import com.nightx.ingale.core.utils.Mapper
-import com.nightx.ingale.feature_local.local_navigation.destinations.SongArg
+import com.nightx.ingale.featureLocal.navigation.api.destinations.SongArg
 
 class SongArgMapper : Mapper<SongArg, Song> {
 

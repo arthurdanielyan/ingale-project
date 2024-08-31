@@ -4,8 +4,7 @@ import com.nightx.featureLocal.core.viewState.SongsSetViewState
 import com.nightx.featureLocal.core.viewState.song.SongViewState
 import com.nightx.ingale.core.utils.Mapper
 import com.nightx.ingale.core.viewState.toStableList
-import com.nightx.ingale.feature_local.local_navigation.destinations.SongsSetScreenDestination
-import org.koin.dsl.module
+import com.nightx.ingale.featureLocal.navigation.api.destinations.SongsSetScreenDestination
 
 class SongsSetArgMapper : Mapper<SongsSetScreenDestination.SongsSet, SongsSetViewState> {
 
@@ -30,8 +29,4 @@ class SongsSetArgMapper : Mapper<SongsSetScreenDestination.SongsSet, SongsSetVie
             }.toStableList(),
             iconPath = from.iconPath
         )
-}
-
-val songsSetArgMapperModule = module {
-    single { SongsSetArgMapper() }
 }

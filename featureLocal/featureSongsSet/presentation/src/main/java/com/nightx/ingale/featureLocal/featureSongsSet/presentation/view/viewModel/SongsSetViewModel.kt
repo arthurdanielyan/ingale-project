@@ -11,7 +11,7 @@ import com.nightx.ingale.core.presentation.viewModel.UiEffect
 import com.nightx.ingale.core.utils.mapList
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.view.mappers.SongArgMapper
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.view.mappers.SongsSetArgMapper
-import com.nightx.ingale.feature_local.local_navigation.destinations.SongsSetScreenDestination
+import com.nightx.ingale.featureLocal.navigation.api.destinations.SongsSetScreenDestination
 
 internal class SongsSetViewModel(
     savedStateHandle: SavedStateHandle,

@@ -22,9 +22,9 @@ import com.nightx.ingale.core.ui.slideOutRight
 import com.nightx.ingale.featureLocal.featureHome.presentation.ui.LocalMainScreen
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.ui.SongsSetScreen
 import com.nightx.ingale.featureLocal.navigation.api.LocalNavigation
+import com.nightx.ingale.featureLocal.navigation.api.destinations.SongsSetScreenDestination
 import com.nightx.ingale.feature_local.local_navigation.destinations.LocalScreenDestination
 import com.nightx.ingale.feature_local.local_navigation.destinations.MainScreenDestination
-import com.nightx.ingale.feature_local.local_navigation.destinations.SongsSetScreenDestination
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 

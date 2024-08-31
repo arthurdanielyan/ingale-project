@@ -2,8 +2,8 @@ package com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.m
 
 import com.nightx.featureLocal.core.viewState.SongsSetViewState
 import com.nightx.ingale.core.utils.Mapper
-import com.nightx.ingale.feature_local.local_navigation.destinations.SongArg
-import com.nightx.ingale.feature_local.local_navigation.destinations.SongsSetScreenDestination
+import com.nightx.ingale.featureLocal.navigation.api.destinations.SongArg
+import com.nightx.ingale.featureLocal.navigation.api.destinations.SongsSetScreenDestination
 
 internal class SongsSetToNavArgMapper : Mapper<SongsSetViewState, SongsSetScreenDestination.SongsSet> {
 
