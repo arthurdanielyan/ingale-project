@@ -151,13 +151,11 @@ fun BottomNavigation() {
                 modifier = Modifier.fillMaxSize(),
                 state = pagerState,
                 key = { bottomNavItems[it].titleKey },
+                beyondBoundsPageCount = 1,
                 userScrollEnabled = false,
             ) {
                 when (it) {
-                    0 -> {
-                        LocalSectionNavGraph()
-                    }
-
+                    0 -> LocalSectionNavGraph()
                     1 -> {
                         Box(
                             modifier = Modifier
