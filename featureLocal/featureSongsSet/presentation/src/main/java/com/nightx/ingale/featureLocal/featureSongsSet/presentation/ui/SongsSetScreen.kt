@@ -10,7 +10,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -26,6 +25,7 @@ import androidx.constraintlayout.compose.MotionLayoutScope
 import androidx.constraintlayout.compose.MotionScene
 import androidx.constraintlayout.solver.widgets.Optimizer
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.nightx.featureLocal.core.viewState.SongsSetViewState
 import com.nightx.ingale.bottomBar.api.BottomBarEffect
 import com.nightx.ingale.bottomBar.api.SetBottomBarState
@@ -42,10 +42,12 @@ fun SongsSetScreen(savedStateHandle: SavedStateHandle) {
     val vm = ingaleViewModels<SongsSetViewModel>(
         savedStateHandle = savedStateHandle
     )
+    val state by vm.state.collectAsStateWithLifecycle()
 
     SetBottomBarState(BottomBarEffect.HideBottomBar)
+
     SongsSetScreen(
-        state = vm.state.collectAsState().value,
+        state = state,
         callbacks = vm
     )
 }

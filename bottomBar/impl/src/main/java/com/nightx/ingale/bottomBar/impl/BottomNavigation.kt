@@ -2,7 +2,6 @@ package com.nightx.ingale.bottomBar.impl
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import com.nightx.ingale.bottomBar.api.BottomBarEffect
@@ -47,7 +47,6 @@ import com.nightx.ingale.musicbar.MusicBar
 import com.nightx.ingalefeatureLocal.navigation.graph.LocalSectionNavGraph
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BottomNavigation() {
     var isBottomBarVisible by remember {
@@ -77,15 +76,17 @@ fun BottomNavigation() {
         }
     }
 
-    val bottomNavItems = listOf(
-        BottomNavItem.Local,
-        BottomNavItem.Youtube
-    )
+    val bottomBarItems = rememberSaveable(saver = BottomBarItem.ListSaver) {
+        listOf(
+            BottomBarItem.Local,
+            BottomBarItem.Youtube
+        )
+    }
     var selected by rememberSaveable {
-        mutableIntStateOf(BottomNavItem.Local.titleKey)
+        mutableIntStateOf(BottomBarItem.Local.titleKey)
     }
     val pagerState = rememberPagerState(
-        pageCount = { bottomNavItems.size }
+        pageCount = { bottomBarItems.size }
     )
     val scope = rememberCoroutineScope()
     Scaffold(
@@ -95,10 +96,15 @@ fun BottomNavigation() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .requiredHeight(BottomBarHeight)
-                    .offset(y = bottomBarOffsetAnim),
+                    .offset {
+                        IntOffset(
+                            x = 0,
+                            y = bottomBarOffsetAnim.roundToPx()
+                        )
+                    },
                 containerColor = MaterialTheme.colorScheme.inversePrimary
             ) {
-                bottomNavItems.forEachIndexed { index, item ->
+                bottomBarItems.forEachIndexed { index, item ->
                     NavigationBarItem(
                         colors = NavigationBarItemDefaults.colors(
                             selectedIconColor = MaterialTheme.colorScheme.inversePrimary,
@@ -150,31 +156,13 @@ fun BottomNavigation() {
             HorizontalPager(
                 modifier = Modifier.fillMaxSize(),
                 state = pagerState,
-                key = { bottomNavItems[it].titleKey },
-                beyondBoundsPageCount = 1,
+                key = { bottomBarItems[it].titleKey },
+                beyondViewportPageCount = 1,
                 userScrollEnabled = false,
             ) {
                 when (it) {
                     0 -> LocalSectionNavGraph()
-                    1 -> {
-                        Box(
-                            modifier = Modifier
-                                .requiredSize(100.dp)
-                                .background(color = Color.Gray)
-                        ) {
-                            Text(
-                                modifier = Modifier.fillMaxWidth(),
-                                text = "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                                maxLines = 1,
-                                softWrap = false
-                            )
-                            AutoSizeText(
-                                modifier = Modifier.fillMaxWidth(),
-                                text = "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                                maxLines = 1
-                            )
-                        }
-                    }
+                    1 -> SecondTab()
                 }
             }
             MusicBar(
@@ -182,6 +170,28 @@ fun BottomNavigation() {
                     .align(Alignment.BottomCenter)
             )
         }
+    }
+}
+
+// Temporary
+@Composable
+private fun SecondTab() {
+    Box(
+        modifier = Modifier
+            .requiredSize(100.dp)
+            .background(color = Color.Gray)
+    ) {
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+            maxLines = 1,
+            softWrap = false
+        )
+        AutoSizeText(
+            modifier = Modifier.fillMaxWidth(),
+            text = "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+            maxLines = 1
+        )
     }
 }
 

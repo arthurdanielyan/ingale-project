@@ -1,6 +1,5 @@
 package com.nightx.ingale.featureLocal.featureHome.presentation.ui
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +13,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -51,25 +51,24 @@ import com.nightx.ingale.resources.strings.R.string as Strings
 @Composable
 fun LocalMainScreen() {
     val vm = ingaleViewModels<LocalMainViewModel>()
+    val state by vm.state.collectAsStateWithLifecycle()
 
+    SetBottomBarState(BottomBarEffect.ShowBottomBar)
     OnLifecycleEvents { event ->
         if (event == Lifecycle.Event.ON_RESUME) {
             vm.onResume()
         }
     }
 
-    SetBottomBarState(BottomBarEffect.ShowBottomBar)
-
     RequiredPermissionsRequesterDialog(vm.permissionsDialogComponentHolder)
 
     LocalMainScreen(
-        state = vm.state.collectAsStateWithLifecycle().value,
+        state = state,
         callbacks = vm,
         effects = vm.effect
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun LocalMainScreen(
     state: LocalMainScreenViewState,
@@ -146,7 +145,7 @@ private fun LocalMainScreen(
         HorizontalPager(
             state = pagerState,
             key = { it },
-            beyondBoundsPageCount = 2,
+            beyondViewportPageCount = 2,
             userScrollEnabled = state.loadingState.isError.not()
         ) {
             when (it) {
