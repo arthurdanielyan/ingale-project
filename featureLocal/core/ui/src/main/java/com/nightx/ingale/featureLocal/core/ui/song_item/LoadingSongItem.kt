@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.nightx.ingale.core.ui.modifierExt.shimmer
+import com.nightx.ingale.core.ui.extensions.shimmer
 import com.nightx.ingale.core.ui.theme.dimensions
 
 

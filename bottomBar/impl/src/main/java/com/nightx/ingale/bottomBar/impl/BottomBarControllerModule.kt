@@ -1,7 +1,7 @@
 package com.nightx.ingale.bottomBar.impl
 
 import com.nightx.ingale.bottomBar.api.BottomBarController
-import com.nightx.ingale.bottomBar.api.BottomBarEffectsHolder
+import com.nightx.ingale.bottomBar.api.BottomBarStateHolder
 import org.koin.dsl.module
 
 val bottomBarControllerModule = module {
@@ -9,7 +9,7 @@ val bottomBarControllerModule = module {
     single<BottomBarController> {
         bottomBarController
     }
-    single<BottomBarEffectsHolder> {
+    single<BottomBarStateHolder> {
         bottomBarController
     }
 }

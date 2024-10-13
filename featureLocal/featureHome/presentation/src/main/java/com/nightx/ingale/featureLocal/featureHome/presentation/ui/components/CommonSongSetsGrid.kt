@@ -1,7 +1,6 @@
 package com.nightx.ingale.featureLocal.featureHome.presentation.ui.components
 
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -34,8 +33,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.nightx.featureLocal.core.viewState.SongsSetViewState
 import com.nightx.ingale.core.ui.SongIcon
+import com.nightx.ingale.core.ui.extensions.shimmer
 import com.nightx.ingale.core.ui.highlight
-import com.nightx.ingale.core.ui.modifierExt.shimmer
 import com.nightx.ingale.core.ui.theme.dimensions
 import com.nightx.ingale.core.viewState.StableList
 import kotlin.math.roundToInt
@@ -43,7 +42,6 @@ import kotlin.math.roundToInt
 /**
  * For Albums, Artists sections and for Playlists in the future
 * */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun CommonSongSetsGrid(
     modifier: Modifier = Modifier,
@@ -67,10 +65,9 @@ internal fun CommonSongSetsGrid(
                 }
             ) {
                 SongsSetCard(
-                    modifier = Modifier.animateItemPlacement(
+                    modifier = Modifier.animateItem(
                         tween(durationMillis = ItemPlacementAnimationDuration)
-                    )
-                    ,
+                    ),
                     onClick = onClick,
                     highlightedText = query,
                     songsSet = it

@@ -21,15 +21,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.nightx.ingale.bottomBar.api.BottomBarEffect
-import com.nightx.ingale.bottomBar.api.SetBottomBarState
+import com.nightx.ingale.bottomBar.api.SetBottomBarVisibility
 import com.nightx.ingale.core.presentation.diExt.ingaleViewModels
-import com.nightx.ingale.core.presentation.flows.ObserveEffects
 import com.nightx.ingale.core.ui.DataPlaceholder
 import com.nightx.ingale.core.ui.LoadingStatePresenter
 import com.nightx.ingale.core.ui.ObserveState
 import com.nightx.ingale.core.ui.OnLifecycleEvents
-import com.nightx.ingale.core.ui.modifierExt.marquee
+import com.nightx.ingale.core.ui.extensions.marquee
+import com.nightx.ingale.core.ui.flows.ObserveEffects
 import com.nightx.ingale.core.ui.theme.dimensions
 import com.nightx.ingale.featureLocal.core.ui.SongsLazyList
 import com.nightx.ingale.featureLocal.featureHome.presentation.ui.components.CommonSongSetsGrid
@@ -53,7 +52,7 @@ fun LocalMainScreen() {
     val vm = ingaleViewModels<LocalMainViewModel>()
     val state by vm.state.collectAsStateWithLifecycle()
 
-    SetBottomBarState(BottomBarEffect.ShowBottomBar)
+    SetBottomBarVisibility(true)
     OnLifecycleEvents { event ->
         if (event == Lifecycle.Event.ON_RESUME) {
             vm.onResume()
@@ -145,7 +144,7 @@ private fun LocalMainScreen(
         HorizontalPager(
             state = pagerState,
             key = { it },
-            beyondViewportPageCount = 2,
+//            beyondViewportPageCount = 2,
             userScrollEnabled = state.loadingState.isError.not()
         ) {
             when (it) {

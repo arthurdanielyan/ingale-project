@@ -13,6 +13,7 @@ dependencies {
     api(projects.bottomBar.api)
 
     implementation(libs.koin.core)
+    implementation(libs.androidx.compose.navigation)
 
     implementation(projects.core.ui)
     implementation(projects.core.utils)
