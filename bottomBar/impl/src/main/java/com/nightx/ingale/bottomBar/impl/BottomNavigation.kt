@@ -3,7 +3,6 @@ package com.nightx.ingale.bottomBar.impl
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -102,7 +101,7 @@ fun BottomNavigation() {
             RootNavigation(selected)
             MusicBar(
                 modifier = Modifier
-                    .align(Alignment.BottomCenter).clickable(enabled = false) {  }
+                    .align(Alignment.BottomCenter)
             )
         }
     }
