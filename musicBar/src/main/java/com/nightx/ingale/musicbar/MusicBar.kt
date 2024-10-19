@@ -17,6 +17,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -93,7 +94,7 @@ fun MusicBar(
 
 
     AnimatedVisibility(
-        modifier = modifier,
+        modifier = modifier.clickable(enabled = false, onClick = {}),
         visible = state.isMusicBarVisible,
         enter = MusicBarAppearanceAnim,
         exit = MusicBarDisappearanceAnim
