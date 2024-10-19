@@ -2,9 +2,9 @@ package com.nightx.ingalefeatureLocal.navigation.graph
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -14,7 +14,7 @@ import com.nightx.ingale.core.navigation.Destination
 import com.nightx.ingale.core.navigation.NavigateEvent
 import com.nightx.ingale.core.navigation.NavigateUpEvent
 import com.nightx.ingale.core.navigation.putScreenData
-import com.nightx.ingale.core.presentation.flows.ComposeCollect
+import com.nightx.ingale.core.ui.flows.ComposeCollect
 import com.nightx.ingale.core.ui.nothingEnter
 import com.nightx.ingale.core.ui.nothingExit
 import com.nightx.ingale.core.ui.slideInLeft

@@ -1,27 +1,24 @@
 package com.nightx.ingale.bottomBar.impl
 
 import com.nightx.ingale.bottomBar.api.BottomBarController
-import com.nightx.ingale.bottomBar.api.BottomBarEffect
-import com.nightx.ingale.bottomBar.api.BottomBarEffectsHolder
+import com.nightx.ingale.bottomBar.api.BottomBarStateHolder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-internal class BottomBarControllerImpl : BottomBarController, BottomBarEffectsHolder {
+internal class BottomBarControllerImpl : BottomBarController, BottomBarStateHolder {
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
-    private val _bottomBarEffect = Channel<BottomBarEffect>(
-        capacity = Channel.UNLIMITED
-    )
-    override val bottomBarEffect = _bottomBarEffect.receiveAsFlow()
+    private val _bottomBarState = MutableStateFlow(true)
+    override val isBottomBarVisible = _bottomBarState
 
-    override fun sendEffect(effect: BottomBarEffect) {
+    override fun setVisibility(isVisible: Boolean) {
         scope.launch {
-            _bottomBarEffect.send(effect)
+            _bottomBarState.update { isVisible }
         }
     }
 }

@@ -12,7 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import com.nightx.ingale.core.presentation.dialogComponent.DialogComponentHolder
 import com.nightx.ingale.core.presentation.dialogComponent.DialogComponentView
-import com.nightx.ingale.core.presentation.flows.ObserveEffects
+import com.nightx.ingale.core.ui.flows.ObserveEffects
 import com.nightx.ingale.featureLocal.featureRequirePermissions.ui_components.AudioPermissionDescriptionProvider
 import com.nightx.ingale.featureLocal.featureRequirePermissions.ui_components.NotificationPermissionDescriptionProvider
 import com.nightx.ingale.featureLocal.featureRequirePermissions.ui_components.PermissionNotGrantedDialog

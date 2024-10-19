@@ -24,9 +24,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
-import com.nightx.ingale.core.ui.modifierExt.marquee
-import com.nightx.ingale.core.ui.modifierExt.modifyIf
-import com.nightx.ingale.core.ui.modifierExt.transparentEdges
+import com.nightx.ingale.core.ui.extensions.marquee
+import com.nightx.ingale.core.ui.extensions.modifyIf
+import com.nightx.ingale.core.ui.extensions.transparentEdges
 import com.nightx.ingale.core.ui.theme.dimensions
 
 /**

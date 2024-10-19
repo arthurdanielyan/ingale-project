@@ -4,39 +4,35 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.lifecycle.Lifecycle
 import com.nightx.ingale.core.ui.OnLifecycleEvents
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 interface BottomBarController {
 
-    fun sendEffect(effect: BottomBarEffect)
+    fun setVisibility(isVisible: Boolean)
 }
 
-interface BottomBarEffectsHolder {
+interface BottomBarStateHolder {
 
-    val bottomBarEffect: Flow<BottomBarEffect>
-}
-
-sealed interface BottomBarEffect {
-    data object ShowBottomBar : BottomBarEffect
-    data object HideBottomBar : BottomBarEffect
+    val isBottomBarVisible: StateFlow<Boolean>
 }
 
 /**
  * Defines the BottomBar's state for the screen
  * */
 @Composable
-fun SetBottomBarState(
-    effect: BottomBarEffect,
+fun SetBottomBarVisibility(
+    isVisible: Boolean,
 ) {
     val bottomBarController = LocalBottomBarController.current
+
     OnLifecycleEvents { event ->
         if (event == Lifecycle.Event.ON_START) {
-            bottomBarController.sendEffect(effect)
+            bottomBarController.setVisibility(isVisible)
         }
     }
 }
 
-val LocalBottomBarEffects = staticCompositionLocalOf<BottomBarEffectsHolder> {
+val LocalBottomBarState = staticCompositionLocalOf<BottomBarStateHolder> {
     error("No BottomBarEffectsHolder provided")
 }
 

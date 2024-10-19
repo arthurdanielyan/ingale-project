@@ -13,10 +13,24 @@ val slideInLeft = slideInHorizontally (
     }
 )
 
+val slideInRight = slideInHorizontally(
+    animationSpec = tween(screenTransitionDuration),
+    initialOffsetX = {
+        -it
+    }
+)
+
 val slideOutRight = slideOutHorizontally(
     animationSpec = tween(screenTransitionDuration),
     targetOffsetX = {
         it
+    }
+)
+
+val slideOutLeft = slideOutHorizontally(
+    animationSpec = tween(screenTransitionDuration),
+    targetOffsetX = {
+        -it
     }
 )
 

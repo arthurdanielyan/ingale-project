@@ -1,6 +1,5 @@
 package com.nightx.ingale.featureLocal.featureHome.presentation.ui
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +13,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -21,15 +21,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.nightx.ingale.bottomBar.api.BottomBarEffect
-import com.nightx.ingale.bottomBar.api.SetBottomBarState
+import com.nightx.ingale.bottomBar.api.SetBottomBarVisibility
 import com.nightx.ingale.core.presentation.diExt.ingaleViewModels
-import com.nightx.ingale.core.presentation.flows.ObserveEffects
 import com.nightx.ingale.core.ui.DataPlaceholder
 import com.nightx.ingale.core.ui.LoadingStatePresenter
 import com.nightx.ingale.core.ui.ObserveState
 import com.nightx.ingale.core.ui.OnLifecycleEvents
-import com.nightx.ingale.core.ui.modifierExt.marquee
+import com.nightx.ingale.core.ui.extensions.marquee
+import com.nightx.ingale.core.ui.flows.ObserveEffects
 import com.nightx.ingale.core.ui.theme.dimensions
 import com.nightx.ingale.featureLocal.core.ui.SongsLazyList
 import com.nightx.ingale.featureLocal.featureHome.presentation.ui.components.CommonSongSetsGrid
@@ -51,25 +50,24 @@ import com.nightx.ingale.resources.strings.R.string as Strings
 @Composable
 fun LocalMainScreen() {
     val vm = ingaleViewModels<LocalMainViewModel>()
+    val state by vm.state.collectAsStateWithLifecycle()
 
+    SetBottomBarVisibility(true)
     OnLifecycleEvents { event ->
         if (event == Lifecycle.Event.ON_RESUME) {
             vm.onResume()
         }
     }
 
-    SetBottomBarState(BottomBarEffect.ShowBottomBar)
-
     RequiredPermissionsRequesterDialog(vm.permissionsDialogComponentHolder)
 
     LocalMainScreen(
-        state = vm.state.collectAsStateWithLifecycle().value,
+        state = state,
         callbacks = vm,
         effects = vm.effect
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun LocalMainScreen(
     state: LocalMainScreenViewState,
@@ -146,7 +144,7 @@ private fun LocalMainScreen(
         HorizontalPager(
             state = pagerState,
             key = { it },
-            beyondBoundsPageCount = 2,
+//            beyondViewportPageCount = 2,
             userScrollEnabled = state.loadingState.isError.not()
         ) {
             when (it) {

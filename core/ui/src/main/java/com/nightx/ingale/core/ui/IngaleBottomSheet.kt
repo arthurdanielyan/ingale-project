@@ -36,8 +36,12 @@ fun IngaleBottomSheet(
     contentColor: Color = contentColorFor(containerColor),
     tonalElevation: Dp = BottomSheetDefaults.Elevation,
     scrimColor: Color = BottomSheetDefaults.ScrimColor,
-    dragHandle: @Composable (() -> Unit)? = { BottomSheetDefaults.DragHandle() },
-    windowInsets: WindowInsets = BottomSheetDefaults.windowInsets,
+    dragHandle: @Composable (() -> Unit)? = {
+        BottomSheetDefaults.DragHandle(
+            color = MaterialTheme.colorScheme.surface
+        )
+    },
+    contentWindowInsets: @Composable () -> WindowInsets = { BottomSheetDefaults.windowInsets },
     content: @Composable () -> Unit,
 ) {
     IngaleBottomSheet(
@@ -48,7 +52,7 @@ fun IngaleBottomSheet(
         tonalElevation = tonalElevation,
         scrimColor = scrimColor,
         dragHandle = dragHandle,
-        windowInsets = windowInsets,
+        contentWindowInsets = contentWindowInsets,
         cornerRadius = MaterialTheme.dimensions.large,
         bottomOffset = MaterialTheme.dimensions.large,
         content = content
@@ -66,7 +70,7 @@ fun IngaleBottomSheet(
     tonalElevation: Dp = BottomSheetDefaults.Elevation,
     scrimColor: Color = BottomSheetDefaults.ScrimColor,
     dragHandle: @Composable (() -> Unit)? = { BottomSheetDefaults.DragHandle() },
-    windowInsets: WindowInsets = BottomSheetDefaults.windowInsets,
+    contentWindowInsets: @Composable () -> WindowInsets = { BottomSheetDefaults.windowInsets },
     cornerRadius: Dp,
     bottomOffset: Dp,
     content: @Composable () -> Unit,
@@ -83,7 +87,7 @@ fun IngaleBottomSheet(
         tonalElevation = tonalElevation,
         scrimColor = scrimColor,
         dragHandle = dragHandle,
-        windowInsets = windowInsets,
+        contentWindowInsets = contentWindowInsets,
         shape = RoundedCornerShape(
             cornerRadius
         )
@@ -91,7 +95,7 @@ fun IngaleBottomSheet(
         Box(
             modifier = Modifier
                 .background(
-                    color = Color.Unspecified,
+                    color = MaterialTheme.colorScheme.surface,
                     shape = RoundedCornerShape(
                         bottomStart = cornerRadius,
                         bottomEnd = cornerRadius
