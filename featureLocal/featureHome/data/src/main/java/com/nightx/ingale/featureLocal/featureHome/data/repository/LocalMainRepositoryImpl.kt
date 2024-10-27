@@ -166,9 +166,9 @@ class LocalMainRepositoryImpl(
                                 mkdirs()
                                 setReadable(true, true)
                             }
+                            previewPath = "${appDataDir.path}/$previewName"
                             val file = File(appDataDir, previewName)
                             if (file.exists().not()) {
-                                previewPath = "${appDataDir.path}/$previewName"
                                 val fos = FileOutputStream(file)
                                 albumArt.compress(ImageCompressFormat, 100, fos)
                                 fos.close()
