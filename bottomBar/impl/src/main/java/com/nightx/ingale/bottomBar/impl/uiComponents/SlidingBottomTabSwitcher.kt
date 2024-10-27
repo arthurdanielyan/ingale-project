@@ -2,13 +2,13 @@ package com.nightx.ingale.bottomBar.impl.uiComponents
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import com.nightx.ingale.bottomBar.impl.BottomBarItem
-import com.nightx.ingale.core.ui.slideInLeft
-import com.nightx.ingale.core.ui.slideInRight
-import com.nightx.ingale.core.ui.slideOutLeft
-import com.nightx.ingale.core.ui.slideOutRight
+import com.nightx.ingale.core.ui.screenTransitionDuration
 
 @Composable
 internal fun SlidingBottomTabSwitcher(
@@ -52,3 +52,31 @@ private fun getContentTransformation(
         }
     )
 }
+
+val slideInLeft = slideInHorizontally(
+    animationSpec = tween(screenTransitionDuration),
+    initialOffsetX = {
+        it
+    }
+)
+
+val slideInRight = slideInHorizontally(
+    animationSpec = tween(screenTransitionDuration),
+    initialOffsetX = {
+        -it
+    }
+)
+
+val slideOutRight = slideOutHorizontally(
+    animationSpec = tween(screenTransitionDuration),
+    targetOffsetX = {
+        it
+    }
+)
+
+val slideOutLeft = slideOutHorizontally(
+    animationSpec = tween(screenTransitionDuration),
+    targetOffsetX = {
+        -it
+    }
+)

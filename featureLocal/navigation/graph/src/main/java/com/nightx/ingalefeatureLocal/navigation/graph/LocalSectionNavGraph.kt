@@ -14,11 +14,11 @@ import com.nightx.ingale.core.navigation.Destination
 import com.nightx.ingale.core.navigation.NavigateEvent
 import com.nightx.ingale.core.navigation.NavigateUpEvent
 import com.nightx.ingale.core.navigation.putScreenData
+import com.nightx.ingale.core.ui.enterTransition
+import com.nightx.ingale.core.ui.exitTransition
 import com.nightx.ingale.core.ui.flows.ComposeCollect
-import com.nightx.ingale.core.ui.nothingEnter
-import com.nightx.ingale.core.ui.nothingExit
-import com.nightx.ingale.core.ui.slideInLeft
-import com.nightx.ingale.core.ui.slideOutRight
+import com.nightx.ingale.core.ui.popEnterTransition
+import com.nightx.ingale.core.ui.popExitTransition
 import com.nightx.ingale.featureLocal.featureHome.presentation.ui.LocalMainScreen
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.ui.SongsSetScreen
 import com.nightx.ingale.featureLocal.navigation.api.LocalNavigation
@@ -38,13 +38,15 @@ fun LocalSectionNavGraph() {
     val navController = rememberNavController()
     ObserveNavigationEvents(navController = navController)
 
+    val exitTransition = exitTransition
+    val popEnterTransition = popEnterTransition
     NavHost(
         navController = navController,
         startDestination = MainScreenDestination.route,
-        enterTransition = { slideInLeft },
-        exitTransition = { nothingExit },
-        popEnterTransition = { nothingEnter },
-        popExitTransition = { slideOutRight }
+        enterTransition = { enterTransition },
+        exitTransition = { exitTransition },
+        popEnterTransition = { popEnterTransition },
+        popExitTransition = { popExitTransition }
     ) {
         appDestinations.forEach { (destination, screenContent) ->
             composable(

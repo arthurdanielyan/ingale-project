@@ -1,50 +1,48 @@
 package com.nightx.ingale.core.ui
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalConfiguration
+import kotlin.math.roundToInt
 
 const val screenTransitionDuration = 300
 
-val slideInLeft = slideInHorizontally (
+val enterTransition = slideInHorizontally(
     animationSpec = tween(screenTransitionDuration),
     initialOffsetX = {
         it
     }
 )
 
-val slideInRight = slideInHorizontally(
-    animationSpec = tween(screenTransitionDuration),
-    initialOffsetX = {
-        -it
+val popEnterTransition: EnterTransition
+    @Composable get() {
+        val targetOffset = ScreenTransitionOffset
+        return slideInHorizontally(
+            animationSpec = tween(screenTransitionDuration),
+            initialOffsetX = { targetOffset }
+        )
     }
-)
 
-val slideOutRight = slideOutHorizontally(
+val exitTransition: ExitTransition
+    @Composable get() {
+        val targetOffset = ScreenTransitionOffset
+        return slideOutHorizontally(
+            animationSpec = tween(screenTransitionDuration),
+            targetOffsetX = { targetOffset }
+        )
+    }
+
+val popExitTransition = slideOutHorizontally(
     animationSpec = tween(screenTransitionDuration),
     targetOffsetX = {
         it
     }
 )
 
-val slideOutLeft = slideOutHorizontally(
-    animationSpec = tween(screenTransitionDuration),
-    targetOffsetX = {
-        -it
-    }
-)
-
-val nothingExit = slideOutHorizontally (
-    animationSpec = tween(
-        delayMillis = screenTransitionDuration,
-        durationMillis = screenTransitionDuration
-    ),
-    targetOffsetX = { -it }
-)
-
-val nothingEnter = slideInHorizontally (
-    animationSpec = tween(
-        durationMillis = 0
-    ),
-    initialOffsetX = { 0 }
-)
+private val ScreenTransitionOffset: Int
+    @Composable get() =
+        (-LocalConfiguration.current.screenWidthDp * 0.8f).roundToInt()
