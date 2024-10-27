@@ -144,7 +144,6 @@ private fun LocalMainScreen(
         HorizontalPager(
             state = pagerState,
             key = { it },
-//            beyondViewportPageCount = 2,
             userScrollEnabled = state.loadingState.isError.not()
         ) {
             when (it) {
