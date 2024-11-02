@@ -14,4 +14,5 @@ dependencies {
     implementation(libs.androidx.compose.navigation)
     implementation(projects.featureLocal.featureHome.presentation)
     implementation(projects.featureLocal.featureSongsSet.presentation)
+    implementation(projects.bottomBar.api)
 }

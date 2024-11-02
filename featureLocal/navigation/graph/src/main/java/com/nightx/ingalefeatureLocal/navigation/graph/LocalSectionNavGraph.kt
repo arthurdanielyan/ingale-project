@@ -2,6 +2,7 @@ package com.nightx.ingalefeatureLocal.navigation.graph
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -9,11 +10,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.nightx.ingale.bottomBar.api.LocalBottomBarController
+import com.nightx.ingale.bottomBar.api.LocalBottomTabActivityState
 import com.nightx.ingale.core.navigation.Destination
 import com.nightx.ingale.core.navigation.NavigateEvent
 import com.nightx.ingale.core.navigation.NavigateUpEvent
 import com.nightx.ingale.core.navigation.putScreenData
+import com.nightx.ingale.core.ui.LaunchedEffect
 import com.nightx.ingale.core.ui.enterTransition
 import com.nightx.ingale.core.ui.exitTransition
 import com.nightx.ingale.core.ui.flows.ComposeCollect
@@ -37,6 +42,7 @@ private val appDestinations = mapOf<LocalScreenDestination, @Composable (SavedSt
 fun LocalSectionNavGraph() {
     val navController = rememberNavController()
     ObserveNavigationEvents(navController = navController)
+    ControlBottomBar(navController = navController)
 
     val exitTransition = exitTransition
     val popEnterTransition = popEnterTransition
@@ -56,6 +62,24 @@ fun LocalSectionNavGraph() {
             }
         }
     }
+}
+
+@Composable
+private fun ControlBottomBar(navController: NavController) {
+    val currentDestination by navController.currentBackStackEntryAsState()
+    val bottomBarController = LocalBottomBarController.current
+    val tabActivityState = LocalBottomTabActivityState.current
+    LaunchedEffect(currentDestination, tabActivityState) { destination, isTabActive ->
+        if (isTabActive) {
+            bottomBarController.setVisibility(isBottomBarAllowed(destination?.destination?.route))
+        }
+    }
+}
+
+private fun isBottomBarAllowed(route: String?) = when (route) {
+    MainScreenDestination.route -> true
+    SongsSetScreenDestination.route -> false
+    else -> true
 }
 
 @Suppress("UNCHECKED_CAST")

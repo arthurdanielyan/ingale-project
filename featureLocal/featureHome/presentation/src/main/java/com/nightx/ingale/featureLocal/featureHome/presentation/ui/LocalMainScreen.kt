@@ -21,7 +21,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.nightx.ingale.bottomBar.api.SetBottomBarVisibility
 import com.nightx.ingale.core.presentation.diExt.ingaleViewModels
 import com.nightx.ingale.core.ui.DataPlaceholder
 import com.nightx.ingale.core.ui.LoadingStatePresenter
@@ -52,7 +51,6 @@ fun LocalMainScreen() {
     val vm = ingaleViewModels<LocalMainViewModel>()
     val state by vm.state.collectAsStateWithLifecycle()
 
-    SetBottomBarVisibility(true)
     OnLifecycleEvents { event ->
         if (event == Lifecycle.Event.ON_RESUME) {
             vm.onResume()
