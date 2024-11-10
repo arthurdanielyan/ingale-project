@@ -1,6 +1,5 @@
 package com.nightx.ingale.core.presentation.dialogComponent
 
-import android.util.Log
 import androidx.annotation.UiThread
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
@@ -35,7 +34,6 @@ class DialogComponentHolder<C : DialogComponent<*, *, *>>(
                 result ?: factory().also {
                     result = it
                     dialogComponent = it
-                    Log.d("myLogs", "instance assigned")
                     observeDisposeEvent()
                 }
             }
@@ -46,7 +44,6 @@ class DialogComponentHolder<C : DialogComponent<*, *, *>>(
         observeDisposeEventJob = scope.launch {
             dialogComponent?.disposeEvent?.collect {
                 dialogComponent = null
-                Log.d("myLogs", "instance disposed")
                 observeDisposeEventJob = null
             }
         }

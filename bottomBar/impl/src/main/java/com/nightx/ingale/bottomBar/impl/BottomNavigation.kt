@@ -1,6 +1,5 @@
 package com.nightx.ingale.bottomBar.impl
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -139,7 +138,6 @@ private fun YouTubeSection() {
         if (isTabActive) {
             bottomBarController.setVisibility(true)
         }
-        Log.d("myLogs", "YouTubeSection: $tabActivityState")
     }
 
     Box(

@@ -8,18 +8,8 @@ import com.nightx.ingale.core.viewState.emptyStableList
 
 @Immutable
 data class SongsSetViewState(
-    val id: Long,
-    val title: String,
-    val songs: StableList<SongViewState>,
-    val iconPath: String = ""
-): UiState {
-
-    companion object {
-        val Empty
-            get() = SongsSetViewState(
-                id = -1,
-                title = "Loading...",
-                songs = emptyStableList()
-            )
-    }
-}
+    val id: Long = -1,
+    val title: String = "Loading...",
+    val songs: StableList<SongViewState> = emptyStableList(),
+    val iconPath: String = "",
+) : UiState

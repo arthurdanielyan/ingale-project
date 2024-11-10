@@ -1,7 +1,6 @@
 package com.nightx.ingale.featureLocal.core.ui
 
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,15 +20,15 @@ import com.nightx.ingale.core.viewState.StableList
 import com.nightx.ingale.featureLocal.core.ui.song_item.LoadingSongItem
 import com.nightx.ingale.featureLocal.core.ui.song_item.SongItem
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SongsLazyList(
     modifier: Modifier = Modifier,
     lazyListState: LazyListState = rememberLazyListState(),
     songs: StableList<SongViewState>,
-    isLoading: Boolean,
+    isLoading: Boolean = false,
+    header: @Composable (() -> Unit)? = null,
     query: String = "",
-    onSongClick: (SongViewState) -> Unit
+    onSongClick: (SongViewState) -> Unit,
 ) {
     if(!isLoading) {
         LazyColumn(
@@ -38,13 +37,20 @@ fun SongsLazyList(
                 .background(MaterialTheme.colorScheme.background),
             state = lazyListState,
         ) {
+            if (header != null) {
+                item(key = "header") {
+                    header()
+                }
+            }
             items(
                 items = songs,
                 key = { it.id }
             ) {
                 SongItem(
-                    modifier = Modifier
-                        .animateItemPlacement(tween(PlacementAnimationDuration)),
+                    modifier = Modifier.animateItem(
+                        fadeInSpec = null,
+                        placementSpec = tween(PlacementAnimationDuration)
+                    ),
                     song = it,
                     highlightedPart = query,
                     onSongClick = onSongClick,

@@ -11,6 +11,7 @@ import com.nightx.ingale.core.presentation.viewModel.UiEffect
 import com.nightx.ingale.core.utils.mapList
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.view.mappers.SongArgMapper
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.view.mappers.SongsSetArgMapper
+import com.nightx.ingale.featureLocal.navigation.api.LocalNavigator
 import com.nightx.ingale.featureLocal.navigation.api.destinations.SongsSetScreenDestination
 
 internal class SongsSetViewModel(
@@ -18,6 +19,7 @@ internal class SongsSetViewModel(
     songsSetArgMapper: SongsSetArgMapper,
     songArgMapper: SongArgMapper,
     private val playerUiActions: PlayerUiActions,
+    private val navigator: LocalNavigator,
 ) : BaseViewModel<SongsSetViewState, UiEffect>(), SongsSetCallbacks {
 
     private val songs: List<Song> =
@@ -28,12 +30,16 @@ internal class SongsSetViewModel(
             songArgMapper.mapList(it.songs)
         } ?: emptyList()
 
-    override fun defineInitialState() = SongsSetViewState.Empty
+    override fun defineInitialState() = SongsSetViewState()
 
     override fun onSongClick(song: SongViewState) {
         playerUiActions.submitNewListAndPlay(
             songs,
             currentState.songs.indexOf(song)
         )
+    }
+
+    override fun onBackClick() {
+        navigator.navigateUp()
     }
 }

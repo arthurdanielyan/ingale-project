@@ -5,6 +5,6 @@ import com.nightx.featureLocal.core.viewState.song.SongViewState
 
 @Immutable
 interface SongsSetCallbacks {
-
     fun onSongClick(song: SongViewState)
+    fun onBackClick()
 }
