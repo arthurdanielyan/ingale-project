@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -30,6 +31,7 @@ import com.nightx.ingale.core.ui.SongIcon
 import com.nightx.ingale.core.ui.extensions.alpha
 import com.nightx.ingale.core.ui.theme.dimensions
 import com.nightx.ingale.core.ui.topBar.TopBarBackButton
+import com.nightx.ingale.core.ui.topBar.TopBarHeight
 import com.nightx.ingale.core.ui.topBar.TopBarWithBackButton
 import com.nightx.ingale.featureLocal.core.ui.SongsLazyList
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.view.viewModel.SongsSetCallbacks
@@ -57,11 +59,16 @@ internal fun SongsSetScreen(
     val lazyListState = rememberLazyListState()
     val musicBarNotifier = rememberNestedScrollForMusicBarNotification()
 
+    val density = LocalDensity.current
     val headerAlpha by remember {
         derivedStateOf {
             if (lazyListState.firstVisibleItemIndex == 0) {
                 lazyListState.layoutInfo.visibleItemsInfo
-                    .getOrNull(0)?.size?.toFloat()?.let { headerHeight ->
+                    .getOrNull(0)?.size?.toFloat()?.minus(
+                        density.run {
+                            TopBarHeight.toPx()
+                        }
+                    )?.let { headerHeight ->
                         1f - lazyListState.firstVisibleItemScrollOffset.toFloat() / headerHeight
                     } ?: return@derivedStateOf 1f
             } else 0f

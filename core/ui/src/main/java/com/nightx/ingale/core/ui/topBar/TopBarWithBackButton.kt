@@ -13,7 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.nightx.ingale.core.ui.autoSizeText.GoodAutoSizeText
+import com.nightx.ingale.core.ui.autoSizeText.AutoSizeText
 import com.nightx.ingale.core.ui.extensions.alpha
 import com.nightx.ingale.core.ui.theme.dimensions
 
@@ -46,7 +46,7 @@ fun TopBarWithBackButton(
                     .padding(vertical = MaterialTheme.dimensions.normal),
                 onClick = onBackClick,
             )
-            GoodAutoSizeText(
+            AutoSizeText(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .padding(vertical = MaterialTheme.dimensions.large),
@@ -57,4 +57,4 @@ fun TopBarWithBackButton(
     }
 }
 
-private val TopBarHeight = 64.dp
+val TopBarHeight = 64.dp

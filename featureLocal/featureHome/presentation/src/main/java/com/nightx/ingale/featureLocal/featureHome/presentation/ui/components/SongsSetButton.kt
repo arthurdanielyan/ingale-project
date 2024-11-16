@@ -19,7 +19,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
-import com.nightx.ingale.core.ui.autoSizeText.GoodAutoSizeText
+import com.nightx.ingale.core.ui.autoSizeText.AutoSizeText
 import com.nightx.ingale.core.ui.darken
 import com.nightx.ingale.core.ui.theme.dimensions
 import kotlin.math.max
@@ -55,7 +55,7 @@ internal fun SongsSetButton(
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
-        GoodAutoSizeText(
+        AutoSizeText(
             text = text,
             modifier = Modifier.padding(MaterialTheme.dimensions.large),
             color = Color.White,
