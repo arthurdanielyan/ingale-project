@@ -4,17 +4,14 @@ import com.nightx.ingale.featureLocal.featureHome.presentation.view.RequiredPerm
 import com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.LocalMainViewModel
 import com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.mappers.SongsSetToNavArgMapper
 import com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.mappers.mappersModule
-import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.androidx.viewmodel.dsl.viewModelOf
+import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
 val presentationModule = module {
-    viewModel {
-        LocalMainViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get())
-    }
+    viewModelOf(::LocalMainViewModel)
     single {
         RequiredPermissionsInspector(get(), get())
     }
-    single {
-        SongsSetToNavArgMapper()
-    }
+    factoryOf(::SongsSetToNavArgMapper)
 } + mappersModule

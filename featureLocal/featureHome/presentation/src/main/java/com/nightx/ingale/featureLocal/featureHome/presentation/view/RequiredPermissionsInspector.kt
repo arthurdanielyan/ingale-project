@@ -9,10 +9,9 @@ import com.nightx.ingale.core.presentation.dialogComponent.dialogComponent
 import com.nightx.ingale.featureLocal.featureRequirePermissions.view.RequiredPermissionsRequesterDialogComponent
 import kotlinx.coroutines.CoroutineScope
 
-
 internal class RequiredPermissionsInspector(
     private val applicationContext: Context,
-    private val scope: CoroutineScope
+    scope: CoroutineScope,
 ) {
 
     private val requiredPermissions = if (Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU) {
