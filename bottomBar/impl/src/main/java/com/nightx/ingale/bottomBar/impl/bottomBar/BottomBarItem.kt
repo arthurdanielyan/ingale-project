@@ -1,4 +1,4 @@
-package com.nightx.ingale.bottomBar.impl
+package com.nightx.ingale.bottomBar.impl.bottomBar
 
 import com.nightx.ingale.resources.bottomBar.R.drawable as BottomBarIcons
 import com.nightx.ingale.resources.strings.R.string as Strings
