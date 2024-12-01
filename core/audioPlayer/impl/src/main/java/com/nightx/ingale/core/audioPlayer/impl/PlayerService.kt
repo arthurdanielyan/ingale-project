@@ -48,13 +48,16 @@ class PlayerService : MediaBrowserServiceCompat() {
         private const val FAVORITE_ACTION_ID = "custom_action_add_to_favorites_id"
 
         private const val MinSkipToPreviousTimestamp = 3000
+        private const val SongFinishThreshold = 200
     }
 
-    private val audioPlayer = get<AudioPlayer>()
+    private val audioPlayer = this.get<AudioPlayer>()
 
     private var mediaPlayer = MediaPlayer().apply {
         setOnCompletionListener {
-            skipToNext()
+            if (duration - currentPosition <= SongFinishThreshold) {
+                skipToNext()
+            }
         }
     }
 
