@@ -1,6 +1,5 @@
 package com.nightx.ingale.bottomBar.impl.snackbar.uiComponents
 
-import android.util.Log
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.splineBasedDecay
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -82,10 +81,8 @@ internal class SnackbarHost(
                 anchoredDraggable.snapTo(SnackbarState.Visible)
                 currentSnackbarMessage = message
                 isVisible = true
-                Log.d("myLogs", "show")
                 delay(SnackbarDuration)
                 isVisible = false
-                Log.d("myLogs", "hide")
             }
         }
     }
