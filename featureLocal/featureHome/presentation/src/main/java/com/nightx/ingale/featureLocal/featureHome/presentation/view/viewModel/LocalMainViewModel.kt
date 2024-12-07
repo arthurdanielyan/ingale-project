@@ -32,13 +32,11 @@ import com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.vi
 import com.nightx.ingale.featureLocal.navigation.api.LocalNavigator
 import com.nightx.ingale.featureLocal.navigation.api.destinations.SongsSetScreenDestination
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
@@ -63,8 +61,6 @@ internal class LocalMainViewModel(
     companion object {
         const val NO_SONGS_FOUND_ERROR = "no_audio_files_found"
         const val PERMISSION_NOT_GRANTED_ERROR = "no_audio_permission_granted"
-
-        private const val QueryDebounce = 200L
     }
 
     private lateinit var allSongsDomain: List<Song>
@@ -158,10 +154,9 @@ internal class LocalMainViewModel(
         }
     }
 
-    @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun observeQuery() {
         query
-            .debounce(QueryDebounce)
             .mapLatest { it.lowercase() }
             .onEach { query ->
                 songs.update {

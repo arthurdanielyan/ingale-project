@@ -20,7 +20,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,33 +52,63 @@ internal fun CommonSongSetsGrid(
     isLoading: Boolean,
     query: String,
 ) {
-    if (!isLoading) {
-        LazyVerticalGrid(
-            state = lazyGridState,
-            columns = GridCells.Fixed(2),
-            modifier = modifier.fillMaxSize(),
-            contentPadding = PaddingValues(MaterialTheme.dimensions.normal),
-            horizontalArrangement = Arrangement.spacedBy(SongsSetCardPadding),
-            verticalArrangement = Arrangement.spacedBy(SongsSetCardPadding),
-        ) {
-            items(
-                items = items,
-                key = {
-                    it.id
-                }
-            ) {
-                SongsSetCard(
-                    modifier = Modifier.animateItem(
-                        tween(durationMillis = ItemPlacementAnimationDuration)
-                    ),
-                    onClick = onClick,
-                    highlightedText = query,
-                    songsSet = it
-                )
-            }
-        }
-    } else {
+    if (isLoading) {
         SongsSetsGridSkeleton()
+    } else {
+        SongsSetsGridContent(
+            modifier = modifier,
+            lazyGridState = lazyGridState,
+            items = items,
+            onClick = onClick,
+            query = query,
+        )
+    }
+}
+
+@Composable
+private fun SongsSetsGridContent(
+    modifier: Modifier = Modifier,
+    lazyGridState: LazyGridState = rememberLazyGridState(),
+    items: StableList<SongsSetViewState>,
+    onClick: (songsSet: SongsSetViewState) -> Unit,
+    query: String,
+) {
+    var firstLoad by remember { mutableStateOf(true) }
+    var animateItemAppearance by remember { mutableStateOf(false) }
+
+    LaunchedEffect(query) {
+        if (firstLoad) {
+            firstLoad = false
+        } else {
+            animateItemAppearance = true
+        }
+    }
+
+    LazyVerticalGrid(
+        state = lazyGridState,
+        columns = GridCells.Fixed(2),
+        modifier = modifier.fillMaxSize(),
+        contentPadding = PaddingValues(MaterialTheme.dimensions.normal),
+        horizontalArrangement = Arrangement.spacedBy(SongsSetCardPadding),
+        verticalArrangement = Arrangement.spacedBy(SongsSetCardPadding),
+    ) {
+        items(
+            items = items,
+            key = {
+                it.id
+            }
+        ) {
+            SongsSetCard(
+                modifier = Modifier.animateItem(
+                    fadeInSpec = if (animateItemAppearance) tween(FadeAnimationDuration) else null,
+                    fadeOutSpec = if (animateItemAppearance) tween(FadeAnimationDuration) else null,
+                    placementSpec = tween(PlacementAnimationDuration)
+                ),
+                onClick = onClick,
+                highlightedText = query,
+                songsSet = it
+            )
+        }
     }
 }
 
@@ -147,9 +181,11 @@ private fun rememberSkeletonCount(freeHeight: Dp) =
         (2 * freeHeight / SongsSetCardHeight).toInt() + 1
     }
 
+private const val PlacementAnimationDuration = 300
+private const val FadeAnimationDuration = 200
+
 private val SongsSetCardHeight = 80.dp
 private val SongsSetCardPadding: Dp
     @Composable get() = MaterialTheme.dimensions.small
 private val SongsSetCardSkeletonPadding: Dp
     @Composable get() = MaterialTheme.dimensions.normal
-private const val ItemPlacementAnimationDuration = 300
