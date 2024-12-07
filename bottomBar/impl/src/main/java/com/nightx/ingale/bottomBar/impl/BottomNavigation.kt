@@ -30,8 +30,10 @@ import androidx.compose.ui.unit.dp
 import com.nightx.ingale.bottomBar.api.LocalBottomBarController
 import com.nightx.ingale.bottomBar.api.LocalBottomBarState
 import com.nightx.ingale.bottomBar.api.LocalBottomTabActivityState
-import com.nightx.ingale.bottomBar.impl.uiComponents.BottomBarItem
-import com.nightx.ingale.bottomBar.impl.uiComponents.SlidingBottomTabSwitcher
+import com.nightx.ingale.bottomBar.impl.bottomBar.BottomBarItem
+import com.nightx.ingale.bottomBar.impl.bottomBar.uiComponents.BottomBarItem
+import com.nightx.ingale.bottomBar.impl.bottomBar.uiComponents.SlidingBottomTabSwitcher
+import com.nightx.ingale.bottomBar.impl.snackbar.uiComponents.SnackbarHost
 import com.nightx.ingale.core.ui.LaunchedEffect
 import com.nightx.ingale.core.ui.extensions.copy
 import com.nightx.ingale.core.ui.screenTransitionDuration
@@ -107,6 +109,9 @@ fun BottomNavigation() {
             MusicBar(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
+            )
+            SnackbarHost(
+                modifier = Modifier.align(Alignment.BottomCenter)
             )
         }
     }

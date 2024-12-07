@@ -6,7 +6,8 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import com.nightx.featureLocal.core.viewState.featureLocalViewStateModule
-import com.nightx.ingale.bottomBar.impl.bottomBarControllerModule
+import com.nightx.ingale.bottomBar.impl.bottomBar.bottomBarControllerModule
+import com.nightx.ingale.bottomBar.impl.snackbar.snackbarMessageSenderModule
 import com.nightx.ingale.core.audioPlayer.impl.audioPlayerModule
 import com.nightx.ingale.core.dataModel.di.mappersModule
 import com.nightx.ingale.core.dataModel.di.realmModule
@@ -30,6 +31,7 @@ class IngaleApplication : Application() {
             androidLogger()
             modules(
                 bottomBarControllerModule,
+                snackbarMessageSenderModule,
                 audioPlayerModule,
                 mappersModule,
                 realmModule,

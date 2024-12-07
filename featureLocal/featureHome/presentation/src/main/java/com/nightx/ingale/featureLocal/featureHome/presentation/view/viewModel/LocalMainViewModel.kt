@@ -12,6 +12,7 @@ import androidx.lifecycle.viewModelScope
 import com.nightx.featureLocal.core.viewState.SongsSetViewState
 import com.nightx.featureLocal.core.viewState.song.SongViewState
 import com.nightx.featureLocal.core.viewState.song.mapper.SongViewStateMapper
+import com.nightx.ingale.bottomBar.api.SnackbarMessageSender
 import com.nightx.ingale.core.audioPlayer.api.PlayerUiActions
 import com.nightx.ingale.core.domainModel.LoadState
 import com.nightx.ingale.core.domainModel.Song
@@ -56,6 +57,7 @@ internal class LocalMainViewModel(
     private val songsSetToNavArgMapper: SongsSetToNavArgMapper,
     private val applicationContext: Context,
     private val playerUiActions: PlayerUiActions,
+    private val snackbarMessageSender: SnackbarMessageSender,
 ) : BaseViewModel<LocalMainScreenViewState, Effect>(), LocalMainCallbacks {
 
     companion object {
@@ -228,15 +230,15 @@ internal class LocalMainViewModel(
     }
 
     override fun onPlaylistsClick() {
-        // TODO: Not yet implemented
+        snackbarMessageSender.sendSnackbarMessage("Playlists not implemented yet")
     }
 
     override fun onFavouritesClick() {
-        // TODO: Not yet implemented
+        snackbarMessageSender.sendSnackbarMessage("Favourites not implemented yet")
     }
 
     override fun onHistoryClick() {
-        // TODO: Not yet implemented
+        snackbarMessageSender.sendSnackbarMessage("History not implemented yet")
     }
 
     override fun refreshSongs() {

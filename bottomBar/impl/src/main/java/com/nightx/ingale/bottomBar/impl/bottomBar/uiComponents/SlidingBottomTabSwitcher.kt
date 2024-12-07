@@ -1,4 +1,4 @@
-package com.nightx.ingale.bottomBar.impl.uiComponents
+package com.nightx.ingale.bottomBar.impl.bottomBar.uiComponents
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ContentTransform
@@ -7,7 +7,7 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
-import com.nightx.ingale.bottomBar.impl.BottomBarItem
+import com.nightx.ingale.bottomBar.impl.bottomBar.BottomBarItem
 import com.nightx.ingale.core.ui.screenTransitionDuration
 
 @Composable

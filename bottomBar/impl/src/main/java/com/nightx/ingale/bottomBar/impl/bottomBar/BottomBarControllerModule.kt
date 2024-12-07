@@ -1,4 +1,4 @@
-package com.nightx.ingale.bottomBar.impl
+package com.nightx.ingale.bottomBar.impl.bottomBar
 
 import com.nightx.ingale.bottomBar.api.BottomBarController
 import com.nightx.ingale.bottomBar.api.BottomBarStateHolder
