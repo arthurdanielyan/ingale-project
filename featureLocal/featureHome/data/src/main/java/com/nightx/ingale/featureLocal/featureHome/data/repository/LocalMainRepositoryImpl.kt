@@ -26,6 +26,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
@@ -44,6 +45,12 @@ class LocalMainRepositoryImpl(
     private val applicationScope: CoroutineScope,
 ) : LocalMainRepository {
 
+    override suspend fun isCached(): Boolean {
+        return songsDb.query<SongRealm>()
+            .asFlow()
+            .first().list.isEmpty().not()
+    }
+
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun getSongs(): Flow<LoadState<List<Song>>> {
         val savingDeferred = applicationScope.async {
@@ -52,12 +59,18 @@ class LocalMainRepositoryImpl(
         return songsDb.query<SongRealm>()
             .asFlow()
             .mapLatest<ResultsChange<SongRealm>, LoadState<List<Song>>> {
+                var localSave: List<SongRealm>? = null
                 if (it.list.isEmpty()) {
                     if (!savingDeferred.isCompleted) {
-                        savingDeferred.await()
+                        localSave = savingDeferred.await()
                     }
                 }
-                LoadState.Success(songRealmMapper.mapList(it.list))
+                LoadState.Success(
+                    songRealmMapper.mapList(
+                        // take already saved if exists not to wait for Realm to emit them
+                        localSave ?: it.list
+                    )
+                )
             }.onStart { emit(LoadState.Loading()) }
     }
 
@@ -208,6 +221,8 @@ class LocalMainRepositoryImpl(
                 }
             }
         }
+
+        localSongs
     }
 
     private companion object {

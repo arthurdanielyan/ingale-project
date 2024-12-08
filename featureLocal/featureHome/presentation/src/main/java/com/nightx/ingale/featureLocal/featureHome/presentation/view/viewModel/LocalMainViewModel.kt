@@ -23,16 +23,20 @@ import com.nightx.ingale.core.viewState.LoadingViewState
 import com.nightx.ingale.core.viewState.emptyStableList
 import com.nightx.ingale.core.viewState.toLoadingViewState
 import com.nightx.ingale.core.viewState.toStableList
+import com.nightx.ingale.featureLocal.featureHome.domain.usecases.GetCachedState
 import com.nightx.ingale.featureLocal.featureHome.domain.usecases.GetSongsUseCase
 import com.nightx.ingale.featureLocal.featureHome.domain.usecases.OrganizeSongsUseCase
+import com.nightx.ingale.featureLocal.featureHome.presentation.R
 import com.nightx.ingale.featureLocal.featureHome.presentation.view.RequiredPermissionsInspector
 import com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.mappers.SongsSetToNavArgMapper
 import com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.mappers.SongsSetViewStateMapper
 import com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.viewState.LocalMainScreenViewState
 import com.nightx.ingale.featureLocal.navigation.api.LocalNavigator
 import com.nightx.ingale.featureLocal.navigation.api.destinations.SongsSetScreenDestination
+import com.nightx.ingale.resources.strings.StringProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -48,6 +52,7 @@ import kotlinx.coroutines.launch
 internal class LocalMainViewModel(
     private val navigator: LocalNavigator,
     private val getSongsUseCase: GetSongsUseCase,
+    private val getCachedState: GetCachedState,
     private val songViewStateMapper: SongViewStateMapper,
     private val songsSetViewStateMapper: SongsSetViewStateMapper,
     private val organizeSongsUseCase: OrganizeSongsUseCase,
@@ -55,15 +60,20 @@ internal class LocalMainViewModel(
     private val songsSetToNavArgMapper: SongsSetToNavArgMapper,
     private val applicationContext: Context,
     private val playerUiActions: PlayerUiActions,
+    private val stringProvider: StringProvider,
     private val snackbarMessageSender: SnackbarMessageSender,
-) : BaseViewModel<LocalMainScreenViewState, Effect>(), LocalMainCallbacks {
+) : BaseViewModel<LocalMainScreenViewState, Effect>(),
+    LocalMainCallbacks,
+    StringProvider by stringProvider {
 
     companion object {
         const val NO_SONGS_FOUND_ERROR = "no_audio_files_found"
         const val PERMISSION_NOT_GRANTED_ERROR = "no_audio_permission_granted"
+
+        private const val LongWait = 3000L
     }
 
-    private lateinit var allSongsDomain: List<Song>
+    private var allSongsDomain: List<Song> = emptyList()
 
     private var allSongs = emptyList<SongViewState>()
     private var allAlbums = emptyList<SongsSetViewState>()
@@ -108,7 +118,16 @@ internal class LocalMainViewModel(
     init {
         observeSongs()
         observeQuery()
-        refreshSongs() // triggers observation
+    }
+
+    private fun observeLongLoading() {
+        viewModelScope.launch {
+            val isCached = getCachedState()
+            delay(LongWait)
+            if (isCached.not() && currentState.loadingState.isLoading) {
+                snackbarMessageSender.sendSnackbarMessage(string(R.string.longer_for_first_time))
+            }
+        }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -118,6 +137,7 @@ internal class LocalMainViewModel(
                 .filter { isAudioPermissionGranted }
                 .flatMapLatest {
                     loadingViewState.update { LoadingViewState.Loading }
+                    observeLongLoading()
                     getSongsUseCase()
                 }.filter { songsLoadState ->
                     // if Success update later, only when the state is fully constructed

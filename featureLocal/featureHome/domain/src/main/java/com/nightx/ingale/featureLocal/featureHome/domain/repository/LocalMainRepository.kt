@@ -7,4 +7,6 @@ import kotlinx.coroutines.flow.Flow
 interface LocalMainRepository {
 
     suspend fun getSongs(): Flow<LoadState<List<Song>>>
+
+    suspend fun isCached(): Boolean
 }
