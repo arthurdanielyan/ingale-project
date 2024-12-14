@@ -1,5 +1,6 @@
 package com.nightx.ingale.globalPlaybackPresentation.ui
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
@@ -58,39 +59,45 @@ fun PlaybackScreen(
     val globalPlaybackComponent = koinInject<GlobalPlaybackComponent>()
     val state by globalPlaybackComponent.state.collectAsStateWithLifecycle()
 
-    val bottomBarState = LocalBottomBarState.current
-    val bottomBarInitialState = remember {
-        bottomBarState.isBottomBarVisible.value
-    }
-    val bottomBarController = LocalBottomBarController.current
-
-    SingleLaunchedEffect {
-        bottomBarController.setVisibility(false)
-    }
-    ObserveState(state.isPlaybackScreenVisible) { isPlaybackScreenVisible ->
-        bottomBarController.setVisibility(
-            if (isPlaybackScreenVisible) {
-                false
-            } else bottomBarInitialState
-        )
-    }
-
     AnimatedVisibility(
         modifier = modifier,
         visible = state.isPlaybackScreenVisible,
         enter = slideInVertically { it },
         exit = slideOutVertically { it }
     ) {
-        PlaybackScreen(
-            currentSong = state.currentSongInfo,
-            callbacks = globalPlaybackComponent
-        )
+        // All these side effects should execute when the PlaybackScreen itself
+        // enters the composition.
+        val bottomBarState = LocalBottomBarState.current
+        val bottomBarInitialState = remember {
+            bottomBarState.isBottomBarVisible.value
+        }
+        val bottomBarController = LocalBottomBarController.current
+
+        SingleLaunchedEffect {
+            Log.d("myLogs", "bottomBarInitialState: $bottomBarInitialState")
+            bottomBarController.setVisibility(false)
+        }
+        ObserveState(state.isPlaybackScreenVisible) { isPlaybackScreenVisible ->
+            bottomBarController.setVisibility(
+                if (isPlaybackScreenVisible) {
+                    false
+                } else {
+                    bottomBarInitialState
+                }
+            )
+        }
+
         DisposableEffect(Unit) {
             onVisibilityChanged(true)
             onDispose {
                 onVisibilityChanged(false)
             }
         }
+
+        PlaybackScreen(
+            currentSong = state.currentSongInfo,
+            callbacks = globalPlaybackComponent
+        )
     }
 }
 
