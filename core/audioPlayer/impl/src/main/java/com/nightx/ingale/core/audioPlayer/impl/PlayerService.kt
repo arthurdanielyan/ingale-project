@@ -29,6 +29,12 @@ import com.nightx.ingale.core.audioPlayer.impl.playerActionReceivers.PlayerActio
 import com.nightx.ingale.core.audioPlayer.impl.playerActionReceivers.PlayerActionSkipToPrevious
 import com.nightx.ingale.core.audioPlayer.impl.playerActionReceivers.PlayerActionStopServiceReceiver
 import com.nightx.ingale.core.audioPlayer.impl.playerActionReceivers.PlayerActionTogglePlaybackReceiver
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
 import kotlin.math.roundToInt
 import androidx.core.app.NotificationCompat as AndroidNotificationCompat
@@ -49,9 +55,11 @@ class PlayerService : MediaBrowserServiceCompat() {
 
         private const val MinSkipToPreviousTimestamp = 3000
         private const val SongFinishThreshold = 200
+        private const val SeekPositionUpdateFrequency = 1000L
     }
 
-    private val audioPlayer = this.get<AudioPlayer>()
+    private val playerServiceCommunicator = this.get<PlayerServiceCommunicator>()
+    private val scope = MainScope()
 
     private var mediaPlayer = MediaPlayer().apply {
         setOnCompletionListener {
@@ -218,8 +226,8 @@ class PlayerService : MediaBrowserServiceCompat() {
 
     override fun onDestroy() {
         super.onDestroy()
-        audioPlayer.isServiceRunning = false
-        audioPlayer.seekPosition = mediaPlayer.currentPosition
+        scope.cancel()
+        playerServiceCommunicator.seekPosition.update { mediaPlayer.currentPosition }
         mediaSession.release()
         mediaPlayer.release()
     }
@@ -237,7 +245,7 @@ class PlayerService : MediaBrowserServiceCompat() {
     ) {
         val items = mutableListOf<MediaBrowserCompat.MediaItem>()
 
-        val albumList = audioPlayer.songQueue
+        val albumList = playerServiceCommunicator.songQueue
         for (it in albumList) {
             val descriptionBuilder = MediaDescriptionCompat.Builder()
                 .setTitle(it.title)
@@ -258,8 +266,19 @@ class PlayerService : MediaBrowserServiceCompat() {
     }
 
     private fun initService() {
-        onSongChanged(audioPlayer.seekPosition)
-        audioPlayer.isServiceRunning = true
+        onSongChanged(playerServiceCommunicator.seekPosition.value)
+        trackSeekPosition()
+    }
+
+    private fun trackSeekPosition() {
+        scope.launch {
+            while (this.isActive) {
+                playerServiceCommunicator.seekPosition.update {
+                    mediaPlayer.currentPosition
+                }
+                delay(SeekPositionUpdateFrequency)
+            }
+        }
     }
 
     private fun pause() {
@@ -275,13 +294,13 @@ class PlayerService : MediaBrowserServiceCompat() {
     }
 
     private fun skipToNext() {
-        audioPlayer.pointer++
+        playerServiceCommunicator.pointer++
         onSongChanged()
     }
 
     private fun skipToPrevious() {
         if(mediaPlayer.currentPosition <= MinSkipToPreviousTimestamp) {
-            audioPlayer.pointer--
+            playerServiceCommunicator.pointer--
             onSongChanged()
         } else {
             seekTo(0f)
@@ -310,10 +329,10 @@ class PlayerService : MediaBrowserServiceCompat() {
                 }
                 .setState(
                     if (isNewSong || mediaPlayer.isPlaying) {
-                        audioPlayer.isPlaying = true
+                        playerServiceCommunicator.isPlaying = true
                         PlaybackStateCompat.STATE_PLAYING
                     } else {
-                        audioPlayer.isPlaying = false
+                        playerServiceCommunicator.isPlaying = false
                         PlaybackStateCompat.STATE_PAUSED
                     },
                     if(isNewSong){
@@ -338,28 +357,31 @@ class PlayerService : MediaBrowserServiceCompat() {
         val metadataBuilder = MediaMetadataCompat.Builder()
             .putBitmap(
                 MediaMetadataCompat.METADATA_KEY_ART,
-                audioPlayer.currentSongBitmap
+                playerServiceCommunicator.currentSongBitmap
             )
             .putString(
                 MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE,
-                audioPlayer.currentSong.title
+                playerServiceCommunicator.currentSong?.title.orEmpty()
             )
             .putString(
                 MediaMetadataCompat.METADATA_KEY_TITLE,
-                audioPlayer.currentSong.title
+                playerServiceCommunicator.currentSong?.title.orEmpty()
             )
             .putString(
                 MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE,
-                audioPlayer.currentSong.artist
+                playerServiceCommunicator.currentSong?.artist.orEmpty()
             )
             .putLong(
                 MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER,
-                audioPlayer.pointer.toLong()
+                playerServiceCommunicator.pointer.toLong()
             )
-            .putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, audioPlayer.songCount)
+            .putLong(
+                MediaMetadataCompat.METADATA_KEY_NUM_TRACKS,
+                playerServiceCommunicator.songCount
+            )
             .putLong(
                 MediaMetadataCompat.METADATA_KEY_DURATION,
-                audioPlayer.currentSong.duration
+                playerServiceCommunicator.currentSong?.duration ?: 0
             )
         mediaSession.setMetadata(metadataBuilder.build())
     }
@@ -369,7 +391,7 @@ class PlayerService : MediaBrowserServiceCompat() {
         updateNotification()
         mediaPlayer.stop()
         mediaPlayer.reset()
-        mediaPlayer.setDataSource(audioPlayer.currentSong.path)
+        mediaPlayer.setDataSource(playerServiceCommunicator.currentSong?.path.orEmpty())
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
             it.start()
@@ -412,9 +434,9 @@ class PlayerService : MediaBrowserServiceCompat() {
                     getPendingIntent(ACTION_STOP_SERVICE)
                 )
                 .setStyle(mediaStyle)
-                .setContentTitle(audioPlayer.currentSong.title)
-                .setContentText(audioPlayer.currentSong.artist)
-                .setLargeIcon(audioPlayer.currentSongBitmap)
+                .setContentTitle(playerServiceCommunicator.currentSong?.title.orEmpty())
+                .setContentText(playerServiceCommunicator.currentSong?.artist.orEmpty())
+                .setLargeIcon(playerServiceCommunicator.currentSongBitmap)
                 .setDeleteIntent(onDismissedIntent)
                 .build()
 

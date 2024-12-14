@@ -8,12 +8,12 @@ import android.os.Build
 import com.nightx.featureLocal.core.viewState.featureLocalViewStateModule
 import com.nightx.ingale.bottomBar.impl.bottomBar.bottomBarControllerModule
 import com.nightx.ingale.bottomBar.impl.snackbar.snackbarMessageSenderModule
-import com.nightx.ingale.core.audioPlayer.impl.audioPlayerModule
+import com.nightx.ingale.core.audioPlayer.impl.playerServiceCommunicatorModule
 import com.nightx.ingale.core.dataModel.di.mappersModule
 import com.nightx.ingale.core.dataModel.di.realmModule
 import com.nightx.ingale.core.utils.di.coroutineDispatchersModule
 import com.nightx.ingale.featureLocal.navigation.impl.di.localNavigationModule
-import com.nightx.ingale.musicbar.musicBarModule
+import com.nightx.ingale.globalPlaybackPresentation.globalPlaybackPresentationModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -32,13 +32,13 @@ class IngaleApplication : Application() {
             modules(
                 bottomBarControllerModule,
                 snackbarMessageSenderModule,
-                audioPlayerModule,
+                playerServiceCommunicatorModule,
                 mappersModule,
                 realmModule,
                 coroutineDispatchersModule,
                 featureLocalViewStateModule,
                 localNavigationModule,
-                musicBarModule,
+                globalPlaybackPresentationModule,
                 com.nightx.ingale.resources.strings.module,
                 com.nightx.ingale.featureLocal.featureHome.data.dataModule,
                 com.nightx.ingale.featureLocal.featureHome.domain.domainModule,

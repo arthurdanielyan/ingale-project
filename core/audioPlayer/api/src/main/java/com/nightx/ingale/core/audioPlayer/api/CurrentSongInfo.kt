@@ -6,8 +6,9 @@ import androidx.compose.runtime.Immutable
 data class CurrentSongInfo(
     val currentSongPreviewPath: String?,
     val isPlaying: Boolean,
-    val songName: String?,
-    val artistName: String?,
+    val songName: String,
+    val artistName: String,
+    val seekPercentage: Float,
 ) {
 
     companion object {
@@ -15,8 +16,9 @@ data class CurrentSongInfo(
             get() = CurrentSongInfo(
                 currentSongPreviewPath = null,
                 isPlaying = false,
-                songName = null,
-                artistName = null,
+                songName = "",
+                artistName = "",
+                seekPercentage = 0f,
             )
     }
 }

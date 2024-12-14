@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -36,7 +37,7 @@ import com.nightx.ingale.core.ui.topBar.TopBarWithBackButton
 import com.nightx.ingale.featureLocal.core.ui.SongsLazyList
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.view.viewModel.SongsSetCallbacks
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.view.viewModel.SongsSetViewModel
-import com.nightx.ingale.musicbar.view.rememberNestedScrollForMusicBarNotification
+import com.nightx.ingale.globalPlaybackPresentation.ui.rememberNestedScrollForMusicBarNotification
 
 @Composable
 fun SongsSetScreen(savedStateHandle: SavedStateHandle) {
@@ -82,7 +83,8 @@ internal fun SongsSetScreen(
 
     Box(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .systemBarsPadding(),
         contentAlignment = Alignment.TopCenter,
     ) {
         TopBarWithBackButton(

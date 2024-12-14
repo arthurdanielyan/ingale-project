@@ -9,11 +9,11 @@ data object SongsSetScreenDestination : LocalScreenDestination {
     override val route = "local_songs_set_screen"
 
     @Parcelize
-    data class SongsSet(
+    data class SongsSetArgs(
         val id: Long,
         val title: String,
         val songs: List<SongArg>,
-        val iconPath: String = ""
+        val iconPath: String = "",
     ): Parcelable
 }
 

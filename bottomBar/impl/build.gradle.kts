@@ -17,7 +17,7 @@ dependencies {
     implementation(projects.core.ui)
     implementation(projects.core.utils)
     implementation(projects.featureLocal.navigation.graph)
-    implementation(projects.musicBar)
+    implementation(projects.globalPlaybackPresentation)
     implementation(projects.resources.strings)
     implementation(projects.resources.bottomBar)
 }

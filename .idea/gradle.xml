@@ -53,8 +53,8 @@
             <option value="$PROJECT_DIR$/featureLocal/navigation/graph" />
             <option value="$PROJECT_DIR$/featureLocal/navigation/impl" />
             <option value="$PROJECT_DIR$/featureYoutube" />
+            <option value="$PROJECT_DIR$/globalPlaybackPresentation" />
             <option value="$PROJECT_DIR$/gradlePlugins" />
-            <option value="$PROJECT_DIR$/musicBar" />
             <option value="$PROJECT_DIR$/resources" />
             <option value="$PROJECT_DIR$/resources/bottomBar" />
             <option value="$PROJECT_DIR$/resources/icon" />

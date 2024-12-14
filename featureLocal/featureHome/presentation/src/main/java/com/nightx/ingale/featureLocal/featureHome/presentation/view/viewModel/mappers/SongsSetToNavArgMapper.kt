@@ -5,10 +5,11 @@ import com.nightx.ingale.core.utils.Mapper
 import com.nightx.ingale.featureLocal.navigation.api.destinations.SongArg
 import com.nightx.ingale.featureLocal.navigation.api.destinations.SongsSetScreenDestination
 
-internal class SongsSetToNavArgMapper : Mapper<SongsSetViewState, SongsSetScreenDestination.SongsSet> {
+internal class SongsSetToNavArgMapper :
+    Mapper<SongsSetViewState, SongsSetScreenDestination.SongsSetArgs> {
 
-    override fun map(from: SongsSetViewState): SongsSetScreenDestination.SongsSet {
-        return SongsSetScreenDestination.SongsSet(
+    override fun map(from: SongsSetViewState): SongsSetScreenDestination.SongsSetArgs {
+        return SongsSetScreenDestination.SongsSetArgs(
             id = from.id,
             title = from.title,
             songs = from.songs.map {

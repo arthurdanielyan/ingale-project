@@ -52,7 +52,7 @@ dependencies {
 
     implementation(projects.core.ui)
     implementation(projects.bottomBar.impl)
-    implementation(projects.musicBar)
+    implementation(projects.globalPlaybackPresentation)
     implementation(projects.core.audioPlayer.impl)
     implementation(projects.core.dataModel)
     implementation(projects.core.utils)

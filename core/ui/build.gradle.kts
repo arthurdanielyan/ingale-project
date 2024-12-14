@@ -23,8 +23,8 @@ dependencies {
     api(libs.androidx.compose.constraintlayout)
     api(libs.androidx.constraintlayout.solver)
     api(projects.core.viewState)
+    api(libs.coil.compose)
 
     implementation(projects.resources.strings)
     implementation(projects.resources.icon)
-    implementation(libs.coil.compose)
 }

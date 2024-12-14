@@ -95,7 +95,7 @@ includeModules(
         "bottomBar",
         submodules = apiImpl
     ),
-    Module("musicBar"),
+    Module("globalPlaybackPresentation"),
 )
 
 data class Module(

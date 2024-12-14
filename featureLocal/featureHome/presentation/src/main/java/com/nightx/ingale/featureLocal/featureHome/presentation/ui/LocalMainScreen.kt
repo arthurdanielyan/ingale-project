@@ -3,9 +3,11 @@ package com.nightx.ingale.featureLocal.featureHome.presentation.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
@@ -39,9 +41,9 @@ import com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.Lo
 import com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.LocalMainViewModel
 import com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.viewState.LocalMainScreenViewState
 import com.nightx.ingale.featureLocal.featureRequirePermissions.RequiredPermissionsRequesterDialog
-import com.nightx.ingale.musicbar.musicBarControls.LocalMusicBarController
-import com.nightx.ingale.musicbar.musicBarControls.MusicBarEffect
-import com.nightx.ingale.musicbar.view.rememberNestedScrollForMusicBarNotification
+import com.nightx.ingale.globalPlaybackPresentation.musicBarController.LocalMusicBarController
+import com.nightx.ingale.globalPlaybackPresentation.musicBarController.MusicBarEffect
+import com.nightx.ingale.globalPlaybackPresentation.ui.rememberNestedScrollForMusicBarNotification
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import com.nightx.ingale.resources.strings.R.string as Strings
@@ -105,6 +107,8 @@ private fun LocalMainScreen(
 
     Column(
         modifier = Modifier
+            .fillMaxSize()
+            .systemBarsPadding()
             .background(
                 color = MaterialTheme.colorScheme.background
             )

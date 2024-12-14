@@ -23,7 +23,7 @@ internal class SongsSetViewModel(
 ) : BaseViewModel<SongsSetViewState, UiEffect>(), SongsSetCallbacks {
 
     private val songs: List<Song> =
-        savedStateHandle.getArgument<SongsSetScreenDestination.SongsSet>()?.let {
+        savedStateHandle.getArgument<SongsSetScreenDestination.SongsSetArgs>()?.let {
             updateState {
                 songsSetArgMapper(it)
             }

@@ -6,9 +6,9 @@ import com.nightx.ingale.core.utils.Mapper
 import com.nightx.ingale.core.viewState.toStableList
 import com.nightx.ingale.featureLocal.navigation.api.destinations.SongsSetScreenDestination
 
-class SongsSetArgMapper : Mapper<SongsSetScreenDestination.SongsSet, SongsSetViewState> {
+class SongsSetArgMapper : Mapper<SongsSetScreenDestination.SongsSetArgs, SongsSetViewState> {
 
-    override fun map(from: SongsSetScreenDestination.SongsSet) =
+    override fun map(from: SongsSetScreenDestination.SongsSetArgs) =
         SongsSetViewState(
             id = from.id,
             title = from.title,

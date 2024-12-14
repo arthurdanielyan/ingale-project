@@ -20,9 +20,8 @@ import com.nightx.ingale.core.ui.theme.colorScheme.IngaleColorsDark
 import com.nightx.ingale.core.ui.theme.colorScheme.IngaleColorsLight
 import com.nightx.ingale.core.ui.theme.colorScheme.LocalIngaleColors
 import com.nightx.ingale.featureLocal.navigation.api.LocalNavigation
-import com.nightx.ingale.musicbar.musicBarControls.LocalMusicBarController
-import com.nightx.ingale.musicbar.musicBarControls.LocalMusicBarEffects
-
+import com.nightx.ingale.globalPlaybackPresentation.musicBarController.LocalMusicBarController
+import com.nightx.ingale.globalPlaybackPresentation.musicBarController.LocalMusicBarEffects
 import org.koin.compose.koinInject
 
 private val LightColors = lightColorScheme(
