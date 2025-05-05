@@ -12,7 +12,6 @@ import androidx.lifecycle.viewModelScope
 import com.nightx.featureLocal.core.viewState.SongsSetViewState
 import com.nightx.featureLocal.core.viewState.song.SongViewState
 import com.nightx.featureLocal.core.viewState.song.mapper.SongViewStateMapper
-import com.nightx.ingale.bottomBar.api.SnackbarMessageSender
 import com.nightx.ingale.core.audioPlayer.api.PlayerUiActions
 import com.nightx.ingale.core.domainModel.LoadState
 import com.nightx.ingale.core.domainModel.Song
@@ -26,7 +25,6 @@ import com.nightx.ingale.core.viewState.toStableList
 import com.nightx.ingale.featureLocal.featureHome.domain.usecases.GetCachedState
 import com.nightx.ingale.featureLocal.featureHome.domain.usecases.GetSongsUseCase
 import com.nightx.ingale.featureLocal.featureHome.domain.usecases.OrganizeSongsUseCase
-import com.nightx.ingale.featureLocal.featureHome.presentation.R
 import com.nightx.ingale.featureLocal.featureHome.presentation.view.RequiredPermissionsInspector
 import com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.mappers.SongsSetToNavArgMapper
 import com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.mappers.SongsSetViewStateMapper
@@ -61,7 +59,6 @@ internal class LocalMainViewModel(
     private val applicationContext: Context,
     private val playerUiActions: PlayerUiActions,
     private val stringProvider: StringProvider,
-    private val snackbarMessageSender: SnackbarMessageSender,
 ) : BaseViewModel<LocalMainScreenViewState, Effect>(),
     LocalMainCallbacks,
     StringProvider by stringProvider {
@@ -125,7 +122,7 @@ internal class LocalMainViewModel(
             val isCached = getCachedState()
             delay(LongWait)
             if (isCached.not() && currentState.loadingState.isLoading) {
-                snackbarMessageSender.sendSnackbarMessage(string(R.string.longer_for_first_time))
+//                snackbarMessageSender.sendSnackbarMessage(string(R.string.longer_for_first_time))
             }
         }
     }
@@ -245,15 +242,15 @@ internal class LocalMainViewModel(
     }
 
     override fun onPlaylistsClick() {
-        snackbarMessageSender.sendSnackbarMessage("Playlists not implemented yet")
+//        snackbarMessageSender.sendSnackbarMessage("Playlists not implemented yet")
     }
 
     override fun onFavouritesClick() {
-        snackbarMessageSender.sendSnackbarMessage("Favourites not implemented yet")
+//        snackbarMessageSender.sendSnackbarMessage("Favourites not implemented yet")
     }
 
     override fun onHistoryClick() {
-        snackbarMessageSender.sendSnackbarMessage("History not implemented yet")
+//        snackbarMessageSender.sendSnackbarMessage("History not implemented yet")
     }
 
     override fun refreshSongs() {

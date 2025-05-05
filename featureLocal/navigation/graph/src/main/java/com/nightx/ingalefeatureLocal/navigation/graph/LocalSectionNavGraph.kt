@@ -1,43 +1,19 @@
 package com.nightx.ingalefeatureLocal.navigation.graph
 
-import android.os.Parcelable
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import com.nightx.ingale.bottomBar.api.LocalBottomBarController
-import com.nightx.ingale.bottomBar.api.LocalBottomTabActivityState
-import com.nightx.ingale.core.navigation.Destination
-import com.nightx.ingale.core.navigation.NavigateEvent
-import com.nightx.ingale.core.navigation.NavigateUpEvent
-import com.nightx.ingale.core.navigation.putScreenData
-import com.nightx.ingale.core.ui.LaunchedEffect
-import com.nightx.ingale.core.ui.enterTransition
-import com.nightx.ingale.core.ui.exitTransition
-import com.nightx.ingale.core.ui.flows.ComposeCollect
-import com.nightx.ingale.core.ui.popEnterTransition
-import com.nightx.ingale.core.ui.popExitTransition
 import com.nightx.ingale.featureLocal.featureHome.presentation.ui.LocalMainScreen
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.ui.SongsSetScreen
-import com.nightx.ingale.featureLocal.navigation.api.LocalNavigation
 import com.nightx.ingale.featureLocal.navigation.api.destinations.SongsSetScreenDestination
 import com.nightx.ingale.feature_local.local_navigation.destinations.LocalScreenDestination
 import com.nightx.ingale.feature_local.local_navigation.destinations.MainScreenDestination
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 private val appDestinations = mapOf<LocalScreenDestination, @Composable (SavedStateHandle) -> Unit>(
     MainScreenDestination to { LocalMainScreen() },
     SongsSetScreenDestination to { SongsSetScreen(it) }
 )
 
+/*
 @Composable
 fun LocalSectionNavGraph() {
     val navController = rememberNavController()
@@ -67,8 +43,8 @@ fun LocalSectionNavGraph() {
 @Composable
 private fun ControlBottomBar(navController: NavController) {
     val currentDestination by navController.currentBackStackEntryAsState()
-    val bottomBarController = LocalBottomBarController.current
-    val tabActivityState = LocalBottomTabActivityState.current
+    val bottomBarController = com.nightx.ingale.root.api.LocalBottomBarController.current
+    val tabActivityState = com.nightx.ingale.root.api.LocalBottomTabActivityState.current
     LaunchedEffect(currentDestination, tabActivityState) { destination, isTabActive ->
         if (isTabActive) {
             bottomBarController.setVisibility(isBottomBarAllowed(destination?.destination?.route))
@@ -121,4 +97,4 @@ private fun NavController.popBackstackIfResumed(lifecycle: Lifecycle) {
     if(lifecycle.currentState == androidx.lifecycle.Lifecycle.State.RESUMED) {
         popBackStack()
     }
-}
+}*/

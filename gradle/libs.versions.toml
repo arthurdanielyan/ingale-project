@@ -10,6 +10,8 @@ realm = "1.14.0"
 coil = "2.6.0"
 espresso-core-version = "3.5.1"
 appcompat-version = "1.7.0"
+decompose-version = "3.0.0"
+kotlin-serialization-json = "1.6.2"
 
 [libraries]
 android-tools-build-gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "agp_version" }
@@ -53,6 +55,9 @@ realm-gradle-plugin = { group = "io.realm.kotlin", name = "gradle-plugin", versi
 coil-compose = { group ="io.coil-kt", name = "coil-compose", version.ref = "coil" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core-version" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat-version" }
+decompose-core = { group = "com.arkivanov.decompose", name = "decompose", version.ref = "decompose-version" }
+decompose-extensions-compose = { group = "com.arkivanov.decompose", name = "extensions-compose", version.ref = 'decompose-version' }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlin-serialization-json" }
 
 [plugins]
 ingale-android-library = { id = "nightx.ingale.android.library", version = "1.0.0" }
@@ -65,3 +70,5 @@ kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin-version"
 realm-kotlin = { id = "io.realm.kotlin", version.ref = "realm" }
 kotlinx-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin-version" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-version" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose" }

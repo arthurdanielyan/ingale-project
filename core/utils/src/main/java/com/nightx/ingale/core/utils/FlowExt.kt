@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.transformLatest
 
 /**
@@ -28,3 +29,10 @@ fun <T> Flow<T>.onEachLatest(action: suspend (T) -> Unit): Flow<T> =
         action(value)
         return@transformLatest emit(value)
     }
+
+fun <T> Flow<T>.stateInWhileSubscribed(
+    scope: CoroutineScope,
+    initialState: T
+) = this.stateIn(scope, SharingStarted.WhileSubscribed(DefaultTimeoutMillis), initialState)
+
+private const val DefaultTimeoutMillis = 5000L

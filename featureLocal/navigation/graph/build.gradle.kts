@@ -10,7 +10,7 @@ android {
 dependencies {
     implementation(projects.core.ui)
     implementation(projects.featureLocal.navigation.api)
-    implementation(projects.core.navigation)
+    implementation(projects.core.decompose)
     implementation(libs.androidx.compose.navigation)
     implementation(projects.featureLocal.featureHome.presentation)
     implementation(projects.featureLocal.featureSongsSet.presentation)

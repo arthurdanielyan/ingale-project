@@ -1,6 +1,5 @@
 package com.nightx.ingale.globalPlaybackPresentation.ui
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
@@ -39,11 +38,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.nightx.ingale.bottomBar.api.LocalBottomBarController
-import com.nightx.ingale.bottomBar.api.LocalBottomBarState
 import com.nightx.ingale.core.audioPlayer.api.CurrentSongInfo
-import com.nightx.ingale.core.ui.ObserveState
-import com.nightx.ingale.core.ui.SingleLaunchedEffect
 import com.nightx.ingale.core.ui.TextMarquee
 import com.nightx.ingale.core.ui.theme.dimensions
 import com.nightx.ingale.globalPlaybackPresentation.view.GlobalPlaybackComponent
@@ -67,25 +62,25 @@ fun PlaybackScreen(
     ) {
         // All these side effects should execute when the PlaybackScreen itself
         // enters the composition.
-        val bottomBarState = LocalBottomBarState.current
-        val bottomBarInitialState = remember {
-            bottomBarState.isBottomBarVisible.value
-        }
-        val bottomBarController = LocalBottomBarController.current
-
-        SingleLaunchedEffect {
-            Log.d("myLogs", "bottomBarInitialState: $bottomBarInitialState")
-            bottomBarController.setVisibility(false)
-        }
-        ObserveState(state.isPlaybackScreenVisible) { isPlaybackScreenVisible ->
-            bottomBarController.setVisibility(
-                if (isPlaybackScreenVisible) {
-                    false
-                } else {
-                    bottomBarInitialState
-                }
-            )
-        }
+//        val bottomBarState = com.nightx.ingale.root.api.LocalBottomBarState.current
+//        val bottomBarInitialState = remember {
+//            bottomBarState.isBottomBarVisible.value
+//        }
+//        val bottomBarController = com.nightx.ingale.root.api.LocalBottomBarController.current
+//
+//        SingleLaunchedEffect {
+//            Log.d("myLogs", "bottomBarInitialState: $bottomBarInitialState")
+//            bottomBarController.setVisibility(false)
+//        }
+//        ObserveState(state.isPlaybackScreenVisible) { isPlaybackScreenVisible ->
+//            bottomBarController.setVisibility(
+//                if (isPlaybackScreenVisible) {
+//                    false
+//                } else {
+//                    bottomBarInitialState
+//                }
+//            )
+//        }
 
         DisposableEffect(Unit) {
             onVisibilityChanged(true)

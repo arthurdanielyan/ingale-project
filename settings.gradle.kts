@@ -32,7 +32,7 @@ val coreModule = Module(
         ),
         Module("dataModel"),
         Module("domainModel"),
-        Module("navigation"),
+        Module("decompose"),
         Module("presentation"),
         Module("ui"),
         Module("utils"),
@@ -93,7 +93,7 @@ includeModules(
     resources,
     Module(
         "bottomBar",
-        submodules = apiImpl
+        submodules = listOf(Module("api"))
     ),
     Module("globalPlaybackPresentation"),
 )
@@ -122,3 +122,6 @@ fun Module.getPaths(): List<String> =
         }
         list
     }
+include(":root")
+include(":root:api")
+include(":root:impl")
