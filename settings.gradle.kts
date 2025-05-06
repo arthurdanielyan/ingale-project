@@ -93,8 +93,7 @@ includeModules(
     featureYoutube,
     resources,
     Module(
-        "bottomBar",
-        submodules = listOf(Module("api"))
+        "bottomBarApi",
     ),
     Module("globalPlaybackPresentation"),
 )

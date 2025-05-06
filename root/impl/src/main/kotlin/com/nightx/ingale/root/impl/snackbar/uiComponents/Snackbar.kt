@@ -32,6 +32,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import com.nightx.ingale.core.ui.theme.dimensions
+import com.nightx.ingale.root.api.snackbar.SnackbarComponent
+import com.nightx.ingale.root.api.snackbar.SnackbarMessageReceiver
 import com.nightx.ingale.root.impl.bottomNavigation.ui.BottomBarHeight
 import com.nightx.ingale.root.impl.snackbar.uiComponents.SnackbarHost.Companion.SnackbarAnimDuration
 
@@ -39,6 +41,7 @@ import com.nightx.ingale.root.impl.snackbar.uiComponents.SnackbarHost.Companion.
 internal fun SnackbarView(
     modifier: Modifier = Modifier,
     bottomBarPadding: () -> Dp,
+    snackbarComponent: SnackbarComponent,
 ) {
     val keyboardHeight by keyboardHeight()
     val snackbarBottomPadding by remember {
@@ -57,15 +60,19 @@ internal fun SnackbarView(
                     x = 0,
                     y = -snackbarBottomPadding.roundToPx()
                 )
-            }
+            },
+        snackbarMessageReceiver = snackbarComponent.snackbarMessageReceiver,
     )
 }
 
 @Composable
 private fun SnackbarHost(
     modifier: Modifier = Modifier,
+    snackbarMessageReceiver: SnackbarMessageReceiver,
 ) {
-    val snackbarHost = rememberSnackbarHost()
+    val snackbarHost = rememberSnackbarHost(
+        snackbarMessageReceiver = snackbarMessageReceiver
+    )
     Snackbar(
         modifier = modifier,
         snackbarHost = snackbarHost

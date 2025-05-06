@@ -16,6 +16,7 @@ val localHomeComponentFactoryModule = module {
             songsSetToNavArgMapper = get(),
             applicationContext = get(),
             playerUiActions = get(),
+            snackbarMessageSender = get(),
             stringProvider = get(),
         )
     }

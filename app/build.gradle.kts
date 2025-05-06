@@ -53,7 +53,7 @@ dependencies {
     implementation(libs.koin.androidx.compose)
 
     implementation(projects.core.ui)
-    implementation(projects.bottomBar.api)
+    implementation(projects.bottomBarApi)
     implementation(projects.globalPlaybackPresentation)
     implementation(projects.core.audioPlayer.impl)
     implementation(projects.core.dataModel)

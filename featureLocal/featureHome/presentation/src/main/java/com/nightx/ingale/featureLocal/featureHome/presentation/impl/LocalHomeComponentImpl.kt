@@ -9,6 +9,7 @@ import android.os.Build
 import android.provider.Settings
 import androidx.core.content.ContextCompat
 import com.arkivanov.essenty.lifecycle.doOnResume
+import com.nightx.ingale.bottomBarApi.SnackbarMessageSender
 import com.nightx.ingale.core.audioPlayer.api.PlayerUiActions
 import com.nightx.ingale.core.decompose.AppComponentContext
 import com.nightx.ingale.core.domainModel.LoadState
@@ -49,6 +50,7 @@ import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import com.nightx.ingale.featureLocal.featureHome.presentation.R.string as Strings
 
 internal class LocalHomeComponentImpl(
     appComponentContext: AppComponentContext,
@@ -61,6 +63,7 @@ internal class LocalHomeComponentImpl(
     private val songsSetToNavArgMapper: SongsSetToNavArgMapper,
     private val applicationContext: Context,
     private val playerUiActions: PlayerUiActions,
+    private val snackbarMessageSender: SnackbarMessageSender,
     private val stringProvider: StringProvider,
 ) : LocalHomeComponent,
     LocalMainCallbacks,
@@ -125,7 +128,9 @@ internal class LocalHomeComponentImpl(
             val isCached = getCachedState()
             delay(LongWait)
             if (isCached.not() && loadingViewState.value.isLoading()) {
-//                snackbarMessageSender.sendSnackbarMessage(string(R.string.longer_for_first_time))
+                snackbarMessageSender.sendSnackbarMessage(
+                    string(Strings.longer_for_first_time)
+                )
             }
         }
     }
@@ -249,15 +254,15 @@ internal class LocalHomeComponentImpl(
     }
 
     override fun onPlaylistsClick() {
-//        snackbarMessageSender.sendSnackbarMessage("Playlists not implemented yet")
+        snackbarMessageSender.sendSnackbarMessage("Playlists not implemented yet")
     }
 
     override fun onFavouritesClick() {
-//        snackbarMessageSender.sendSnackbarMessage("Favourites not implemented yet")
+        snackbarMessageSender.sendSnackbarMessage("Favourites not implemented yet")
     }
 
     override fun onHistoryClick() {
-//        snackbarMessageSender.sendSnackbarMessage("History not implemented yet")
+        snackbarMessageSender.sendSnackbarMessage("History not implemented yet")
     }
 
     override fun refreshSongs() {

@@ -16,7 +16,7 @@ dependencies {
     implementation(libs.koin.core)
     implementation(projects.core.ui)
     implementation(projects.core.utils)
-    implementation(projects.bottomBar.api)
+    implementation(projects.bottomBarApi)
     implementation(projects.resources.bottomBar)
     implementation(projects.featureLocal.navigation.impl)
 }

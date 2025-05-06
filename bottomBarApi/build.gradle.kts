@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.nightx.ingale.bottomBar.api"
+    namespace = "com.nightx.ingale.bottomBarApi"
 }
 
 dependencies {

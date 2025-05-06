@@ -1,4 +1,4 @@
-package com.nightx.ingale.bottomBar.api
+package com.nightx.ingale.bottomBarApi
 
 interface BottomBarController {
 

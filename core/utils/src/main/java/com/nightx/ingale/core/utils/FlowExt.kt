@@ -1,5 +1,6 @@
 package com.nightx.ingale.core.utils
 
+import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -36,3 +37,7 @@ fun <T> Flow<T>.stateInWhileSubscribed(
 ) = this.stateIn(scope, SharingStarted.WhileSubscribed(DefaultTimeoutMillis), initialState)
 
 private const val DefaultTimeoutMillis = 5000L
+
+inline fun yap(message: Any?) {
+    Log.d("yapping", message.toString())
+}

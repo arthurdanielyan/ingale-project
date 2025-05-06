@@ -22,8 +22,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/bottomBar" />
-            <option value="$PROJECT_DIR$/bottomBar/api" />
+            <option value="$PROJECT_DIR$/bottomBarApi" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core/audioPlayer" />
             <option value="$PROJECT_DIR$/core/audioPlayer/api" />

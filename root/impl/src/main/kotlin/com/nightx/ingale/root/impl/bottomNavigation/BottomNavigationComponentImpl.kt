@@ -2,16 +2,19 @@ package com.nightx.ingale.root.impl.bottomNavigation
 
 import com.arkivanov.essenty.backhandler.BackCallback
 import com.nightx.ingale.core.decompose.AppComponentContext
+import com.nightx.ingale.core.decompose.appChildContext
 import com.nightx.ingale.core.utils.stateInWhileSubscribed
 import com.nightx.ingale.root.api.bottomBar.BottomBarItemViewState
 import com.nightx.ingale.root.api.bottomBar.BottomNavigationComponent
 import com.nightx.ingale.root.api.bottomBar.BottomNavigationState
+import com.nightx.ingale.root.api.snackbar.SnackbarComponent
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 
 internal class BottomNavigationComponentImpl(
     appComponentContext: AppComponentContext,
     selectedTab: StateFlow<BottomBarItemViewState>,
+    snackbarComponentFactory: SnackbarComponent.Factory,
     private val onTabSelectedCallback: (BottomBarItemViewState) -> Unit,
     private val bottomBarControllerImpl: BottomBarControllerImpl
 ) : BottomNavigationComponent, AppComponentContext by appComponentContext {
@@ -19,6 +22,10 @@ internal class BottomNavigationComponentImpl(
     private val backCallback = BackCallback {
         onTabSelectedCallback(BottomBarItemViewState.Local)
     }
+
+    override val snackbarComponent = snackbarComponentFactory(
+        appComponentContext = appChildContext("snackbarComponent"),
+    )
 
     override val uiState: StateFlow<BottomNavigationState> = combine(
         selectedTab,

@@ -17,8 +17,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
-import com.nightx.ingale.bottomBar.api.LocalSnackbarMessageReceiver
-import com.nightx.ingale.bottomBar.api.SnackbarMessageReceiver
+import com.nightx.ingale.root.api.snackbar.SnackbarMessageReceiver
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -103,8 +102,9 @@ internal class SnackbarHost(
 }
 
 @Composable
-internal fun rememberSnackbarHost(): SnackbarHost {
-    val snackbarMessageReceiver = LocalSnackbarMessageReceiver.current
+internal fun rememberSnackbarHost(
+    snackbarMessageReceiver: SnackbarMessageReceiver
+): SnackbarHost {
     val density = LocalDensity.current
     val screenWidth = LocalConfiguration.current.screenWidthDp
     return remember {

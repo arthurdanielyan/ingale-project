@@ -1,15 +1,11 @@
 package com.nightx.ingale.root.impl.snackbar
 
-import com.nightx.ingale.bottomBar.api.SnackbarMessageReceiver
-import com.nightx.ingale.bottomBar.api.SnackbarMessageSender
+import com.nightx.ingale.bottomBarApi.SnackbarMessageSender
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.binds
 import org.koin.dsl.module
 
 val snackbarMessageSenderModule = module {
-    val snackbarMessageSender = SnackbarMessageSenderImpl()
-    single<SnackbarMessageSender> {
-        snackbarMessageSender
-    }
-    single<SnackbarMessageReceiver> {
-        snackbarMessageSender
-    }
+
+    singleOf(::SnackbarMessageSenderImpl) binds arrayOf(SnackbarMessageSender::class)
 }

@@ -1,6 +1,6 @@
 package com.nightx.ingale.featureLocal.navigation.impl
 
-import com.nightx.ingale.bottomBar.api.BottomBarController
+import com.nightx.ingale.bottomBarApi.BottomBarController
 import com.nightx.ingale.core.decompose.AppComponentContext
 import com.nightx.ingale.featureLocal.featureHome.presentation.api.LocalHomeComponent
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.api.SongsSetComponent

@@ -14,7 +14,7 @@ dependencies {
 
     implementation(projects.core.ui)
     implementation(projects.core.audioPlayer.api)
-    implementation(projects.bottomBar.api)
+    implementation(projects.bottomBarApi)
     implementation(projects.core.presentation)
     implementation(projects.resources.strings)
     implementation(projects.resources.icon)

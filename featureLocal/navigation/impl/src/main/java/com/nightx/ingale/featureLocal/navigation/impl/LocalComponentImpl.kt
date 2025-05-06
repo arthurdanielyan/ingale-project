@@ -5,7 +5,7 @@ import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.value.subscribe
 import com.arkivanov.essenty.lifecycle.doOnResume
-import com.nightx.ingale.bottomBar.api.BottomBarController
+import com.nightx.ingale.bottomBarApi.BottomBarController
 import com.nightx.ingale.core.decompose.AppComponentContext
 import com.nightx.ingale.core.decompose.appChildStack
 import com.nightx.ingale.featureLocal.featureHome.presentation.api.LocalHomeComponent

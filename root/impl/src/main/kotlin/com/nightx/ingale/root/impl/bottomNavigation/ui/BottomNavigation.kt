@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import com.nightx.ingale.core.ui.screenTransitionDuration
 import com.nightx.ingale.root.api.bottomBar.BottomBarItemViewState
 import com.nightx.ingale.root.api.bottomBar.BottomNavigationComponent
@@ -67,10 +66,10 @@ fun BottomNavigation(
                 .align(Alignment.BottomCenter),
             bottomBarPadding = {
                 BottomBarHeight - bottomBarOffsetAnim
-            }
+            },
+            snackbarComponent = component.snackbarComponent,
         )
         BottomBar(
-            modifier = Modifier.zIndex(BottomBarZ),
             offset = {
                 bottomBarOffsetAnim.roundToPx()
             },

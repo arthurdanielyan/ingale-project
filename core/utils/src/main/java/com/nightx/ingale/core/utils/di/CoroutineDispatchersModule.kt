@@ -14,7 +14,7 @@ val coroutineDispatchersModule = module {
             main = Dispatchers.Main
         )
     }
-    single {
+    single(createdAtStart = true) { // application scope
         val dispatchers = get<CoroutineDispatchers>()
         CoroutineScope(SupervisorJob() + dispatchers.main)
     }

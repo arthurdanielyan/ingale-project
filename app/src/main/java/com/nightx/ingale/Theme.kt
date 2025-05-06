@@ -11,9 +11,6 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
-//import com.nightx.ingale.bottomBar.api.LocalBottomBarController
-//import com.nightx.ingale.bottomBar.api.LocalBottomBarState
-import com.nightx.ingale.bottomBar.api.LocalSnackbarMessageReceiver
 import com.nightx.ingale.core.ui.theme.DefaultDimensions
 import com.nightx.ingale.core.ui.theme.LocalDimensions
 import com.nightx.ingale.core.ui.theme.colorScheme.IngaleColorsDark
@@ -118,11 +115,9 @@ fun IngaleTheme(
         LocalIngaleColors provides
                 if (isSystemInDarkTheme()) IngaleColorsDark() else IngaleColorsLight(),
         LocalNavigation provides koinInject(),
-//        LocalBottomBarState provides koinInject(),
-//        LocalBottomBarController provides koinInject(),
         LocalMusicBarController provides koinInject(),
         LocalMusicBarEffects provides koinInject(),
-        LocalSnackbarMessageReceiver provides koinInject(),
+//        LocalSnackbarMessageReceiver provides koinInject(),
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
