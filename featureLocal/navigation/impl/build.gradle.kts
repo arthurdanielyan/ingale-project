@@ -15,7 +15,9 @@ dependencies {
     implementation(libs.koin.core)
     implementation(projects.core.ui)
     implementation(libs.androidx.compose.navigation)
+    implementation(projects.bottomBar.api)
 
     // Screens
     implementation(projects.featureLocal.featureHome.presentation)
+    implementation(projects.featureLocal.featureSongsSet.presentation)
 }

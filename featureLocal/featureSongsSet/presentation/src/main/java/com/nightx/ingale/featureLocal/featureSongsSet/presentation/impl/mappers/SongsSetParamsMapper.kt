@@ -1,14 +1,14 @@
-package com.nightx.ingale.featureLocal.featureSongsSet.presentation.view.mappers
+package com.nightx.ingale.featureLocal.featureSongsSet.presentation.impl.mappers
 
 import com.nightx.ingale.core.utils.Mapper
 import com.nightx.ingale.core.viewState.toStableList
 import com.nightx.ingale.featureLocal.core.ui.viewState.SongViewState
 import com.nightx.ingale.featureLocal.core.ui.viewState.SongsSetViewState
-import com.nightx.ingale.featureLocal.navigation.api.destinations.SongsSetScreenDestination
+import com.nightx.ingale.featureLocal.featureSongsSet.presentation.api.SongsSetComponent
 
-class SongsSetArgMapper : Mapper<SongsSetScreenDestination.SongsSetArgs, SongsSetViewState> {
+class SongsSetParamsMapper : Mapper<SongsSetComponent.Params, SongsSetViewState> {
 
-    override fun map(from: SongsSetScreenDestination.SongsSetArgs) =
+    override fun map(from: SongsSetComponent.Params) =
         SongsSetViewState(
             id = from.id,
             title = from.title,

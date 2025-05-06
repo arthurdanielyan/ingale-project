@@ -1,7 +1,6 @@
 package com.nightx.ingale.featureLocal.core.ui.viewState
 
 import androidx.compose.runtime.Immutable
-import com.nightx.ingale.core.presentation.viewModel.UiState
 import com.nightx.ingale.core.viewState.StableList
 import com.nightx.ingale.core.viewState.emptyStableList
 
@@ -11,4 +10,4 @@ data class SongsSetViewState(
     val title: String = "Loading...",
     val songs: StableList<SongViewState> = emptyStableList(),
     val iconPath: String = "",
-) : UiState
+)

@@ -10,7 +10,7 @@ import com.arkivanov.essenty.lifecycle.Lifecycle
 import kotlinx.serialization.KSerializer
 
 @Suppress("UNCHECKED_CAST")
-fun <CONTEXT : AppComponentContext, CONFIG : Any, COMPONENT : Any> CONTEXT.appChildStack(
+fun <CONTEXT : AppComponentContext, CONFIG : ScreenConfig, COMPONENT : Any> CONTEXT.appChildStack(
     source: NavigationSource<StackNavigation.Event<CONFIG>>,
     serializer: KSerializer<CONFIG>?,
     initialConfiguration: CONFIG,

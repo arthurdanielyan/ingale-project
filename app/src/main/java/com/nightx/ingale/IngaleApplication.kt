@@ -12,6 +12,7 @@ import com.nightx.ingale.core.dataModel.di.realmModule
 import com.nightx.ingale.core.utils.di.coroutineDispatchersModule
 import com.nightx.ingale.featureLocal.core.ui.featureLocalCoreUiModule
 import com.nightx.ingale.featureLocal.featureHome.presentation.di.featureHomePresentationModule
+import com.nightx.ingale.featureLocal.featureSongsSet.presentation.di.songsSetPresentationModule
 import com.nightx.ingale.featureLocal.navigation.impl.di.localComponentFactoryModule
 import com.nightx.ingale.featureLocal.navigation.impl.di.localNavigationModule
 import com.nightx.ingale.globalPlaybackPresentation.globalPlaybackPresentationModule
@@ -48,7 +49,7 @@ class IngaleApplication : Application() {
                 com.nightx.ingale.featureLocal.featureHome.data.dataModule,
                 com.nightx.ingale.featureLocal.featureHome.domain.domainModule,
                 *featureHomePresentationModule.toTypedArray(),
-                *com.nightx.ingale.featureLocal.featureSongsSet.presentation.presentationModule.toTypedArray(),
+                *songsSetPresentationModule.toTypedArray(),
             )
         }
 

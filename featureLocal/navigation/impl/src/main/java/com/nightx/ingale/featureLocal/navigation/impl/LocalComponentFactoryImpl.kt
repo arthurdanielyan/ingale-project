@@ -1,11 +1,15 @@
 package com.nightx.ingale.featureLocal.navigation.impl
 
+import com.nightx.ingale.bottomBar.api.BottomBarController
 import com.nightx.ingale.core.decompose.AppComponentContext
 import com.nightx.ingale.featureLocal.featureHome.presentation.api.LocalHomeComponent
+import com.nightx.ingale.featureLocal.featureSongsSet.presentation.api.SongsSetComponent
 import com.nightx.ingale.featureLocal.navigation.api.LocalComponent
 
 internal class LocalComponentFactoryImpl(
-    private val localHomeComponentFactory: LocalHomeComponent.Factory
+    private val bottomBarController: BottomBarController,
+    private val localHomeComponentFactory: LocalHomeComponent.Factory,
+    private val songsSetComponentFactory: SongsSetComponent.Factory,
 ) : LocalComponent.Factory {
 
     override fun invoke(
@@ -13,7 +17,9 @@ internal class LocalComponentFactoryImpl(
     ): LocalComponent {
         return LocalComponentImpl(
             appComponentContext = appComponentContext,
+            bottomBarController = bottomBarController,
             localHomeComponentFactory = localHomeComponentFactory,
+            songsSetComponentFactory = songsSetComponentFactory,
         )
     }
 }

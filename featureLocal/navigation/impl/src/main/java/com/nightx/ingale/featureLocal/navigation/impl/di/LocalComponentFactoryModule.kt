@@ -7,7 +7,9 @@ import org.koin.dsl.module
 val localComponentFactoryModule = module {
     single<LocalComponent.Factory> {
         LocalComponentFactoryImpl(
+            bottomBarController = get(),
             localHomeComponentFactory = get(),
+            songsSetComponentFactory = get(),
         )
     }
 }
