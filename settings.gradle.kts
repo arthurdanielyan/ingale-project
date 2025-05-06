@@ -40,6 +40,11 @@ val coreModule = Module(
     )
 )
 
+val root = Module(
+    name = "root",
+    submodules = apiImpl,
+)
+
 val featureLocal = Module(
     name = "featureLocal",
     submodules = listOf(
@@ -48,7 +53,6 @@ val featureLocal = Module(
             submodules = listOf(
                 Module("data"),
                 Module("ui"),
-                Module("viewState"),
             )
         ),
         Module(
@@ -64,11 +68,7 @@ val featureLocal = Module(
         ),
         Module(
             name = "navigation",
-            submodules = listOf(
-                Module("api"),
-                Module("impl"),
-                Module("graph")
-            )
+            submodules = apiImpl,
         )
     )
 )
@@ -88,6 +88,7 @@ val resources = Module(
 
 includeModules(
     coreModule,
+    root,
     featureLocal,
     featureYoutube,
     resources,
@@ -103,13 +104,13 @@ data class Module(
     val submodules: List<Module> = emptyList()
 )
 
-fun includeModules(vararg modules: Module) {
+private fun includeModules(vararg modules: Module) {
     modules.forEach { module ->
         module.getPaths().forEach { include(it) }
     }
 }
 
-fun Module.getPaths(): List<String> =
+private fun Module.getPaths(): List<String> =
     if(submodules.isEmpty()) {
         listOf(this.name)
     } else {
@@ -122,6 +123,3 @@ fun Module.getPaths(): List<String> =
         }
         list
     }
-include(":root")
-include(":root:api")
-include(":root:impl")

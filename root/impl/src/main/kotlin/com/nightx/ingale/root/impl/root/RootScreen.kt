@@ -17,6 +17,7 @@ import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.nightx.ingale.core.ui.slideInFromLeftOutToRight
 import com.nightx.ingale.core.ui.slideInFromRightOutToLeft
 import com.nightx.ingale.featureLocal.navigation.api.LocalComponent
+import com.nightx.ingale.featureLocal.navigation.impl.LocalScreen
 import com.nightx.ingale.root.api.root.RootComponent
 import com.nightx.ingale.root.api.root.RootScreenConfig
 import com.nightx.ingale.root.api.root.toBottomBarItemViewState
@@ -37,20 +38,9 @@ fun RootScreen(
                 getContentTransformation(child.configuration, otherChild.configuration, direction)
             }
         ) {
-            when (it.instance) {
+            when (val childComponent = it.instance) {
                 is LocalComponent -> {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(MaterialTheme.colorScheme.background),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "Local Tab",
-                            style = MaterialTheme.typography.headlineLarge,
-                            textAlign = TextAlign.Center
-                        )
-                    }
+                    LocalScreen(childComponent)
                 }
 
                 else -> {

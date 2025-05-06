@@ -58,7 +58,7 @@ dependencies {
     implementation(projects.core.audioPlayer.impl)
     implementation(projects.core.dataModel)
     implementation(projects.core.utils)
-    implementation(projects.featureLocal.core.viewState)
+    implementation(projects.featureLocal.core.ui)
     implementation(projects.featureLocal.featureHome.data)
     implementation(projects.featureLocal.featureHome.domain)
     implementation(projects.featureLocal.featureHome.presentation)

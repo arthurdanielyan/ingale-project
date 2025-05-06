@@ -1,19 +1,19 @@
-package com.nightx.ingale.featureLocal.featureSongsSet.presentation.view.mappers
+package com.nightx.ingale.featureLocal.featureHome.presentation.impl.mappers
 
 import com.nightx.ingale.core.utils.Mapper
-import com.nightx.ingale.core.viewState.toStableList
-import com.nightx.ingale.featureLocal.core.ui.viewState.SongViewState
 import com.nightx.ingale.featureLocal.core.ui.viewState.SongsSetViewState
-import com.nightx.ingale.featureLocal.navigation.api.destinations.SongsSetScreenDestination
+import com.nightx.ingale.featureLocal.navigation.api.LocalScreenConfig
+import com.nightx.ingale.featureLocal.navigation.api.LocalScreenConfig.SongsSet.SongArg
 
-class SongsSetArgMapper : Mapper<SongsSetScreenDestination.SongsSetArgs, SongsSetViewState> {
+internal class SongsSetToNavArgMapper :
+    Mapper<SongsSetViewState, LocalScreenConfig.SongsSet> {
 
-    override fun map(from: SongsSetScreenDestination.SongsSetArgs) =
-        SongsSetViewState(
+    override fun map(from: SongsSetViewState): LocalScreenConfig.SongsSet {
+        return LocalScreenConfig.SongsSet(
             id = from.id,
             title = from.title,
             songs = from.songs.map {
-                SongViewState(
+                SongArg(
                     id = it.id,
                     title = it.title,
                     album = it.album,
@@ -24,9 +24,10 @@ class SongsSetArgMapper : Mapper<SongsSetScreenDestination.SongsSetArgs, SongsSe
                     picturePath = it.picturePath,
                     artistId = it.artistId,
                     albumId = it.albumId,
-                    lastModifier = it.lastModified
+                    lastModified = it.lastModifier
                 )
-            }.toStableList(),
+            },
             iconPath = from.iconPath
         )
+    }
 }

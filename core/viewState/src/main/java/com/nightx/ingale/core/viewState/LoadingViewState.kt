@@ -2,19 +2,20 @@ package com.nightx.ingale.core.viewState
 
 import com.nightx.ingale.core.domainModel.LoadState
 
-sealed class LoadingViewState {
-
-    val isLoading: Boolean
-        get() = this is Loading
-    val isSuccess: Boolean
-        get() = this is Loading
-    val isError: Boolean
-        get() = this is Error
-
-    data object Loading : LoadingViewState()
-    data object Success : LoadingViewState()
-    data class Error(val message: String): LoadingViewState()
+sealed interface LoadingViewState {
+    data object Loading : LoadingViewState
+    data object Success : LoadingViewState
+    data class Error(val message: String) : LoadingViewState
 }
+
+fun LoadingViewState.isLoading(): Boolean =
+    this is LoadingViewState.Loading
+
+fun LoadingViewState.isSuccess(): Boolean =
+    this is LoadingViewState.Success
+
+fun LoadingViewState.isError(): Boolean =
+    this is LoadingViewState.Error
 
 fun LoadState<*>.toLoadingViewState(): LoadingViewState =
     when(this) {

@@ -15,32 +15,30 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.nightx.ingale.core.presentation.diExt.ingaleViewModels
 import com.nightx.ingale.core.ui.DataPlaceholder
 import com.nightx.ingale.core.ui.LoadingStatePresenter
 import com.nightx.ingale.core.ui.ObserveState
-import com.nightx.ingale.core.ui.OnLifecycleEvents
 import com.nightx.ingale.core.ui.extensions.marquee
 import com.nightx.ingale.core.ui.flows.ObserveEffects
 import com.nightx.ingale.core.ui.theme.dimensions
-import com.nightx.ingale.featureLocal.core.ui.SongsLazyList
+import com.nightx.ingale.core.viewState.isError
+import com.nightx.ingale.core.viewState.isLoading
+import com.nightx.ingale.featureLocal.core.ui.components.SongsLazyList
+import com.nightx.ingale.featureLocal.featureHome.presentation.api.LocalHomeComponent
+import com.nightx.ingale.featureLocal.featureHome.presentation.api.LocalMainCallbacks
+import com.nightx.ingale.featureLocal.featureHome.presentation.api.LocalMainScreenViewState
+import com.nightx.ingale.featureLocal.featureHome.presentation.api.LocalMainUiEffect
 import com.nightx.ingale.featureLocal.featureHome.presentation.ui.components.CommonSongSetsGrid
 import com.nightx.ingale.featureLocal.featureHome.presentation.ui.components.SearchTextField
 import com.nightx.ingale.featureLocal.featureHome.presentation.ui.components.SongsSetButtons
 import com.nightx.ingale.featureLocal.featureHome.presentation.ui.components.TabRow
-import com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.Effect
-import com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.LocalMainCallbacks
-import com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.LocalMainViewModel
-import com.nightx.ingale.featureLocal.featureHome.presentation.view.viewModel.viewState.LocalMainScreenViewState
-import com.nightx.ingale.featureLocal.featureRequirePermissions.RequiredPermissionsRequesterDialog
 import com.nightx.ingale.globalPlaybackPresentation.musicBarController.LocalMusicBarController
 import com.nightx.ingale.globalPlaybackPresentation.musicBarController.MusicBarEffect
 import com.nightx.ingale.globalPlaybackPresentation.ui.rememberNestedScrollForMusicBarNotification
@@ -49,22 +47,17 @@ import kotlinx.coroutines.flow.Flow
 import com.nightx.ingale.resources.strings.R.string as Strings
 
 @Composable
-fun LocalMainScreen() {
-    val vm = ingaleViewModels<LocalMainViewModel>()
-    val state by vm.state.collectAsStateWithLifecycle()
-
-    OnLifecycleEvents { event ->
-        if (event == Lifecycle.Event.ON_RESUME) {
-            vm.onResume()
-        }
-    }
-
-    RequiredPermissionsRequesterDialog(vm.permissionsDialogComponentHolder)
+fun LocalMainScreen(
+    component: LocalHomeComponent
+) {
+    val state by component.uiState.collectAsState()
+    val callbacks = component.uiCallbacks
+    val effect = component.uiEffect
 
     LocalMainScreen(
         state = state,
-        callbacks = vm,
-        effects = vm.effect
+        callbacks = callbacks,
+        effects = effect
     )
 }
 
@@ -72,7 +65,7 @@ fun LocalMainScreen() {
 private fun LocalMainScreen(
     state: LocalMainScreenViewState,
     callbacks: LocalMainCallbacks,
-    effects: Flow<Effect>,
+    effects: Flow<LocalMainUiEffect>,
 ) {
     val songsLazyColumnState = rememberLazyListState()
     val albumsGridsState = rememberLazyGridState()
@@ -81,7 +74,7 @@ private fun LocalMainScreen(
 
     ObserveEffects(effects) { effect ->
         when (effect) {
-            Effect.ScrollToTop -> {
+            LocalMainUiEffect.ScrollToTop -> {
                 delay(100) // delay for the list to have time to update
                 if (songsLazyColumnState.canScrollBackward) {
                     songsLazyColumnState.animateScrollToItem(0)
@@ -131,7 +124,7 @@ private fun LocalMainScreen(
             modifier = Modifier.fillMaxWidth(),
             pagerState = pagerState,
             items = state.sections,
-            userScrollEnabled = state.loadingState.isError.not()
+            userScrollEnabled = state.loadingState.isError().not()
         ) { title ->
             Text(
                 text = stringResource(id = title),
@@ -146,7 +139,7 @@ private fun LocalMainScreen(
         HorizontalPager(
             state = pagerState,
             key = { it },
-            userScrollEnabled = state.loadingState.isError.not()
+            userScrollEnabled = state.loadingState.isError().not()
         ) {
             when (it) {
                 0 -> {
@@ -159,7 +152,7 @@ private fun LocalMainScreen(
                                 lazyListState = songsLazyColumnState,
                                 songs = state.songs,
                                 query = state.searchTextField,
-                                isLoading = state.loadingState.isLoading,
+                                isLoading = state.loadingState.isLoading(),
                                 onSongClick = callbacks::onSongClick
                             )
                         },
@@ -196,7 +189,7 @@ private fun LocalMainScreen(
                         lazyGridState = albumsGridsState,
                         items = state.albums,
                         onClick = callbacks::onAlbumClick,
-                        isLoading = state.loadingState.isLoading,
+                        isLoading = state.loadingState.isLoading(),
                         query = state.searchTextField
                     )
                 }
@@ -208,7 +201,7 @@ private fun LocalMainScreen(
                         lazyGridState = artistsGridsState,
                         items = state.artists,
                         onClick = callbacks::onArtistClick,
-                        isLoading = state.loadingState.isLoading,
+                        isLoading = state.loadingState.isLoading(),
                         query = state.searchTextField
                     )
                 }

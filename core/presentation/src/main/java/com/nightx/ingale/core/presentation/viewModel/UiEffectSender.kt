@@ -1,0 +1,14 @@
+package com.nightx.ingale.core.presentation.viewModel
+
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
+
+abstract class UiEffectSender<UiEffect> {
+
+    private val _effect = Channel<UiEffect>()
+    val uiEffect = _effect.receiveAsFlow()
+
+    protected fun sendEffect(builder: () -> UiEffect) {
+        _effect.trySend(builder())
+    }
+}

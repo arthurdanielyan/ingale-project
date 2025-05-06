@@ -33,12 +33,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
-import com.nightx.featureLocal.core.viewState.SongsSetViewState
 import com.nightx.ingale.core.ui.SongIcon
 import com.nightx.ingale.core.ui.extensions.shimmer
 import com.nightx.ingale.core.ui.highlight
 import com.nightx.ingale.core.ui.theme.dimensions
 import com.nightx.ingale.core.viewState.StableList
+import com.nightx.ingale.featureLocal.core.ui.viewState.SongsSetViewState
 
 /**
  * For Albums, Artists sections and for Playlists in the future

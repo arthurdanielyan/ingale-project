@@ -18,4 +18,5 @@ dependencies {
     implementation(projects.core.utils)
     implementation(projects.bottomBar.api)
     implementation(projects.resources.bottomBar)
+    implementation(projects.featureLocal.navigation.impl)
 }

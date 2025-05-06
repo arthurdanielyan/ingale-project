@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.nightx.featureLocal.core.viewState.SongsSetViewState
 import com.nightx.ingale.core.presentation.diExt.ingaleViewModels
 import com.nightx.ingale.core.ui.SongIcon
 import com.nightx.ingale.core.ui.extensions.alpha
@@ -34,7 +33,8 @@ import com.nightx.ingale.core.ui.theme.dimensions
 import com.nightx.ingale.core.ui.topBar.TopBarBackButton
 import com.nightx.ingale.core.ui.topBar.TopBarHeight
 import com.nightx.ingale.core.ui.topBar.TopBarWithBackButton
-import com.nightx.ingale.featureLocal.core.ui.SongsLazyList
+import com.nightx.ingale.featureLocal.core.ui.components.SongsLazyList
+import com.nightx.ingale.featureLocal.core.ui.viewState.SongsSetViewState
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.view.viewModel.SongsSetCallbacks
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.view.viewModel.SongsSetViewModel
 import com.nightx.ingale.globalPlaybackPresentation.ui.rememberNestedScrollForMusicBarNotification

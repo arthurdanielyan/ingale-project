@@ -6,7 +6,7 @@ import com.nightx.ingale.core.decompose.AppComponentContext
 
 interface LocalComponent {
 
-    val childStack: Value<ChildStack<LocalScreenConfig, Unit>>
+    val childStack: Value<ChildStack<LocalScreenConfig, Any>>
 
     fun interface Factory {
 

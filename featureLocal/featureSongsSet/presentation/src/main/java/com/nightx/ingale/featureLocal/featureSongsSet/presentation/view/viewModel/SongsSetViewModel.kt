@@ -1,14 +1,14 @@
 package com.nightx.ingale.featureLocal.featureSongsSet.presentation.view.viewModel
 
 import androidx.lifecycle.SavedStateHandle
-import com.nightx.featureLocal.core.viewState.SongsSetViewState
-import com.nightx.featureLocal.core.viewState.song.SongViewState
 import com.nightx.ingale.core.audioPlayer.api.PlayerUiActions
 import com.nightx.ingale.core.decompose.getArgument
 import com.nightx.ingale.core.domainModel.Song
 import com.nightx.ingale.core.presentation.viewModel.BaseViewModel
 import com.nightx.ingale.core.presentation.viewModel.UiEffect
 import com.nightx.ingale.core.utils.mapList
+import com.nightx.ingale.featureLocal.core.ui.viewState.SongViewState
+import com.nightx.ingale.featureLocal.core.ui.viewState.SongsSetViewState
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.view.mappers.SongArgMapper
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.view.mappers.SongsSetArgMapper
 import com.nightx.ingale.featureLocal.navigation.api.LocalNavigator

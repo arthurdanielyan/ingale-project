@@ -13,7 +13,6 @@ dependencies{
 
     implementation(projects.featureLocal.featureHome.domain)
     implementation(projects.featureLocal.featureRequirePermissions)
-    implementation(projects.featureLocal.core.viewState)
     implementation(projects.featureLocal.core.ui)
     implementation(projects.globalPlaybackPresentation)
     implementation(projects.bottomBar.api)
