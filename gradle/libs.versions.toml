@@ -1,6 +1,5 @@
 [versions]
 ktx = "1.9.0"
-retrofit = "2.9.0"
 agp_version = "8.2.1"
 kotlin-version = "1.9.24"
 compose-bom = "2024.09.03"
@@ -17,9 +16,7 @@ kotlin-serialization-json = "1.6.2"
 android-tools-build-gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "agp_version" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin-version" }
 androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
-kotlin-bom = { group = "org.jetbrains.kotlin", name = "kotlin-bom", version.ref = "ktx" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.7.3" }
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
@@ -33,7 +30,6 @@ androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name ="ui
 androidx-compose-foundation = { group = "androidx.compose.foundation", name ="foundation" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name ="material3" }
 google-material = { group = "com.google.android.material", name ="material", version = "1.11.0" }
-androidx-media3 = { group = "androidx.media3", name ="media3-ui", version = "1.2.0" }
 junit = { group = "junit", name ="junit", version = "4.13.2" }
 androidx-junit = { group = "androidx.test.ext", name ="junit", version = "1.1.5" }
 #androidx-espresso = { group = "androidx.test.espresso", name ="espresso" }
@@ -67,4 +63,3 @@ realm-kotlin = { id = "io.realm.kotlin", version.ref = "realm" }
 kotlinx-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin-version" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-version" }
-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose" }
