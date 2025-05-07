@@ -15,4 +15,5 @@ dependencies {
     implementation(libs.androidx.compose.runtime)
     implementation(projects.resources.strings)
     implementation(projects.resources.bottomBar)
+    implementation(projects.globalPlaybackPresentation)
 }

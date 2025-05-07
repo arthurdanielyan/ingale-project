@@ -23,6 +23,7 @@ val rootModule = module {
     factory<BottomNavigationComponent.Factory> {
         BottomNavigationComponentFactory(
             snackbarComponentFactory = get(),
+            musicBarComponentFactory = get(),
             bottomBarControllerImpl = get(),
         )
     }

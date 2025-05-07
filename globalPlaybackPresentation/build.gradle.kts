@@ -12,7 +12,9 @@ dependencies {
 
     implementation(libs.koin.core)
 
+    implementation(projects.core.decompose)
     implementation(projects.core.ui)
+    implementation(projects.core.utils)
     implementation(projects.core.audioPlayer.api)
     implementation(projects.bottomBarApi)
     implementation(projects.core.presentation)

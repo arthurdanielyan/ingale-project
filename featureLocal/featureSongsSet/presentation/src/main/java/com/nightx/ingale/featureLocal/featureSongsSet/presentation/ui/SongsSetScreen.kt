@@ -35,7 +35,7 @@ import com.nightx.ingale.featureLocal.core.ui.components.SongsLazyList
 import com.nightx.ingale.featureLocal.core.ui.viewState.SongsSetViewState
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.api.SongsSetComponent
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.impl.SongsSetUiCallbacks
-import com.nightx.ingale.globalPlaybackPresentation.ui.rememberNestedScrollForMusicBarNotification
+import com.nightx.ingale.globalPlaybackPresentation.musicBar.api.rememberNestedScrollForMusicBarNotification
 
 @Composable
 fun SongsSetScreen(

@@ -1,4 +1,4 @@
-package com.nightx.ingale.globalPlaybackPresentation.ui
+package com.nightx.ingale.globalPlaybackPresentation.musicBar.api
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -8,11 +8,8 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
-import com.nightx.ingale.globalPlaybackPresentation.musicBarController.LocalMusicBarController
-import com.nightx.ingale.globalPlaybackPresentation.musicBarController.MusicBarController
-import com.nightx.ingale.globalPlaybackPresentation.musicBarController.MusicBarEffect
 
-class NestedScrollForMusicBarNotification(
+private class NestedScrollForMusicBarNotification(
     private val musicBarController: MusicBarController,
     private val density: Density,
 ) : NestedScrollConnection {
@@ -39,7 +36,7 @@ class NestedScrollForMusicBarNotification(
 }
 
 @Composable
-fun rememberNestedScrollForMusicBarNotification(): NestedScrollForMusicBarNotification {
+fun rememberNestedScrollForMusicBarNotification(): NestedScrollConnection {
     val musicBarController = LocalMusicBarController.current
     val density = LocalDensity.current
     return remember {

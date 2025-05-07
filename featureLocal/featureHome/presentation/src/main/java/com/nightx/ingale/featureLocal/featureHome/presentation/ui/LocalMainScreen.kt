@@ -39,9 +39,9 @@ import com.nightx.ingale.featureLocal.featureHome.presentation.ui.components.Com
 import com.nightx.ingale.featureLocal.featureHome.presentation.ui.components.SearchTextField
 import com.nightx.ingale.featureLocal.featureHome.presentation.ui.components.SongsSetButtons
 import com.nightx.ingale.featureLocal.featureHome.presentation.ui.components.TabRow
-import com.nightx.ingale.globalPlaybackPresentation.musicBarController.LocalMusicBarController
-import com.nightx.ingale.globalPlaybackPresentation.musicBarController.MusicBarEffect
-import com.nightx.ingale.globalPlaybackPresentation.ui.rememberNestedScrollForMusicBarNotification
+import com.nightx.ingale.globalPlaybackPresentation.musicBar.api.LocalMusicBarController
+import com.nightx.ingale.globalPlaybackPresentation.musicBar.api.MusicBarEffect
+import com.nightx.ingale.globalPlaybackPresentation.musicBar.api.rememberNestedScrollForMusicBarNotification
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import com.nightx.ingale.resources.strings.R.string as Strings

@@ -1,9 +1,10 @@
 plugins {
     alias(libs.plugins.ingale.android.library)
+    alias(libs.plugins.ingale.uses.compose)
 }
 
 android {
-    namespace = "com.nightx.ingale.featureLocal.navigation.impl"
+    namespace = "com.nightx.ingale.featureLocal.navigation.ui"
 }
 
 dependencies {
@@ -11,9 +12,7 @@ dependencies {
     api(projects.featureLocal.navigation.api)
 
     implementation(projects.core.decompose)
-    implementation(libs.koin.core)
     implementation(projects.core.ui)
-    implementation(projects.bottomBarApi)
 
     // Screens
     implementation(projects.featureLocal.featureHome.presentation)

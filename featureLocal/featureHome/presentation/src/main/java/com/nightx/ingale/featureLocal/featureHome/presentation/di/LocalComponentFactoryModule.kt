@@ -15,7 +15,7 @@ val localHomeComponentFactoryModule = module {
             requiredPermissionsInspector = get(),
             songsSetToNavArgMapper = get(),
             applicationContext = get(),
-            playerUiActions = get(),
+            playbackUserActions = get(),
             snackbarMessageSender = get(),
             stringProvider = get(),
         )

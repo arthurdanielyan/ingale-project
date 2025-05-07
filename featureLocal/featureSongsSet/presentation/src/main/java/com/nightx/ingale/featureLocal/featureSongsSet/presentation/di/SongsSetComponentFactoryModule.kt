@@ -9,7 +9,7 @@ internal val songsSetComponentFactoryModule = module {
         SongsSetComponentFactoryImpl(
             songArgMapper = get(),
             songsSetParamsMapper = get(),
-            playerUiActions = get(),
+            playbackUserActions = get(),
         )
     }
 }

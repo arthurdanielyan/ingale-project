@@ -2,7 +2,7 @@ package com.nightx.ingale.featureLocal.featureHome.presentation.impl
 
 import android.content.Context
 import com.nightx.ingale.bottomBarApi.SnackbarMessageSender
-import com.nightx.ingale.core.audioPlayer.api.PlayerUiActions
+import com.nightx.ingale.core.audioPlayer.api.PlaybackUserActions
 import com.nightx.ingale.core.decompose.AppComponentContext
 import com.nightx.ingale.featureLocal.core.ui.viewState.mapper.SongViewStateMapper
 import com.nightx.ingale.featureLocal.featureHome.domain.usecases.GetCachedState
@@ -22,7 +22,7 @@ internal class LocalHomeComponentFactoryImpl(
     private val requiredPermissionsInspector: RequiredPermissionsInspector,
     private val songsSetToNavArgMapper: SongsSetToNavArgMapper,
     private val applicationContext: Context,
-    private val playerUiActions: PlayerUiActions,
+    private val playbackUserActions: PlaybackUserActions,
     private val snackbarMessageSender: SnackbarMessageSender,
     private val stringProvider: StringProvider,
 ) : LocalHomeComponent.Factory {
@@ -40,7 +40,7 @@ internal class LocalHomeComponentFactoryImpl(
             requiredPermissionsInspector = requiredPermissionsInspector,
             songsSetToNavArgMapper = songsSetToNavArgMapper,
             applicationContext = applicationContext,
-            playerUiActions = playerUiActions,
+            playbackUserActions = playbackUserActions,
             snackbarMessageSender = snackbarMessageSender,
             stringProvider = stringProvider,
         )

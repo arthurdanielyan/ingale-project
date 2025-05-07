@@ -1,4 +1,4 @@
-package com.nightx.ingale.globalPlaybackPresentation.ui
+package com.nightx.ingale.globalPlaybackPresentation.oldShit.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
@@ -41,11 +41,12 @@ import coil.compose.AsyncImage
 import com.nightx.ingale.core.audioPlayer.api.CurrentSongInfo
 import com.nightx.ingale.core.ui.TextMarquee
 import com.nightx.ingale.core.ui.theme.dimensions
-import com.nightx.ingale.globalPlaybackPresentation.view.GlobalPlaybackComponent
-import com.nightx.ingale.globalPlaybackPresentation.view.GlobalPlaybackViewCallbacks
+import com.nightx.ingale.globalPlaybackPresentation.oldShit.view.GlobalPlaybackComponent
+import com.nightx.ingale.globalPlaybackPresentation.oldShit.view.GlobalPlaybackViewCallbacks
 import com.nightx.ingale.resources.icon.R
 import org.koin.compose.koinInject
 
+// TODO: refactor
 @Composable
 fun PlaybackScreen(
     modifier: Modifier = Modifier,

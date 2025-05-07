@@ -18,10 +18,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.nightx.ingale.core.ui.screenTransitionDuration
+import com.nightx.ingale.globalPlaybackPresentation.musicBar.ui.MusicBar
 import com.nightx.ingale.root.api.bottomBar.BottomBarItemViewState
 import com.nightx.ingale.root.api.bottomBar.BottomNavigationComponent
 import com.nightx.ingale.root.impl.bottomNavigation.ui.components.BottomBarItem
@@ -61,6 +63,14 @@ fun BottomNavigation(
         ) {
             content()
         }
+        MusicBar(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .graphicsLayer {
+                    translationY = -(BottomBarHeight.toPx() - bottomBarOffsetAnim.toPx())
+                },
+            component = component.musicBarComponent,
+        )
         SnackbarView(
             modifier = Modifier
                 .align(Alignment.BottomCenter),

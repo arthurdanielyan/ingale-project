@@ -17,8 +17,7 @@ import com.nightx.ingale.core.ui.theme.colorScheme.IngaleColorsDark
 import com.nightx.ingale.core.ui.theme.colorScheme.IngaleColorsLight
 import com.nightx.ingale.core.ui.theme.colorScheme.LocalIngaleColors
 import com.nightx.ingale.featureLocal.navigation.api.LocalNavigation
-import com.nightx.ingale.globalPlaybackPresentation.musicBarController.LocalMusicBarController
-import com.nightx.ingale.globalPlaybackPresentation.musicBarController.LocalMusicBarEffects
+import com.nightx.ingale.globalPlaybackPresentation.musicBar.api.LocalMusicBarController
 import org.koin.compose.koinInject
 
 private val LightColors = lightColorScheme(
@@ -116,8 +115,6 @@ fun IngaleTheme(
                 if (isSystemInDarkTheme()) IngaleColorsDark() else IngaleColorsLight(),
         LocalNavigation provides koinInject(),
         LocalMusicBarController provides koinInject(),
-        LocalMusicBarEffects provides koinInject(),
-//        LocalSnackbarMessageReceiver provides koinInject(),
     ) {
         MaterialTheme(
             colorScheme = colorScheme,

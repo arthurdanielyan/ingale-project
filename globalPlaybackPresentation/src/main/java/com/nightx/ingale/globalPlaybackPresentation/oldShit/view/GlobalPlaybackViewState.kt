@@ -1,4 +1,4 @@
-package com.nightx.ingale.globalPlaybackPresentation.view
+package com.nightx.ingale.globalPlaybackPresentation.oldShit.view
 
 import androidx.compose.runtime.Immutable
 import com.nightx.ingale.core.audioPlayer.api.CurrentSongInfo

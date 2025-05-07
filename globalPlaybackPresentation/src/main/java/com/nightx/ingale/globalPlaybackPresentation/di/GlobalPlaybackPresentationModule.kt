@@ -1,0 +1,6 @@
+package com.nightx.ingale.globalPlaybackPresentation
+
+import com.nightx.ingale.globalPlaybackPresentation.musicBar.di.musicBarComponentFactoryModule
+import com.nightx.ingale.globalPlaybackPresentation.musicBar.di.musicBarModule
+
+val globalPlaybackPresentationModule = musicBarModule + musicBarComponentFactoryModule

@@ -10,7 +10,7 @@ import android.provider.Settings
 import androidx.core.content.ContextCompat
 import com.arkivanov.essenty.lifecycle.doOnResume
 import com.nightx.ingale.bottomBarApi.SnackbarMessageSender
-import com.nightx.ingale.core.audioPlayer.api.PlayerUiActions
+import com.nightx.ingale.core.audioPlayer.api.PlaybackUserActions
 import com.nightx.ingale.core.decompose.AppComponentContext
 import com.nightx.ingale.core.domainModel.LoadState
 import com.nightx.ingale.core.domainModel.Song
@@ -62,7 +62,7 @@ internal class LocalHomeComponentImpl(
     private val requiredPermissionsInspector: RequiredPermissionsInspector,
     private val songsSetToNavArgMapper: SongsSetToNavArgMapper,
     private val applicationContext: Context,
-    private val playerUiActions: PlayerUiActions,
+    private val playbackUserActions: PlaybackUserActions,
     private val snackbarMessageSender: SnackbarMessageSender,
     private val stringProvider: StringProvider,
 ) : LocalHomeComponent,
@@ -246,7 +246,7 @@ internal class LocalHomeComponentImpl(
     }
 
     override fun onSongClick(song: SongViewState) {
-        playerUiActions.submitNewListAndPlay(
+        playbackUserActions.submitNewListAndPlay(
             songQueue = allSongsDomain,
             indexToPlay = allSongsDomain
                 .indexOfFirst { it.id == song.id }.coerceAtLeast(0)

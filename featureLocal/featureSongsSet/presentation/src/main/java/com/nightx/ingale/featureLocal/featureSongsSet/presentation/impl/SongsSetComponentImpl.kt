@@ -1,6 +1,6 @@
 package com.nightx.ingale.featureLocal.featureSongsSet.presentation.impl
 
-import com.nightx.ingale.core.audioPlayer.api.PlayerUiActions
+import com.nightx.ingale.core.audioPlayer.api.PlaybackUserActions
 import com.nightx.ingale.core.decompose.AppComponentContext
 import com.nightx.ingale.core.domainModel.Song
 import com.nightx.ingale.core.utils.mapList
@@ -18,7 +18,7 @@ internal class SongsSetComponentImpl(
     params: Params,
     songsSetParamsMapper: SongsSetParamsMapper,
     songArgMapper: SongArgMapper,
-    private val playerUiActions: PlayerUiActions,
+    private val playbackUserActions: PlaybackUserActions,
 ) : SongsSetComponent,
     SongsSetUiCallbacks,
     AppComponentContext by appComponentContext {
@@ -31,7 +31,7 @@ internal class SongsSetComponentImpl(
     override val uiCallbacks = this
 
     override fun onSongClick(song: SongViewState) {
-        playerUiActions.submitNewListAndPlay(
+        playbackUserActions.submitNewListAndPlay(
             songs,
             uiState.value.songs.indexOf(song)
         )

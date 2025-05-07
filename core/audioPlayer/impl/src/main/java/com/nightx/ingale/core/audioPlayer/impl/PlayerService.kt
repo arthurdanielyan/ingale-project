@@ -261,7 +261,7 @@ class PlayerService : MediaBrowserServiceCompat() {
     }
 
     // Player actions ///////////////////////////////////////////////////////////////////////////////////
-    private fun seekTo(@FloatRange(0.0, 1.0) progress: Float) {
+    private fun seekTo(@FloatRange(from = 0.0, to = 1.0) progress: Float) {
         mediaPlayer.seekTo((mediaPlayer.duration * progress.coerceIn(0f, 1f)).roundToInt())
     }
 

@@ -1,4 +1,4 @@
-package com.nightx.ingale.globalPlaybackPresentation.ui
+package com.nightx.ingale.globalPlaybackPresentation.musicBar.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -31,6 +31,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,29 +46,24 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import androidx.compose.ui.zIndex
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.nightx.ingale.core.ui.IconButton
 import com.nightx.ingale.core.ui.SongIcon
 import com.nightx.ingale.core.ui.TextMarquee
 import com.nightx.ingale.core.ui.theme.dimensions
-import com.nightx.ingale.globalPlaybackPresentation.view.GlobalPlaybackComponent
-import com.nightx.ingale.globalPlaybackPresentation.view.GlobalPlaybackViewCallbacks
-import org.koin.compose.koinInject
+import com.nightx.ingale.globalPlaybackPresentation.musicBar.api.MusicBarComponent
 import com.nightx.ingale.resources.playbackActions.R.drawable as PlaybackActions
 
 @Composable
 fun MusicBar(
+    component: MusicBarComponent,
     modifier: Modifier = Modifier,
 ) {
-    val globalPlaybackComponent = koinInject<GlobalPlaybackComponent>()
-    val state by globalPlaybackComponent.state.collectAsStateWithLifecycle()
-    val callbacks: GlobalPlaybackViewCallbacks = remember {
-        globalPlaybackComponent
-    }
+    val state by component.uiState.collectAsState()
+    val callbacks = component.uiCallbacks
 
     var maxBarWidth by remember { mutableStateOf(MusicBarHeight) }
     val cardWidth by animateDpAsState(
-        targetValue = if (state.isMusicBarExpanded) maxBarWidth else MusicBarHeight,
+        targetValue = if (state.isExpanded) maxBarWidth else MusicBarHeight,
         animationSpec = tween(durationMillis = MusicBarCollapsingDuration),
         label = "music bar width animation"
     )
@@ -79,7 +75,7 @@ fun MusicBar(
     val infiniteTransition = rememberInfiniteTransition(
         label = "Music image rotation"
     )
-    val musicImageRotation = infiniteTransition.animateFloat(
+    val musicImageRotation by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 360f,
         animationSpec = infiniteRepeatable(
@@ -126,26 +122,26 @@ fun MusicBar(
                         .padding(MaterialTheme.dimensions.normal)
                         .size(MusicIconSize)
                         .graphicsLayer {
-                            this.rotationZ = musicImageRotation.value
+                            this.rotationZ = musicImageRotation
                         },
-                    model = state.currentSongInfo.currentSongPreviewPath
+                    model = state.currentSongPreviewPath,
                 )
                 BoxWithConstraints(
                     modifier = Modifier
                         .weight(1f)
                         .zIndex(0f),
-                ) marqueeTextContainer@ {
-                    if(marqueeContainerWidth < this.maxWidth) {
+                ) marqueeTextContainer@{
+                    if (marqueeContainerWidth < this.maxWidth) {
                         marqueeContainerWidth = this.maxWidth
                     }
                     androidx.compose.animation.AnimatedVisibility(
                         modifier = Modifier
                             .fillMaxSize()
                             .clipToBounds(),
-                        visible = state.isMusicBarExpanded,
+                        visible = state.isExpanded,
                         enter = MusicDetailsAppearanceAnim,
                         exit = MusicDetailsDisappearanceAnim,
-                    ) musicDetailsAnim@ {
+                    ) musicDetailsAnim@{
                         Column(
                             modifier = Modifier
                                 .fillMaxSize(),
@@ -155,12 +151,12 @@ fun MusicBar(
                             )
                         ) {
                             TextMarquee(
-                                text = state.currentSongInfo.songName,
+                                text = state.songName,
                                 modifier = Modifier.requiredWidth(marqueeContainerWidth),
                                 style = MaterialTheme.typography.bodyMedium,
                             )
                             TextMarquee(
-                                text = state.currentSongInfo.artistName,
+                                text = state.artistName,
                                 modifier = Modifier
                                     .requiredWidth(marqueeContainerWidth),
                                 style = MaterialTheme.typography.bodySmall,
@@ -180,8 +176,8 @@ fun MusicBar(
                             end = MaterialTheme.dimensions.large,
                         )
                 ) {
-                    val playPauseButton = remember(state.currentSongInfo.isPlaying) {
-                        if (state.currentSongInfo.isPlaying) {
+                    val playPauseButton = remember(state.isPlaying) {
+                        if (state.isPlaying) {
                             PlaybackActions.ic_pause
                         } else {
                             PlaybackActions.ic_play
@@ -189,7 +185,7 @@ fun MusicBar(
                     }
                     IconButton(
                         painter = painterResource(playPauseButton),
-                        contentDescription = "stop music button",
+                        contentDescription = "stop/resume music button",
                         onClick = callbacks::onTogglePlaybackClick,
                     )
                     IconButton(

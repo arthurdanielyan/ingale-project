@@ -44,7 +44,7 @@ class IngaleApplication : Application() {
                 featureLocalCoreUiModule,
                 localNavigationModule,
                 localComponentFactoryModule,
-                globalPlaybackPresentationModule,
+                *globalPlaybackPresentationModule.toTypedArray(),
                 com.nightx.ingale.resources.strings.module,
                 com.nightx.ingale.featureLocal.featureHome.data.dataModule,
                 com.nightx.ingale.featureLocal.featureHome.domain.domainModule,

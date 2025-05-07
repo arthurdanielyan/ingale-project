@@ -48,6 +48,7 @@
             <option value="$PROJECT_DIR$/featureLocal/navigation" />
             <option value="$PROJECT_DIR$/featureLocal/navigation/api" />
             <option value="$PROJECT_DIR$/featureLocal/navigation/impl" />
+            <option value="$PROJECT_DIR$/featureLocal/navigation/ui" />
             <option value="$PROJECT_DIR$/featureYoutube" />
             <option value="$PROJECT_DIR$/globalPlaybackPresentation" />
             <option value="$PROJECT_DIR$/gradlePlugins" />

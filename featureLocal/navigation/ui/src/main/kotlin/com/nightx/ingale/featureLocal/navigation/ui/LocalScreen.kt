@@ -1,4 +1,4 @@
-package com.nightx.ingale.featureLocal.navigation.impl
+package com.nightx.ingale.featureLocal.navigation.ui
 
 import androidx.compose.runtime.Composable
 import com.arkivanov.decompose.extensions.compose.stack.Children

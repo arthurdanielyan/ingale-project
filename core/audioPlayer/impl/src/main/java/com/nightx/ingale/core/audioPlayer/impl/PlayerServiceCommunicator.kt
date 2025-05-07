@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.nightx.ingale.core.audioPlayer.api.CurrentSongInfo
 import com.nightx.ingale.core.audioPlayer.api.CurrentSongInfoStateProvider
-import com.nightx.ingale.core.audioPlayer.api.PlayerUiActions
+import com.nightx.ingale.core.audioPlayer.api.PlaybackUserActions
 import com.nightx.ingale.core.audioPlayer.impl.PlayerActionType.ACTION_CHANGE_FAVORITE_STATE
 import com.nightx.ingale.core.audioPlayer.impl.PlayerActionType.ACTION_PLAY_SONG
 import com.nightx.ingale.core.audioPlayer.impl.PlayerActionType.ACTION_SKIP_TO_NEXT
@@ -35,7 +35,7 @@ class PlayerServiceCommunicator(
     private val applicationContext: Context,
     private val stringProvider: StringProvider,
     applicationScope: CoroutineScope,
-) : PlayerUiActions, CurrentSongInfoStateProvider {
+) : PlaybackUserActions, CurrentSongInfoStateProvider {
 
     private val defaultSongBitmap: Bitmap
         get() = ContextCompat
@@ -45,7 +45,7 @@ class PlayerServiceCommunicator(
         set(value) {
             field = value
             _currentSongInfo.update {
-                it.copy(isPlaying = value)
+                it?.copy(isPlaying = value)
             }
         }
 
@@ -53,7 +53,7 @@ class PlayerServiceCommunicator(
 
     var seekPosition = MutableStateFlow(0)
 
-    private val _currentSongInfo = MutableStateFlow(CurrentSongInfo.Empty)
+    private val _currentSongInfo = MutableStateFlow<CurrentSongInfo?>(null)
     private val seekPercentage = seekPosition.map { seekPosition ->
         currentSong?.duration?.toFloat()?.let {
             seekPosition.toFloat() / it
@@ -64,8 +64,8 @@ class PlayerServiceCommunicator(
         _currentSongInfo,
         seekPercentage
     ) { currentSongInfo, seekPercentage ->
-        currentSongInfo.copy(seekPercentage = seekPercentage)
-    }.stateIn(applicationScope, SharingStarted.WhileSubscribed(), CurrentSongInfo.Empty)
+        currentSongInfo?.copy(seekPercentage = seekPercentage)
+    }.stateIn(applicationScope, SharingStarted.WhileSubscribed(), null)
 
     @Volatile
     var pointer = 0

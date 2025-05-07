@@ -68,7 +68,7 @@ val featureLocal = Module(
         ),
         Module(
             name = "navigation",
-            submodules = apiImpl,
+            submodules = apiImpl + Module("ui"),
         )
     )
 )

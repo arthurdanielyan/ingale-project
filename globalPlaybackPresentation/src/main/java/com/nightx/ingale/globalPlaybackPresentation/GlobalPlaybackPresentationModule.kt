@@ -1,5 +1,0 @@
-package com.nightx.ingale.globalPlaybackPresentation
-
-import com.nightx.ingale.globalPlaybackPresentation.musicBarController.musicBarModule
-
-val globalPlaybackPresentationModule = musicBarModule
