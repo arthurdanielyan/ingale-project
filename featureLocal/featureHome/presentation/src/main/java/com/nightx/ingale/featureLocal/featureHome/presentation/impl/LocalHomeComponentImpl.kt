@@ -20,10 +20,10 @@ import com.nightx.ingale.core.presentation.viewModel.updateIf
 import com.nightx.ingale.core.utils.mapList
 import com.nightx.ingale.core.utils.stateInWhileSubscribed
 import com.nightx.ingale.core.viewState.LoadingViewState
-import com.nightx.ingale.core.viewState.emptyStableList
+import com.nightx.ingale.core.viewState.emptyComposeList
 import com.nightx.ingale.core.viewState.isLoading
+import com.nightx.ingale.core.viewState.toComposeList
 import com.nightx.ingale.core.viewState.toLoadingViewState
-import com.nightx.ingale.core.viewState.toStableList
 import com.nightx.ingale.featureLocal.core.ui.viewState.SongViewState
 import com.nightx.ingale.featureLocal.core.ui.viewState.SongsSetViewState
 import com.nightx.ingale.featureLocal.core.ui.viewState.mapper.SongViewStateMapper
@@ -95,9 +95,9 @@ internal class LocalHomeComponentImpl(
         )
 
     private val loadingViewState = MutableStateFlow<LoadingViewState>(LoadingViewState.Loading)
-    private val songs = MutableStateFlow(emptyStableList<SongViewState>())
-    private val albums = MutableStateFlow(emptyStableList<SongsSetViewState>())
-    private val artists = MutableStateFlow(emptyStableList<SongsSetViewState>())
+    private val songs = MutableStateFlow(emptyComposeList<SongViewState>())
+    private val albums = MutableStateFlow(emptyComposeList<SongsSetViewState>())
+    private val artists = MutableStateFlow(emptyComposeList<SongsSetViewState>())
     private val query = MutableStateFlow("")
 
     override val requirePermissionsComponent = requirePermissionComponentFactory(
@@ -183,9 +183,9 @@ internal class LocalHomeComponentImpl(
                         allAlbums = songsSetViewStateMapper.mapList(songsSeparation.albums)
                         allArtists = songsSetViewStateMapper.mapList(songsSeparation.artists)
                         Triple(
-                            allSongs.toStableList(),
-                            allAlbums.toStableList(),
-                            allArtists.toStableList(),
+                            allSongs.toComposeList(),
+                            allAlbums.toComposeList(),
+                            allArtists.toComposeList(),
                         )
                     } else {
                         null
@@ -209,13 +209,13 @@ internal class LocalHomeComponentImpl(
             .mapLatest { it.lowercase() }
             .onEach { query ->
                 songs.update {
-                    allSongs.filter { it.title.lowercase().contains(query) }.toStableList()
+                    allSongs.filter { it.title.lowercase().contains(query) }.toComposeList()
                 }
                 albums.update {
-                    allAlbums.filter { it.title.lowercase().contains(query) }.toStableList()
+                    allAlbums.filter { it.title.lowercase().contains(query) }.toComposeList()
                 }
                 artists.update {
-                    allArtists.filter { it.title.lowercase().contains(query) }.toStableList()
+                    allArtists.filter { it.title.lowercase().contains(query) }.toComposeList()
                 }
                 sendEffect { LocalMainUiEffect.ScrollToTop }
             }.launchIn(componentScope)

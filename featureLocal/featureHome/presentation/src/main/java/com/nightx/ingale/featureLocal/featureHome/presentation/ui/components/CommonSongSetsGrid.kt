@@ -37,7 +37,7 @@ import com.nightx.ingale.core.ui.SongIcon
 import com.nightx.ingale.core.ui.extensions.shimmer
 import com.nightx.ingale.core.ui.highlight
 import com.nightx.ingale.core.ui.theme.dimensions
-import com.nightx.ingale.core.viewState.StableList
+import com.nightx.ingale.core.viewState.ComposeList
 import com.nightx.ingale.featureLocal.core.ui.viewState.SongsSetViewState
 
 /**
@@ -47,7 +47,7 @@ import com.nightx.ingale.featureLocal.core.ui.viewState.SongsSetViewState
 internal fun CommonSongSetsGrid(
     modifier: Modifier = Modifier,
     lazyGridState: LazyGridState = rememberLazyGridState(),
-    items: StableList<SongsSetViewState>,
+    items: ComposeList<SongsSetViewState>,
     onClick: (songsSet: SongsSetViewState) -> Unit,
     isLoading: Boolean,
     query: String,
@@ -69,7 +69,7 @@ internal fun CommonSongSetsGrid(
 private fun SongsSetsGridContent(
     modifier: Modifier = Modifier,
     lazyGridState: LazyGridState = rememberLazyGridState(),
-    items: StableList<SongsSetViewState>,
+    items: ComposeList<SongsSetViewState>,
     onClick: (songsSet: SongsSetViewState) -> Unit,
     query: String,
 ) {

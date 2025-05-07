@@ -2,10 +2,10 @@ package com.nightx.ingale.featureLocal.featureHome.presentation.api
 
 import androidx.compose.runtime.Immutable
 import com.nightx.ingale.core.presentation.viewModel.UiState
+import com.nightx.ingale.core.viewState.ComposeList
 import com.nightx.ingale.core.viewState.LoadingViewState
-import com.nightx.ingale.core.viewState.StableList
-import com.nightx.ingale.core.viewState.emptyStableList
-import com.nightx.ingale.core.viewState.stableListOf
+import com.nightx.ingale.core.viewState.composeListOf
+import com.nightx.ingale.core.viewState.emptyComposeList
 import com.nightx.ingale.featureLocal.core.ui.viewState.SongViewState
 import com.nightx.ingale.featureLocal.core.ui.viewState.SongsSetViewState
 import com.nightx.ingale.resources.strings.R.string as Strings
@@ -13,9 +13,9 @@ import com.nightx.ingale.resources.strings.R.string as Strings
 @Immutable
 data class LocalMainScreenViewState(
     val searchTextField: String = "",
-    val songs: StableList<SongViewState> = emptyStableList(),
-    val albums: StableList<SongsSetViewState> = emptyStableList(),
-    val artists: StableList<SongsSetViewState> = emptyStableList(),
+    val songs: ComposeList<SongViewState> = emptyComposeList(),
+    val albums: ComposeList<SongsSetViewState> = emptyComposeList(),
+    val artists: ComposeList<SongsSetViewState> = emptyComposeList(),
     val loadingState: LoadingViewState = LoadingViewState.Loading,
 ) : UiState {
 
@@ -23,7 +23,7 @@ data class LocalMainScreenViewState(
         const val PERMISSION_NOT_GRANTED_ERROR = "no_audio_permission_granted"
     }
 
-    val sections: StableList<Int> = stableListOf(
+    val sections: ComposeList<Int> = composeListOf(
         Strings.section_songs, Strings.section_albums, Strings.section_artist
     )
 

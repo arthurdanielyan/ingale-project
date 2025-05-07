@@ -7,8 +7,8 @@ import com.nightx.ingale.core.presentation.osExt.api.SettingsLauncher
 import com.nightx.ingale.core.presentation.viewModel.UiEffectSender
 import com.nightx.ingale.core.utils.stateInWhileSubscribed
 import com.nightx.ingale.core.utils.yap
-import com.nightx.ingale.core.viewState.stableListOf
-import com.nightx.ingale.core.viewState.toStableList
+import com.nightx.ingale.core.viewState.composeListOf
+import com.nightx.ingale.core.viewState.toComposeList
 import com.nightx.ingale.featureLocal.featureRequirePermissions.api.RequirePermissionsComponent
 import com.nightx.ingale.featureLocal.featureRequirePermissions.api.RequirePermissionsUiCallbacks
 import com.nightx.ingale.featureLocal.featureRequirePermissions.api.RequirePermissionsUiEffect
@@ -55,7 +55,7 @@ internal class RequirePermissionsComponentImpl(
             }
             sendEffect {
                 RequirePermissionsUiEffect.RequestPermission(
-                    permissionsToRequest.toStableList()
+                    permissionsToRequest.toComposeList()
                 )
             }
         } else {
@@ -85,7 +85,7 @@ internal class RequirePermissionsComponentImpl(
     override fun onOkClick(permission: String) {
         requiredPermissionDialogs.update { it - permission }
         sendEffect {
-            RequirePermissionsUiEffect.RequestPermission(stableListOf(permission))
+            RequirePermissionsUiEffect.RequestPermission(composeListOf(permission))
         }
     }
 

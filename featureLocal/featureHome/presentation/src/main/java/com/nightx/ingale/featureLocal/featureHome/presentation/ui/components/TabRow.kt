@@ -31,7 +31,7 @@ import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.nightx.ingale.core.viewState.StableList
+import com.nightx.ingale.core.viewState.ComposeList
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
@@ -46,7 +46,7 @@ private data class TabBounds(
 internal fun <T> TabRow(
     modifier: Modifier = Modifier,
     pagerState: PagerState,
-    items: StableList<T>,
+    items: ComposeList<T>,
     userScrollEnabled: Boolean = true,
     itemContent: @Composable (item: T) -> Unit
 ) {

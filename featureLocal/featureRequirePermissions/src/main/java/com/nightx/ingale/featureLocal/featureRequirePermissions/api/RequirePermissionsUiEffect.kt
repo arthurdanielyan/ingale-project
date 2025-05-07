@@ -1,9 +1,9 @@
 package com.nightx.ingale.featureLocal.featureRequirePermissions.api
 
-import com.nightx.ingale.core.viewState.StableList
+import com.nightx.ingale.core.viewState.ComposeList
 
 sealed interface RequirePermissionsUiEffect {
     data class RequestPermission(
-        val permissions: StableList<String>
+        val permissions: ComposeList<String>
     ) : RequirePermissionsUiEffect
 }

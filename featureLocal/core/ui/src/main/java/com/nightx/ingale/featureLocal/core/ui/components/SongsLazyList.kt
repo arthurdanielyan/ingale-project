@@ -19,7 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onSizeChanged
-import com.nightx.ingale.core.viewState.StableList
+import com.nightx.ingale.core.viewState.ComposeList
 import com.nightx.ingale.featureLocal.core.ui.components.song_item.LoadingSongItem
 import com.nightx.ingale.featureLocal.core.ui.components.song_item.SongItem
 import com.nightx.ingale.featureLocal.core.ui.viewState.SongViewState
@@ -28,7 +28,7 @@ import com.nightx.ingale.featureLocal.core.ui.viewState.SongViewState
 fun SongsLazyList(
     modifier: Modifier = Modifier,
     lazyListState: LazyListState = rememberLazyListState(),
-    songs: StableList<SongViewState>,
+    songs: ComposeList<SongViewState>,
     isLoading: Boolean = false,
     header: @Composable (() -> Unit)? = null,
     query: String = "",
@@ -54,7 +54,7 @@ fun SongsLazyList(
 private fun SongsListContent(
     modifier: Modifier = Modifier,
     lazyListState: LazyListState = rememberLazyListState(),
-    songs: StableList<SongViewState>,
+    songs: ComposeList<SongViewState>,
     header: @Composable (() -> Unit)? = null,
     query: String = "",
     onSongClick: (SongViewState) -> Unit,
