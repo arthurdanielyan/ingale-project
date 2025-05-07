@@ -39,6 +39,7 @@ import com.nightx.ingale.featureLocal.featureHome.presentation.ui.components.Com
 import com.nightx.ingale.featureLocal.featureHome.presentation.ui.components.SearchTextField
 import com.nightx.ingale.featureLocal.featureHome.presentation.ui.components.SongsSetButtons
 import com.nightx.ingale.featureLocal.featureHome.presentation.ui.components.TabRow
+import com.nightx.ingale.featureLocal.featureRequirePermissions.ui.RequiredPermissionsRequesterDialog
 import com.nightx.ingale.globalPlaybackPresentation.musicBar.api.LocalMusicBarController
 import com.nightx.ingale.globalPlaybackPresentation.musicBar.api.MusicBarEffect
 import com.nightx.ingale.globalPlaybackPresentation.musicBar.api.rememberNestedScrollForMusicBarNotification
@@ -47,22 +48,26 @@ import kotlinx.coroutines.flow.Flow
 import com.nightx.ingale.resources.strings.R.string as Strings
 
 @Composable
-fun LocalMainScreen(
+fun LocalHomeScreen(
     component: LocalHomeComponent
 ) {
     val state by component.uiState.collectAsState()
     val callbacks = component.uiCallbacks
     val effect = component.uiEffect
 
-    LocalMainScreen(
+    LocalHomeScreen(
         state = state,
         callbacks = callbacks,
         effects = effect
     )
+
+    RequiredPermissionsRequesterDialog(
+        component = component.requirePermissionsComponent,
+    )
 }
 
 @Composable
-private fun LocalMainScreen(
+private fun LocalHomeScreen(
     state: LocalMainScreenViewState,
     callbacks: LocalMainCallbacks,
     effects: Flow<LocalMainUiEffect>,

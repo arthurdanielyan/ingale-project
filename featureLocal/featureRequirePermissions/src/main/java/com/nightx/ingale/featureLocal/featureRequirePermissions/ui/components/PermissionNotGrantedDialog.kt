@@ -1,4 +1,4 @@
-package com.nightx.ingale.featureLocal.featureRequirePermissions.ui_components
+package com.nightx.ingale.featureLocal.featureRequirePermissions.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

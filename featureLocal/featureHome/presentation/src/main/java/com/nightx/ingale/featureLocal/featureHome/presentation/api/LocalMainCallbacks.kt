@@ -7,7 +7,6 @@ import com.nightx.ingale.featureLocal.core.ui.viewState.SongsSetViewState
 @Immutable
 interface LocalMainCallbacks {
 
-    fun onResume()
     fun onAlbumClick(songsSet: SongsSetViewState)
     fun onArtistClick(songsSet: SongsSetViewState)
     fun onSearchType(query: String)

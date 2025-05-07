@@ -1,4 +1,4 @@
-package com.nightx.ingale.featureLocal.featureRequirePermissions
+package com.nightx.ingale.featureLocal.featureRequirePermissions.ui
 
 import android.Manifest
 import android.content.Context
@@ -10,40 +10,35 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
-import com.nightx.ingale.core.presentation.dialogComponent.DialogComponentHolder
-import com.nightx.ingale.core.presentation.dialogComponent.DialogComponentView
 import com.nightx.ingale.core.ui.flows.ObserveEffects
-import com.nightx.ingale.featureLocal.featureRequirePermissions.ui_components.AudioPermissionDescriptionProvider
-import com.nightx.ingale.featureLocal.featureRequirePermissions.ui_components.NotificationPermissionDescriptionProvider
-import com.nightx.ingale.featureLocal.featureRequirePermissions.ui_components.PermissionNotGrantedDialog
-import com.nightx.ingale.featureLocal.featureRequirePermissions.ui_components.StoragePermissionDescriptionProvider
-import com.nightx.ingale.featureLocal.featureRequirePermissions.view.RequiredPermissionsCallbacks
-import com.nightx.ingale.featureLocal.featureRequirePermissions.view.RequiredPermissionsRequesterContract
-import com.nightx.ingale.featureLocal.featureRequirePermissions.view.RequiredPermissionsRequesterContract.Effect
-import com.nightx.ingale.featureLocal.featureRequirePermissions.view.RequiredPermissionsRequesterDialogComponent
+import com.nightx.ingale.featureLocal.featureRequirePermissions.api.RequirePermissionsComponent
+import com.nightx.ingale.featureLocal.featureRequirePermissions.api.RequirePermissionsUiCallbacks
+import com.nightx.ingale.featureLocal.featureRequirePermissions.api.RequirePermissionsUiEffect
+import com.nightx.ingale.featureLocal.featureRequirePermissions.api.RequirePermissionsViewState
+import com.nightx.ingale.featureLocal.featureRequirePermissions.ui.components.AudioPermissionDescriptionProvider
+import com.nightx.ingale.featureLocal.featureRequirePermissions.ui.components.NotificationPermissionDescriptionProvider
+import com.nightx.ingale.featureLocal.featureRequirePermissions.ui.components.PermissionNotGrantedDialog
+import com.nightx.ingale.featureLocal.featureRequirePermissions.ui.components.StoragePermissionDescriptionProvider
 import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun RequiredPermissionsRequesterDialog(
-    componentHolder: DialogComponentHolder<RequiredPermissionsRequesterDialogComponent>,
+    component: RequirePermissionsComponent,
 ) {
-    DialogComponentView(
-        componentHolder = componentHolder,
-    ) { component ->
-        val state by component.state.collectAsState()
-        RequiredPermissionsRequesterDialogContent(
-            state = state,
-            effects = component.effect,
-            callbacks = component
-        )
-    }
+    val state by component.uiState.collectAsState()
+
+    RequiredPermissionsRequesterDialogContent(
+        state = state,
+        effects = component.uiEffect,
+        callbacks = component.uiCallbacks,
+    )
 }
 
 @Composable
 private fun RequiredPermissionsRequesterDialogContent(
-    state: RequiredPermissionsRequesterContract.State,
-    effects: Flow<Effect>,
-    callbacks: RequiredPermissionsCallbacks,
+    state: RequirePermissionsViewState,
+    effects: Flow<RequirePermissionsUiEffect>,
+    callbacks: RequirePermissionsUiCallbacks,
 ) {
     val permissionsResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
@@ -53,7 +48,7 @@ private fun RequiredPermissionsRequesterDialogContent(
     )
     ObserveEffects(effects) { effect ->
         when (effect) {
-            is Effect.RequestPermission -> {
+            is RequirePermissionsUiEffect.RequestPermission -> {
                 permissionsResultLauncher.launch(effect.permissions.toTypedArray())
             }
         }

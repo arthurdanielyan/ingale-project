@@ -2,6 +2,7 @@ package com.nightx.ingale.core.viewState
 
 import androidx.compose.runtime.Immutable
 
+// TODO: rename to ComposeList
 @JvmInline
 @Immutable
 value class StableList<out T> (

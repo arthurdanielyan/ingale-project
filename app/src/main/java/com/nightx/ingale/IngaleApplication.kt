@@ -9,9 +9,11 @@ import android.os.Build
 import com.nightx.ingale.core.audioPlayer.impl.playerServiceCommunicatorModule
 import com.nightx.ingale.core.dataModel.di.mappersModule
 import com.nightx.ingale.core.dataModel.di.realmModule
+import com.nightx.ingale.core.presentation.osExt.di.osExtModule
 import com.nightx.ingale.core.utils.di.coroutineDispatchersModule
 import com.nightx.ingale.featureLocal.core.ui.featureLocalCoreUiModule
 import com.nightx.ingale.featureLocal.featureHome.presentation.di.featureHomePresentationModule
+import com.nightx.ingale.featureLocal.featureRequirePermissions.di.requirePermissionsComponentFactoryModule
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.di.songsSetPresentationModule
 import com.nightx.ingale.featureLocal.navigation.impl.di.localComponentFactoryModule
 import com.nightx.ingale.featureLocal.navigation.impl.di.localNavigationModule
@@ -34,8 +36,8 @@ class IngaleApplication : Application() {
             androidContext(applicationContext)
             androidLogger()
             modules(
+                osExtModule,
                 rootModule,
-//                bottomBarControllerModule,
                 snackbarMessageSenderModule,
                 playerServiceCommunicatorModule,
                 mappersModule,
@@ -44,6 +46,7 @@ class IngaleApplication : Application() {
                 featureLocalCoreUiModule,
                 localNavigationModule,
                 localComponentFactoryModule,
+                requirePermissionsComponentFactoryModule,
                 *globalPlaybackPresentationModule.toTypedArray(),
                 com.nightx.ingale.resources.strings.module,
                 com.nightx.ingale.featureLocal.featureHome.data.dataModule,

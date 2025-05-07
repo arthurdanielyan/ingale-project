@@ -5,7 +5,7 @@ import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.nightx.ingale.featureLocal.featureHome.presentation.api.LocalHomeComponent
-import com.nightx.ingale.featureLocal.featureHome.presentation.ui.LocalMainScreen
+import com.nightx.ingale.featureLocal.featureHome.presentation.ui.LocalHomeScreen
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.api.SongsSetComponent
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.ui.SongsSetScreen
 import com.nightx.ingale.featureLocal.navigation.api.LocalComponent
@@ -19,7 +19,7 @@ fun LocalScreen(
         animation = stackAnimation(slide()),
     ) {
         when (val childComponent = it.instance) {
-            is LocalHomeComponent -> LocalMainScreen(childComponent)
+            is LocalHomeComponent -> LocalHomeScreen(childComponent)
             is SongsSetComponent -> SongsSetScreen(childComponent)
         }
     }

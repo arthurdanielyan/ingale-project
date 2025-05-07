@@ -7,12 +7,13 @@ import org.koin.dsl.module
 val localHomeComponentFactoryModule = module {
     factory<LocalHomeComponent.Factory> {
         LocalHomeComponentFactoryImpl(
+            requirePermissionComponentFactory = get(),
+            permissionInspector = get(),
             getSongsUseCase = get(),
             getCachedState = get(),
             songViewStateMapper = get(),
             songsSetViewStateMapper = get(),
             organizeSongsUseCase = get(),
-            requiredPermissionsInspector = get(),
             songsSetToNavArgMapper = get(),
             applicationContext = get(),
             playbackUserActions = get(),

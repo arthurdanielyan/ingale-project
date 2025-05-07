@@ -8,12 +8,13 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import androidx.core.content.ContextCompat
-import com.arkivanov.essenty.lifecycle.doOnResume
 import com.nightx.ingale.bottomBarApi.SnackbarMessageSender
 import com.nightx.ingale.core.audioPlayer.api.PlaybackUserActions
 import com.nightx.ingale.core.decompose.AppComponentContext
+import com.nightx.ingale.core.decompose.appChildContext
 import com.nightx.ingale.core.domainModel.LoadState
 import com.nightx.ingale.core.domainModel.Song
+import com.nightx.ingale.core.presentation.osExt.api.PermissionInspector
 import com.nightx.ingale.core.presentation.viewModel.UiEffectSender
 import com.nightx.ingale.core.presentation.viewModel.updateIf
 import com.nightx.ingale.core.utils.mapList
@@ -35,6 +36,7 @@ import com.nightx.ingale.featureLocal.featureHome.presentation.api.LocalMainScre
 import com.nightx.ingale.featureLocal.featureHome.presentation.api.LocalMainUiEffect
 import com.nightx.ingale.featureLocal.featureHome.presentation.impl.mappers.SongsSetToNavArgMapper
 import com.nightx.ingale.featureLocal.featureHome.presentation.impl.mappers.SongsSetViewStateMapper
+import com.nightx.ingale.featureLocal.featureRequirePermissions.api.RequirePermissionsComponent
 import com.nightx.ingale.resources.strings.StringProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
@@ -54,12 +56,13 @@ import com.nightx.ingale.featureLocal.featureHome.presentation.R.string as Strin
 
 internal class LocalHomeComponentImpl(
     appComponentContext: AppComponentContext,
+    requirePermissionComponentFactory: RequirePermissionsComponent.Factory,
+    permissionInspector: PermissionInspector,
     private val getSongsUseCase: GetSongsUseCase,
     private val getCachedState: GetCachedState,
     private val songViewStateMapper: SongViewStateMapper,
     private val songsSetViewStateMapper: SongsSetViewStateMapper,
     private val organizeSongsUseCase: OrganizeSongsUseCase,
-    private val requiredPermissionsInspector: RequiredPermissionsInspector,
     private val songsSetToNavArgMapper: SongsSetToNavArgMapper,
     private val applicationContext: Context,
     private val playbackUserActions: PlaybackUserActions,
@@ -97,6 +100,27 @@ internal class LocalHomeComponentImpl(
     private val artists = MutableStateFlow(emptyStableList<SongsSetViewState>())
     private val query = MutableStateFlow("")
 
+    override val requirePermissionsComponent = requirePermissionComponentFactory(
+        appComponentContext = appChildContext("requirePermissionsComponent"),
+        params = RequirePermissionsComponent.Params(
+            permissions = permissionInspector.appRequiredPermissions
+        ),
+        onAudioPermissionResult = { isAudioPermissionGranted ->
+            if (isAudioPermissionGranted) {
+                if (!wasAudioPermissionGrantedReceived) {
+                    refreshSongs()
+                    wasAudioPermissionGrantedReceived = true
+                }
+            } else {
+                loadingViewState.update {
+                    LoadingViewState.Error(
+                        LocalMainScreenViewState.PERMISSION_NOT_GRANTED_ERROR
+                    )
+                }
+            }
+        }
+    )
+
     override val uiCallbacks = this
     override val uiState = combine(
         loadingViewState,
@@ -118,9 +142,9 @@ internal class LocalHomeComponentImpl(
     init {
         observeSongs()
         observeQuery()
-        doOnResume {
-            onResume()
-        }
+//        doOnResume {
+//            onResume()
+//        }
     }
 
     private fun observeLongLoading() {
@@ -209,25 +233,6 @@ internal class LocalHomeComponentImpl(
                 audioPermission
             ) == PackageManager.PERMISSION_GRANTED
         }
-
-    override fun onResume() {
-        requiredPermissionsInspector.start(
-            shouldReloadSongs = {
-                if (it) {
-                    if (!wasAudioPermissionGrantedReceived) {
-                        refreshSongs()
-                        wasAudioPermissionGrantedReceived = true
-                    }
-                } else {
-                    loadingViewState.update {
-                        LoadingViewState.Error(
-                            LocalMainScreenViewState.PERMISSION_NOT_GRANTED_ERROR
-                        )
-                    }
-                }
-            }
-        )
-    }
 
     override fun onAlbumClick(songsSet: SongsSetViewState) {
         appRouter.navigate(
