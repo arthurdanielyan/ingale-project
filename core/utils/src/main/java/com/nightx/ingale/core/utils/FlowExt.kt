@@ -5,12 +5,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.transformLatest
+import kotlinx.coroutines.flow.update
 
 /**
  * Transform this Channel into a hot flow.
@@ -37,6 +39,15 @@ fun <T> Flow<T>.stateInWhileSubscribed(
 ) = this.stateIn(scope, SharingStarted.WhileSubscribed(DefaultTimeoutMillis), initialState)
 
 private const val DefaultTimeoutMillis = 5000L
+
+fun <T> MutableStateFlow<T>.updateIf(
+    condition: Boolean,
+    update: (T) -> T
+) {
+    if (condition) {
+        this.update(update)
+    }
+}
 
 inline fun yap(message: Any?) {
     Log.d("yapping", message.toString())

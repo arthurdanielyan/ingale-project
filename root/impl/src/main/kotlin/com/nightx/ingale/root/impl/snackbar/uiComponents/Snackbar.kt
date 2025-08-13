@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.IntOffset
 import com.nightx.ingale.core.ui.theme.dimensions
 import com.nightx.ingale.root.api.snackbar.SnackbarComponent
 import com.nightx.ingale.root.api.snackbar.SnackbarMessageReceiver
-import com.nightx.ingale.root.impl.bottomNavigation.ui.BottomBarHeight
+import com.nightx.ingale.root.impl.root.ui.components.BottomBarHeight
 import com.nightx.ingale.root.impl.snackbar.uiComponents.SnackbarHost.Companion.SnackbarAnimDuration
 
 @Composable

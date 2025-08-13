@@ -10,7 +10,7 @@ internal class BottomBarControllerImpl(
     private val applicationScope: CoroutineScope
 ) : BottomBarController {
 
-    val isBottomBarVisible = MutableStateFlow(true)
+    override val isBottomBarVisible = MutableStateFlow(true)
 
     override fun setVisibility(isVisible: Boolean) {
         applicationScope.launch {

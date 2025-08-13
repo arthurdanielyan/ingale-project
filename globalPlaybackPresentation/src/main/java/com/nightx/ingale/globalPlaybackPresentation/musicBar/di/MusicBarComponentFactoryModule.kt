@@ -4,7 +4,7 @@ import com.nightx.ingale.globalPlaybackPresentation.musicBar.api.MusicBarCompone
 import com.nightx.ingale.globalPlaybackPresentation.musicBar.impl.MusicBarComponentFactoryImpl
 import org.koin.dsl.module
 
-val musicBarComponentFactoryModule = module {
+internal val musicBarComponentFactoryModule = module {
 
     factory<MusicBarComponent.Factory> {
         MusicBarComponentFactoryImpl(

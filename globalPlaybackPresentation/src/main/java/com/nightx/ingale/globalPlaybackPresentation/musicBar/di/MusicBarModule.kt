@@ -6,6 +6,6 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.binds
 import org.koin.dsl.module
 
-internal val musicBarModule = module {
+internal val musicBarControllerModule = module {
     singleOf(::MusicBarControllerImpl) binds arrayOf(MusicBarController::class)
 }

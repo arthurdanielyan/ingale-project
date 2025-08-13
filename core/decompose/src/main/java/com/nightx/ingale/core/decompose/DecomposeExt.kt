@@ -49,8 +49,8 @@ fun <CONTEXT : AppComponentContext, CONFIG : ScreenConfig, COMPONENT : Any> CONT
 fun <CONTEXT : AppComponentContext, CONFIG : ScreenConfig, COMPONENT : Any> CONTEXT.appChildSlot(
     source: NavigationSource<SlotNavigation.Event<CONFIG>>,
     serializer: KSerializer<CONFIG>?,
-    initialConfiguration: CONFIG,
-    key: String = "DefaultChildStack",
+    initialConfiguration: CONFIG?,
+    key: String = "DefaultChildSlot",
     handleBackButton: Boolean = false,
     childFactory: (configuration: CONFIG, AppComponentContext) -> COMPONENT,
 ): Value<ChildSlot<CONFIG, COMPONENT>> {

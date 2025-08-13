@@ -1,4 +1,4 @@
-package com.nightx.ingale.root.api.bottomBar
+package com.nightx.ingale.root.api.root
 
 import androidx.compose.runtime.Immutable
 import com.nightx.ingale.resources.bottomBar.R.drawable as BottomBarIcons

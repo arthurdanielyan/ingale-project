@@ -1,6 +1,5 @@
 package com.nightx.ingale
 
-//import com.nightx.ingale.root.impl.bottomNavigation.bottomBarControllerModule
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -17,7 +16,7 @@ import com.nightx.ingale.featureLocal.featureRequirePermissions.di.requirePermis
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.di.songsSetPresentationModule
 import com.nightx.ingale.featureLocal.navigation.impl.di.localComponentFactoryModule
 import com.nightx.ingale.featureLocal.navigation.impl.di.localNavigationModule
-import com.nightx.ingale.globalPlaybackPresentation.globalPlaybackPresentationModule
+import com.nightx.ingale.globalPlaybackPresentation.di.globalPlaybackPresentationModule
 import com.nightx.ingale.root.impl.di.rootModule
 import com.nightx.ingale.root.impl.snackbar.snackbarMessageSenderModule
 import org.koin.android.ext.koin.androidContext

@@ -8,6 +8,6 @@ interface PlaybackUserActions {
     fun togglePlaying()
     fun skipToNext()
     fun skipToPrevious()
-    fun seekTo(progress: Float)
+    fun seekTo(percentage: Float)
     fun changeFavoriteState()
 }

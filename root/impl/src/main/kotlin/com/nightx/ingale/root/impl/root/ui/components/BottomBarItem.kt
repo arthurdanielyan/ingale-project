@@ -1,4 +1,4 @@
-package com.nightx.ingale.root.impl.bottomNavigation.ui.components
+package com.nightx.ingale.root.impl.root.ui.components
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.requiredSize
@@ -16,8 +16,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import com.nightx.ingale.core.ui.theme.dimensions
-import com.nightx.ingale.root.api.bottomBar.BottomBarItemViewState
-import com.nightx.ingale.root.impl.bottomNavigation.ui.BottomBarHeight
+import com.nightx.ingale.root.api.root.BottomBarItemViewState
 
 @Composable
 internal fun RowScope.BottomBarItem(

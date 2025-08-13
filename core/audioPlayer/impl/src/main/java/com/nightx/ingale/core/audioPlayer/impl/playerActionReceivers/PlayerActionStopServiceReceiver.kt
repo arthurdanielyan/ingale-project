@@ -12,7 +12,7 @@ class PlayerActionStopServiceReceiver : BroadcastReceiver() {
         val actionsServiceIntent = Intent(context, PlaybackActionService::class.java)
             .putExtra(
                 PlaybackActionService.EXTRA_ACTION_KEY,
-                PlayerActionType.ACTION_STOP_SERVICE.alias
+                PlayerActionType.StopService.alias
             )
         context?.startService(actionsServiceIntent)
     }

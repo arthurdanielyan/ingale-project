@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 internal class MusicBarComponentImpl(
     appComponentContext: AppComponentContext,
     currentSongInfoStateHolder: CurrentSongInfoStateProvider,
+    private val onMusicBarClicked: () -> Unit,
     private val playbackUserActions: PlaybackUserActions,
     private val musicBarEffectsHolder: MusicBarControllerImpl,
 ) : MusicBarComponent,
@@ -72,6 +73,6 @@ internal class MusicBarComponentImpl(
     }
 
     override fun onMusicBarClick() {
-
+        onMusicBarClicked()
     }
 }

@@ -5,11 +5,6 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
-import com.nightx.ingale.core.audioPlayer.impl.PlayerActionType.ACTION_CHANGE_FAVORITE_STATE
-import com.nightx.ingale.core.audioPlayer.impl.PlayerActionType.ACTION_SKIP_TO_NEXT
-import com.nightx.ingale.core.audioPlayer.impl.PlayerActionType.ACTION_SKIP_TO_PREVIOUS
-import com.nightx.ingale.core.audioPlayer.impl.PlayerActionType.ACTION_STOP_SERVICE
-import com.nightx.ingale.core.audioPlayer.impl.PlayerActionType.ACTION_TOGGLE_PLAYBACK
 
 class PlaybackActionService : Service() {
 
@@ -42,11 +37,11 @@ class PlaybackActionService : Service() {
             }
 
             when(action) {
-                ACTION_TOGGLE_PLAYBACK.alias -> playerServiceActions.togglePlaying()
-                ACTION_SKIP_TO_NEXT.alias -> playerServiceActions.skipToNext()
-                ACTION_SKIP_TO_PREVIOUS.alias -> playerServiceActions.skipToPrevious()
-                ACTION_CHANGE_FAVORITE_STATE.alias -> playerServiceActions.changeFavoriteState()
-                ACTION_STOP_SERVICE.alias -> playerServiceActions.stopService()
+                PlayerActionType.TogglePlayback.alias -> playerServiceActions.togglePlaying()
+                PlayerActionType.SkipToNext.alias -> playerServiceActions.skipToNext()
+                PlayerActionType.SkipToPrevious.alias -> playerServiceActions.skipToPrevious()
+                PlayerActionType.ChangeFavoriteState.alias -> playerServiceActions.changeFavoriteState()
+                PlayerActionType.StopService.alias -> playerServiceActions.stopService()
             }
             stopSelf()
         }

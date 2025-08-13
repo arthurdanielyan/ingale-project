@@ -12,12 +12,6 @@ import androidx.core.graphics.drawable.toBitmap
 import com.nightx.ingale.core.audioPlayer.api.CurrentSongInfo
 import com.nightx.ingale.core.audioPlayer.api.CurrentSongInfoStateProvider
 import com.nightx.ingale.core.audioPlayer.api.PlaybackUserActions
-import com.nightx.ingale.core.audioPlayer.impl.PlayerActionType.ACTION_CHANGE_FAVORITE_STATE
-import com.nightx.ingale.core.audioPlayer.impl.PlayerActionType.ACTION_PLAY_SONG
-import com.nightx.ingale.core.audioPlayer.impl.PlayerActionType.ACTION_SKIP_TO_NEXT
-import com.nightx.ingale.core.audioPlayer.impl.PlayerActionType.ACTION_SKIP_TO_PREVIOUS
-import com.nightx.ingale.core.audioPlayer.impl.PlayerActionType.ACTION_STOP_SERVICE
-import com.nightx.ingale.core.audioPlayer.impl.PlayerActionType.ACTION_TOGGLE_PLAYBACK
 import com.nightx.ingale.core.domainModel.DomainConstants
 import com.nightx.ingale.core.domainModel.Song
 import com.nightx.ingale.resources.strings.StringProvider
@@ -89,7 +83,7 @@ class PlayerServiceCommunicator(
         } ?: defaultSongBitmap
 
     private fun initService() {
-        fireServiceAction(ACTION_PLAY_SONG)
+        fireServiceAction(PlayerActionType.PlaySong)
     }
 
     override fun submitNewListAndPlay(songQueue: List<Song>, indexToPlay: Int) {
@@ -103,25 +97,27 @@ class PlayerServiceCommunicator(
     }
 
     override fun togglePlaying() {
-        fireServiceAction(ACTION_TOGGLE_PLAYBACK)
+        fireServiceAction(PlayerActionType.TogglePlayback)
     }
 
     override fun skipToNext() {
         seekPosition.update { 0 }
-        fireServiceAction(ACTION_SKIP_TO_NEXT)
+        fireServiceAction(PlayerActionType.SkipToNext)
     }
 
     override fun skipToPrevious() {
         seekPosition.update { 0 }
-        fireServiceAction(ACTION_SKIP_TO_PREVIOUS)
+        fireServiceAction(PlayerActionType.SkipToPrevious)
     }
 
-    override fun seekTo(progress: Float) {
-
+    override fun seekTo(percentage: Float) {
+        fireServiceAction(
+            PlayerActionType.SeekTo(percentage)
+        )
     }
 
     override fun changeFavoriteState() {
-        fireServiceAction(ACTION_CHANGE_FAVORITE_STATE)
+        fireServiceAction(PlayerActionType.ChangeFavoriteState)
     }
 
     private fun getCurrentSongPreviewPath(): String? =
@@ -145,10 +141,6 @@ class PlayerServiceCommunicator(
 
     private fun fireServiceAction(action: PlayerActionType) {
         val serviceIntent = Intent(applicationContext, PlayerService::class.java)
-            .putExtra(
-                PlaybackActionService.EXTRA_ACTION_KEY,
-                ACTION_SKIP_TO_NEXT.alias
-            )
         applicationContext.bindService(
             serviceIntent,
             getConnection(action),
@@ -162,12 +154,13 @@ class PlayerServiceCommunicator(
                 val playerServiceActions = service as? PlayerServiceActions ?: return
 
                 when (action) {
-                    ACTION_TOGGLE_PLAYBACK -> playerServiceActions.togglePlaying()
-                    ACTION_SKIP_TO_NEXT -> playerServiceActions.skipToNext()
-                    ACTION_SKIP_TO_PREVIOUS -> playerServiceActions.skipToPrevious()
-                    ACTION_CHANGE_FAVORITE_STATE -> playerServiceActions.changeFavoriteState()
-                    ACTION_STOP_SERVICE -> playerServiceActions.stopService()
-                    ACTION_PLAY_SONG -> playerServiceActions.initService()
+                    PlayerActionType.TogglePlayback -> playerServiceActions.togglePlaying()
+                    PlayerActionType.SkipToNext -> playerServiceActions.skipToNext()
+                    PlayerActionType.SkipToPrevious -> playerServiceActions.skipToPrevious()
+                    PlayerActionType.ChangeFavoriteState -> playerServiceActions.changeFavoriteState()
+                    PlayerActionType.StopService -> playerServiceActions.stopService()
+                    PlayerActionType.PlaySong -> playerServiceActions.initService()
+                    is PlayerActionType.SeekTo -> playerServiceActions.seekTo(action.percentage)
                 }
             }
 

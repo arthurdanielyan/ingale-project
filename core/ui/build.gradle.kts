@@ -15,6 +15,7 @@ dependencies {
 
     api(libs.androidx.activity.compose)
     api(libs.decompose.extensions.compose)
+    api(libs.decompose.core)
     api(libs.androidx.compose.ui)
     api(libs.androidx.compose.ui.graphics)
     api(libs.androidx.compose.ui.tooling.preview)

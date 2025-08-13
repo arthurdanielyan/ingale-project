@@ -1,7 +1,6 @@
 package com.nightx.ingale.root.api.root
 
 import com.nightx.ingale.core.decompose.ScreenConfig
-import com.nightx.ingale.root.api.bottomBar.BottomBarItemViewState
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -15,7 +14,7 @@ sealed interface RootScreenConfig : ScreenConfig {
 }
 
 @Serializable
-data object GlobalPlaybackConfig
+data object PlaybackScreenConfig : ScreenConfig
 
 fun RootScreenConfig.toBottomBarItemViewState(): BottomBarItemViewState {
     return when (this) {
