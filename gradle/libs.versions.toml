@@ -1,6 +1,5 @@
 [versions]
 ktx = "1.9.0"
-retrofit = "2.9.0"
 agp_version = "8.2.1"
 kotlin-version = "1.9.24"
 compose-bom = "2024.09.03"
@@ -10,14 +9,14 @@ realm = "1.14.0"
 coil = "2.6.0"
 espresso-core-version = "3.5.1"
 appcompat-version = "1.7.0"
+decompose-version = "3.0.0"
+kotlin-serialization-json = "1.6.2"
 
 [libraries]
 android-tools-build-gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "agp_version" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin-version" }
 androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
-kotlin-bom = { group = "org.jetbrains.kotlin", name = "kotlin-bom", version.ref = "ktx" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.7.3" }
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
@@ -31,7 +30,6 @@ androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name ="ui
 androidx-compose-foundation = { group = "androidx.compose.foundation", name ="foundation" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name ="material3" }
 google-material = { group = "com.google.android.material", name ="material", version = "1.11.0" }
-androidx-media3 = { group = "androidx.media3", name ="media3-ui", version = "1.2.0" }
 junit = { group = "junit", name ="junit", version = "4.13.2" }
 androidx-junit = { group = "androidx.test.ext", name ="junit", version = "1.1.5" }
 #androidx-espresso = { group = "androidx.test.espresso", name ="espresso" }
@@ -40,10 +38,6 @@ androidx-compose-ui-tooling = { group = "androidx.compose.ui", name ="ui-tooling
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name ="ui-test-manifest" }
 androidx-compose-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout-solver", version = "2.0.4" }
 androidx-constraintlayout-solver = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version = "1.0.1" }
-androidx-compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version = "2.8.2" }
-google-gson = { group = "com.google.code.gson", name = "gson", version = "2.10.1" }
-squareup-retrofit2 = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
-squareup-retrofit2-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 androidx-media = { group = "androidx.media", name = "media", version = "1.6.0" }
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
@@ -53,6 +47,9 @@ realm-gradle-plugin = { group = "io.realm.kotlin", name = "gradle-plugin", versi
 coil-compose = { group ="io.coil-kt", name = "coil-compose", version.ref = "coil" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core-version" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat-version" }
+decompose-core = { group = "com.arkivanov.decompose", name = "decompose", version.ref = "decompose-version" }
+decompose-extensions-compose = { group = "com.arkivanov.decompose", name = "extensions-compose", version.ref = 'decompose-version' }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlin-serialization-json" }
 
 [plugins]
 ingale-android-library = { id = "nightx.ingale.android.library", version = "1.0.0" }
@@ -65,3 +62,4 @@ kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin-version"
 realm-kotlin = { id = "io.realm.kotlin", version.ref = "realm" }
 kotlinx-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin-version" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-version" }

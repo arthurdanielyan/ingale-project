@@ -13,10 +13,9 @@ dependencies{
 
     implementation(projects.featureLocal.featureHome.domain)
     implementation(projects.featureLocal.featureRequirePermissions)
-    implementation(projects.featureLocal.core.viewState)
     implementation(projects.featureLocal.core.ui)
     implementation(projects.globalPlaybackPresentation)
-    implementation(projects.bottomBar.api)
+    implementation(projects.bottomBarApi)
     implementation(projects.core.domainModel)
     implementation(projects.core.audioPlayer.api)
     implementation(projects.core.ui)

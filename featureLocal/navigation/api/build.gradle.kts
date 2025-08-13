@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.ingale.android.library)
     alias(libs.plugins.kotlinx.parcelize)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -9,8 +10,9 @@ android {
 
 dependencies {
 
-    api(projects.core.navigation)
+    api(projects.core.decompose)
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.runtime)
+    implementation(libs.kotlinx.serialization.json)
 }

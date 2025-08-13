@@ -10,6 +10,10 @@ android {
 dependencies {
 
     implementation(projects.core.ui)
-    implementation(projects.featureLocal.core.viewState)
     implementation(projects.resources.songOperations)
+    implementation(projects.core.domainModel)
+    implementation(projects.core.viewState)
+    implementation(projects.core.presentation)
+    implementation(projects.core.utils)
+    implementation(projects.resources.strings)
 }

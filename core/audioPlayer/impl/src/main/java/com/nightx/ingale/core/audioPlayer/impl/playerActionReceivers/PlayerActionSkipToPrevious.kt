@@ -12,7 +12,7 @@ class PlayerActionSkipToPrevious : BroadcastReceiver() {
         val actionsServiceIntent = Intent(context, PlaybackActionService::class.java)
             .putExtra(
                 PlaybackActionService.EXTRA_ACTION_KEY,
-                PlayerActionType.ACTION_SKIP_TO_PREVIOUS.alias
+                PlayerActionType.SkipToPrevious.alias
             )
         context?.startService(actionsServiceIntent)
     }

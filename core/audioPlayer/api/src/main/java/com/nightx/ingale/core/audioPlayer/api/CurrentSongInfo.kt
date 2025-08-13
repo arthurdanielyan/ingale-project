@@ -1,8 +1,6 @@
 package com.nightx.ingale.core.audioPlayer.api
 
-import androidx.compose.runtime.Immutable
 
-@Immutable
 data class CurrentSongInfo(
     val currentSongPreviewPath: String?,
     val isPlaying: Boolean,

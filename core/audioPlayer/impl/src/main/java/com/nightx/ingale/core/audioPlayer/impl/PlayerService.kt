@@ -19,11 +19,6 @@ import android.support.v4.media.session.PlaybackStateCompat
 import android.view.KeyEvent
 import androidx.annotation.FloatRange
 import androidx.media.MediaBrowserServiceCompat
-import com.nightx.ingale.core.audioPlayer.impl.PlayerActionType.ACTION_CHANGE_FAVORITE_STATE
-import com.nightx.ingale.core.audioPlayer.impl.PlayerActionType.ACTION_SKIP_TO_NEXT
-import com.nightx.ingale.core.audioPlayer.impl.PlayerActionType.ACTION_SKIP_TO_PREVIOUS
-import com.nightx.ingale.core.audioPlayer.impl.PlayerActionType.ACTION_STOP_SERVICE
-import com.nightx.ingale.core.audioPlayer.impl.PlayerActionType.ACTION_TOGGLE_PLAYBACK
 import com.nightx.ingale.core.audioPlayer.impl.playerActionReceivers.PlayerActionChangeFavoriteStateReceiver
 import com.nightx.ingale.core.audioPlayer.impl.playerActionReceivers.PlayerActionSkipToNextReceiver
 import com.nightx.ingale.core.audioPlayer.impl.playerActionReceivers.PlayerActionSkipToPrevious
@@ -37,6 +32,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
 import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 import androidx.core.app.NotificationCompat as AndroidNotificationCompat
 import androidx.media.app.NotificationCompat as MediaNotificationCompat
 import com.nightx.ingale.resources.icon.R.mipmap as IconMipmap
@@ -135,12 +131,7 @@ class PlayerService : MediaBrowserServiceCompat() {
 
         override fun onSeekTo(pos: Long) {
             super.onSeekTo(pos)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                mediaPlayer.seekTo(pos, MediaPlayer.SEEK_PREVIOUS_SYNC)
-            else
-                mediaPlayer.seekTo(pos.toInt())
-
-            updateState()
+            seekTo(pos / mediaPlayer.duration.toFloat())
         }
 
         override fun onSkipToNext() {
@@ -215,7 +206,18 @@ class PlayerService : MediaBrowserServiceCompat() {
                 RECEIVER_NOT_EXPORTED
             )
         } else {
-            registerReceiver(NotificationDismissedReceiver(), IntentFilter(STOP_SERVICE_ACTION))
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                registerReceiver(
+                    NotificationDismissedReceiver(),
+                    IntentFilter(STOP_SERVICE_ACTION),
+                )
+            } else {
+                registerReceiver(
+                    NotificationDismissedReceiver(),
+                    IntentFilter(STOP_SERVICE_ACTION),
+                    RECEIVER_NOT_EXPORTED
+                )
+            }
         }
     }
 
@@ -261,8 +263,16 @@ class PlayerService : MediaBrowserServiceCompat() {
     }
 
     // Player actions ///////////////////////////////////////////////////////////////////////////////////
-    private fun seekTo(@FloatRange(0.0, 1.0) progress: Float) {
-        mediaPlayer.seekTo((mediaPlayer.duration * progress.coerceIn(0f, 1f)).roundToInt())
+    private fun seekTo(@FloatRange(from = 0.0, to = 1.0) progress: Float) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mediaPlayer.seekTo(
+                (mediaPlayer.duration * progress.coerceIn(0f, 1f)).roundToLong(),
+                MediaPlayer.SEEK_PREVIOUS_SYNC
+            )
+        } else {
+            mediaPlayer.seekTo((mediaPlayer.duration * progress.coerceIn(0f, 1f)).roundToInt())
+        }
+        updateState()
     }
 
     private fun initService() {
@@ -422,16 +432,16 @@ class PlayerService : MediaBrowserServiceCompat() {
             AndroidNotificationCompat.Builder(this, MUSIC_PLAYER_NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(IconMipmap.ic_launcher_foreground)
                 .addAction(R.drawable.ic_arrow_previous, "Previous",
-                    getPendingIntent(ACTION_SKIP_TO_PREVIOUS)
+                    getPendingIntent(PlayerActionType.SkipToPrevious)
                 ) // #0
                 .addAction(togglePlayingIcon, "Pause",
-                    getPendingIntent(ACTION_TOGGLE_PLAYBACK)
+                    getPendingIntent(PlayerActionType.TogglePlayback)
                 ) // #1
                 .addAction(R.drawable.ic_arrow_next, "Next",
-                    getPendingIntent(ACTION_SKIP_TO_NEXT)
+                    getPendingIntent(PlayerActionType.SkipToNext)
                 ) // #2
                 .addAction(R.drawable.ic_close_white, "Stop playback",
-                    getPendingIntent(ACTION_STOP_SERVICE)
+                    getPendingIntent(PlayerActionType.StopService)
                 )
                 .setStyle(mediaStyle)
                 .setContentTitle(playerServiceCommunicator.currentSong?.title.orEmpty())
@@ -445,43 +455,51 @@ class PlayerService : MediaBrowserServiceCompat() {
 
     private fun getPendingIntent(action: PlayerActionType): PendingIntent =
         when(action) {
-            ACTION_TOGGLE_PLAYBACK ->
+            PlayerActionType.TogglePlayback ->
                 PendingIntent.getBroadcast(
                     this,
                     0,
                     Intent(this, PlayerActionTogglePlaybackReceiver::class.java),
                     PendingIntent.FLAG_IMMUTABLE
                 )
-            ACTION_SKIP_TO_NEXT ->
+
+            PlayerActionType.SkipToNext ->
                 PendingIntent.getBroadcast(
                     this,
                     0,
                     Intent(this, PlayerActionSkipToNextReceiver::class.java),
                     PendingIntent.FLAG_IMMUTABLE
                 )
-            ACTION_SKIP_TO_PREVIOUS ->
+
+            PlayerActionType.SkipToPrevious ->
                 PendingIntent.getBroadcast(
                     this,
                     0,
                     Intent(this, PlayerActionSkipToPrevious::class.java),
                     PendingIntent.FLAG_IMMUTABLE
                 )
-            ACTION_CHANGE_FAVORITE_STATE ->
+
+            PlayerActionType.ChangeFavoriteState ->
                 PendingIntent.getBroadcast(
                     this,
                     0,
                     Intent(this, PlayerActionChangeFavoriteStateReceiver::class.java),
                     PendingIntent.FLAG_IMMUTABLE
                 )
-            ACTION_STOP_SERVICE ->
+
+            PlayerActionType.StopService ->
                 PendingIntent.getBroadcast(
                     this,
                     0,
                     Intent(this, PlayerActionStopServiceReceiver::class.java),
                     PendingIntent.FLAG_IMMUTABLE
                 )
-            PlayerActionType.ACTION_PLAY_SONG ->
+
+            PlayerActionType.PlaySong ->
                 throw IllegalAccessException("PlayerService is already started")
+
+            is PlayerActionType.SeekTo ->
+                throw IllegalArgumentException("Seeking from notifications is handled automatically")
         }
 
     private val onDismissedIntent: PendingIntent

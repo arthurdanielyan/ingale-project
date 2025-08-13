@@ -9,6 +9,6 @@ interface PlayerServiceActions {
     fun togglePlaying()
     fun skipToNext()
     fun skipToPrevious()
-    fun seekTo(@FloatRange(0.0, 1.0) progress: Float)
+    fun seekTo(@FloatRange(from = 0.0, to = 1.0) progress: Float)
     fun changeFavoriteState()
 }

@@ -22,16 +22,14 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/bottomBar" />
-            <option value="$PROJECT_DIR$/bottomBar/api" />
-            <option value="$PROJECT_DIR$/bottomBar/impl" />
+            <option value="$PROJECT_DIR$/bottomBarApi" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core/audioPlayer" />
             <option value="$PROJECT_DIR$/core/audioPlayer/api" />
             <option value="$PROJECT_DIR$/core/audioPlayer/impl" />
             <option value="$PROJECT_DIR$/core/dataModel" />
+            <option value="$PROJECT_DIR$/core/decompose" />
             <option value="$PROJECT_DIR$/core/domainModel" />
-            <option value="$PROJECT_DIR$/core/navigation" />
             <option value="$PROJECT_DIR$/core/presentation" />
             <option value="$PROJECT_DIR$/core/ui" />
             <option value="$PROJECT_DIR$/core/utils" />
@@ -40,7 +38,6 @@
             <option value="$PROJECT_DIR$/featureLocal/core" />
             <option value="$PROJECT_DIR$/featureLocal/core/data" />
             <option value="$PROJECT_DIR$/featureLocal/core/ui" />
-            <option value="$PROJECT_DIR$/featureLocal/core/viewState" />
             <option value="$PROJECT_DIR$/featureLocal/featureHome" />
             <option value="$PROJECT_DIR$/featureLocal/featureHome/data" />
             <option value="$PROJECT_DIR$/featureLocal/featureHome/domain" />
@@ -50,8 +47,8 @@
             <option value="$PROJECT_DIR$/featureLocal/featureSongsSet/presentation" />
             <option value="$PROJECT_DIR$/featureLocal/navigation" />
             <option value="$PROJECT_DIR$/featureLocal/navigation/api" />
-            <option value="$PROJECT_DIR$/featureLocal/navigation/graph" />
             <option value="$PROJECT_DIR$/featureLocal/navigation/impl" />
+            <option value="$PROJECT_DIR$/featureLocal/navigation/ui" />
             <option value="$PROJECT_DIR$/featureYoutube" />
             <option value="$PROJECT_DIR$/globalPlaybackPresentation" />
             <option value="$PROJECT_DIR$/gradlePlugins" />
@@ -61,6 +58,9 @@
             <option value="$PROJECT_DIR$/resources/playbackActions" />
             <option value="$PROJECT_DIR$/resources/songOperations" />
             <option value="$PROJECT_DIR$/resources/strings" />
+            <option value="$PROJECT_DIR$/root" />
+            <option value="$PROJECT_DIR$/root/api" />
+            <option value="$PROJECT_DIR$/root/impl" />
           </set>
         </option>
       </GradleProjectSettings>

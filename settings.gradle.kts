@@ -32,12 +32,17 @@ val coreModule = Module(
         ),
         Module("dataModel"),
         Module("domainModel"),
-        Module("navigation"),
+        Module("decompose"),
         Module("presentation"),
         Module("ui"),
         Module("utils"),
         Module("viewState"),
     )
+)
+
+val root = Module(
+    name = "root",
+    submodules = apiImpl,
 )
 
 val featureLocal = Module(
@@ -48,7 +53,6 @@ val featureLocal = Module(
             submodules = listOf(
                 Module("data"),
                 Module("ui"),
-                Module("viewState"),
             )
         ),
         Module(
@@ -64,11 +68,7 @@ val featureLocal = Module(
         ),
         Module(
             name = "navigation",
-            submodules = listOf(
-                Module("api"),
-                Module("impl"),
-                Module("graph")
-            )
+            submodules = apiImpl + Module("ui"),
         )
     )
 )
@@ -88,12 +88,12 @@ val resources = Module(
 
 includeModules(
     coreModule,
+    root,
     featureLocal,
     featureYoutube,
     resources,
     Module(
-        "bottomBar",
-        submodules = apiImpl
+        "bottomBarApi",
     ),
     Module("globalPlaybackPresentation"),
 )
@@ -103,13 +103,13 @@ data class Module(
     val submodules: List<Module> = emptyList()
 )
 
-fun includeModules(vararg modules: Module) {
+private fun includeModules(vararg modules: Module) {
     modules.forEach { module ->
         module.getPaths().forEach { include(it) }
     }
 }
 
-fun Module.getPaths(): List<String> =
+private fun Module.getPaths(): List<String> =
     if(submodules.isEmpty()) {
         listOf(this.name)
     } else {

@@ -4,5 +4,5 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface CurrentSongInfoStateProvider {
 
-    val currentSongInfo: StateFlow<CurrentSongInfo>
+    val currentSongInfo: StateFlow<CurrentSongInfo?>
 }

@@ -8,7 +8,6 @@ android {
 
 dependencies {
 
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.ui)
+    implementation(libs.kotlinx.coroutines.core)
     implementation(projects.core.domainModel)
 }

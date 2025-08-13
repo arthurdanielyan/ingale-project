@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -24,38 +25,35 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.nightx.featureLocal.core.viewState.SongsSetViewState
-import com.nightx.ingale.core.presentation.diExt.ingaleViewModels
 import com.nightx.ingale.core.ui.SongIcon
 import com.nightx.ingale.core.ui.extensions.alpha
 import com.nightx.ingale.core.ui.theme.dimensions
 import com.nightx.ingale.core.ui.topBar.TopBarBackButton
 import com.nightx.ingale.core.ui.topBar.TopBarHeight
 import com.nightx.ingale.core.ui.topBar.TopBarWithBackButton
-import com.nightx.ingale.featureLocal.core.ui.SongsLazyList
-import com.nightx.ingale.featureLocal.featureSongsSet.presentation.view.viewModel.SongsSetCallbacks
-import com.nightx.ingale.featureLocal.featureSongsSet.presentation.view.viewModel.SongsSetViewModel
-import com.nightx.ingale.globalPlaybackPresentation.ui.rememberNestedScrollForMusicBarNotification
+import com.nightx.ingale.featureLocal.core.ui.components.SongsLazyList
+import com.nightx.ingale.featureLocal.core.ui.viewState.SongsSetViewState
+import com.nightx.ingale.featureLocal.featureSongsSet.presentation.api.SongsSetComponent
+import com.nightx.ingale.featureLocal.featureSongsSet.presentation.impl.SongsSetUiCallbacks
+import com.nightx.ingale.globalPlaybackPresentation.musicBar.api.rememberNestedScrollForMusicBarNotification
 
 @Composable
-fun SongsSetScreen(savedStateHandle: SavedStateHandle) {
-    val vm = ingaleViewModels<SongsSetViewModel>(
-        savedStateHandle = savedStateHandle
-    )
-    val state by vm.state.collectAsStateWithLifecycle()
+fun SongsSetScreen(
+    component: SongsSetComponent,
+) {
+    val state by component.uiState.collectAsState()
+    val callbacks = component.uiCallbacks
 
     SongsSetScreen(
         state = state,
-        callbacks = vm
+        callbacks = callbacks
     )
 }
 
 @Composable
 internal fun SongsSetScreen(
     state: SongsSetViewState,
-    callbacks: SongsSetCallbacks,
+    callbacks: SongsSetUiCallbacks,
 ) {
     val lazyListState = rememberLazyListState()
     val musicBarNotifier = rememberNestedScrollForMusicBarNotification()

@@ -10,11 +10,12 @@ dependencies {
 
     api(projects.featureLocal.navigation.api)
 
-    implementation(projects.core.navigation)
+    implementation(projects.core.decompose)
     implementation(libs.koin.core)
     implementation(projects.core.ui)
-    implementation(libs.androidx.compose.navigation)
+    implementation(projects.bottomBarApi)
 
     // Screens
     implementation(projects.featureLocal.featureHome.presentation)
+    implementation(projects.featureLocal.featureSongsSet.presentation)
 }

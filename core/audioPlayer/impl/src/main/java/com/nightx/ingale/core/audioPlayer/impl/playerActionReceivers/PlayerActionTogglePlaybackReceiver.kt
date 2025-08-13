@@ -12,7 +12,7 @@ class PlayerActionTogglePlaybackReceiver : BroadcastReceiver() {
         val actionsServiceIntent = Intent(context, PlaybackActionService::class.java)
             .putExtra(
                 PlaybackActionService.EXTRA_ACTION_KEY,
-                PlayerActionType.ACTION_TOGGLE_PLAYBACK.alias
+                PlayerActionType.TogglePlayback.alias
             )
         context?.startService(actionsServiceIntent)
     }

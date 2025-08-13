@@ -12,7 +12,7 @@ class PlayerActionChangeFavoriteStateReceiver : BroadcastReceiver() {
         val actionsServiceIntent = Intent(context, PlaybackActionService::class.java)
             .putExtra(
                 PlaybackActionService.EXTRA_ACTION_KEY,
-                PlayerActionType.ACTION_CHANGE_FAVORITE_STATE.alias
+                PlayerActionType.ChangeFavoriteState.alias
             )
         context?.startService(actionsServiceIntent)
     }
