@@ -13,7 +13,6 @@ data class DefaultDimensions(
     val normal: Dp = 8.dp,
     val large: Dp = 16.dp,
     val extraLarge: Dp = 32.dp,
-    val squared: Dp = 64.dp
 )
 
 val LocalDimensions = compositionLocalOf<DefaultDimensions> {

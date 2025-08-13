@@ -2,7 +2,6 @@ package com.nightx.ingale.globalPlaybackPresentation.playbackScreen.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -80,7 +79,8 @@ private fun PlaybackScreen(
         ) {
             Icon(
                 modifier = Modifier
-                    .requiredSize(IconSize),
+                    .requiredSize(IconSize)
+                    .padding(MaterialTheme.dimensions.normal),
                 imageVector = Icons.Default.KeyboardArrowDown,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onBackground,
@@ -90,7 +90,6 @@ private fun PlaybackScreen(
             modifier = Modifier
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
         ) {
             TextMarquee(
                 modifier = Modifier

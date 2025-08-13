@@ -2,10 +2,8 @@ package com.nightx.ingale.featureLocal.featureHome.presentation.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
@@ -25,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.nightx.ingale.core.ui.DataPlaceholder
 import com.nightx.ingale.core.ui.LoadingStatePresenter
 import com.nightx.ingale.core.ui.ObserveState
+import com.nightx.ingale.core.ui.SpacerHeight
 import com.nightx.ingale.core.ui.extensions.marquee
 import com.nightx.ingale.core.ui.flows.ObserveEffects
 import com.nightx.ingale.core.ui.theme.dimensions
@@ -118,13 +117,13 @@ private fun LocalHomeScreen(
             text = state.searchTextField,
             onType = callbacks::onSearchType
         )
-        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.normal))
+        SpacerHeight(MaterialTheme.dimensions.normal)
         SongsSetButtons(
             onPlaylistsClick = callbacks::onPlaylistsClick,
             onFavouritesClick = callbacks::onFavouritesClick,
             onHistoryClick = callbacks::onHistoryClick
         )
-        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.large))
+        SpacerHeight(MaterialTheme.dimensions.large)
         TabRow(
             modifier = Modifier.fillMaxWidth(),
             pagerState = pagerState,

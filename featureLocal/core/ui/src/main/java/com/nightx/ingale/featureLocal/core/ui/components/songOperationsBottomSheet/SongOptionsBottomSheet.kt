@@ -4,11 +4,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -20,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.nightx.ingale.core.ui.SpacerWidth
 import com.nightx.ingale.core.ui.bottomSheet.ModalBottomSheet
 import com.nightx.ingale.core.ui.theme.dimensions
 import com.nightx.ingale.featureLocal.core.ui.components.songOperationsBottomSheet.SongOperations.ADD_TO_QUEUE
@@ -90,7 +89,7 @@ private fun BottomSheetButton(
             painter = iconPainter,
             contentDescription = text
         )
-        Spacer(modifier = Modifier.width(MaterialTheme.dimensions.normal))
+        SpacerWidth(MaterialTheme.dimensions.normal)
         Text(
             text = text
         )
