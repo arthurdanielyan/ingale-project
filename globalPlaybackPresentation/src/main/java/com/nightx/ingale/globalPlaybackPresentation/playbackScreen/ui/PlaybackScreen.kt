@@ -2,6 +2,7 @@ package com.nightx.ingale.globalPlaybackPresentation.playbackScreen.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,15 +31,19 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.nightx.ingale.core.ui.ActiveIconButton
 import com.nightx.ingale.core.ui.MusicProgressIndicator
+import com.nightx.ingale.core.ui.SpacerHeight
 import com.nightx.ingale.core.ui.TextMarquee
 import com.nightx.ingale.core.ui.theme.dimensions
 import com.nightx.ingale.globalPlaybackPresentation.playbackScreen.api.PlaybackScreenComponent
 import com.nightx.ingale.globalPlaybackPresentation.playbackScreen.api.PlaybackScreenUiCallbacks
 import com.nightx.ingale.globalPlaybackPresentation.playbackScreen.api.PlaybackScreenViewState
 import com.nightx.ingale.resources.icon.R
+import com.nightx.ingale.resources.playbackActions.R.drawable as Drawables
 
 @Composable
 fun PlaybackScreen(
@@ -74,32 +79,48 @@ private fun PlaybackScreen(
     ) {
         IconButton(
             modifier = Modifier
+                .padding(MaterialTheme.dimensions.normal)
                 .requiredSize(ButtonSize),
             onClick = callbacks::onClose,
         ) {
             Icon(
                 modifier = Modifier
-                    .requiredSize(IconSize)
-                    .padding(MaterialTheme.dimensions.normal),
+                    .requiredSize(IconSize),
                 imageVector = Icons.Default.KeyboardArrowDown,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onBackground,
             )
         }
+        SpacerHeight(MaterialTheme.dimensions.extraLarge)
         Column(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .padding(
+                    horizontal = MaterialTheme.dimensions.large
+                ),
             horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.large)
         ) {
-            TextMarquee(
-                modifier = Modifier
-                    .fillMaxWidth(0.5f),
-                text = state.songName,
-            )
             SongPreview(
                 modifier = Modifier
-                    .fillMaxWidth(0.4f),
+                    .fillMaxWidth(0.8f),
                 preview = state.currentSongPreviewPath,
+            )
+            TextMarquee(
+                modifier = Modifier
+                    .fillMaxWidth(0.9f)
+                    .align(Alignment.Start),
+                text = state.songName,
+                style = MaterialTheme.typography.titleLarge,
+                textAlign = TextAlign.Start,
+            )
+            TextMarquee(
+                modifier = Modifier
+                    .fillMaxWidth(0.7f)
+                    .align(Alignment.Start),
+                text = state.artistName,
+                style = MaterialTheme.typography.labelLarge,
+                textAlign = TextAlign.Start,
             )
             MusicProgressIndicator(
                 progress = playbackProgress,
@@ -107,19 +128,44 @@ private fun PlaybackScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
-                        horizontal = MaterialTheme.dimensions.large,
                         vertical = MaterialTheme.dimensions.normal,
                     ),
             )
+            val playPauseButton = remember(state.isPlaying) {
+                if (state.isPlaying) {
+                    com.nightx.ingale.resources.playbackActions.R.drawable.ic_pause
+                } else {
+                    com.nightx.ingale.resources.playbackActions.R.drawable.ic_play
+                }
+            }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
                         horizontal = MaterialTheme.dimensions.large,
                         vertical = MaterialTheme.dimensions.normal,
+                    ),
+                horizontalArrangement = Arrangement
+                    .spacedBy(
+                        alignment = Alignment.CenterHorizontally,
+                        space = MaterialTheme.dimensions.extraLarge
                     )
             ) {
-
+                ActiveIconButton(
+                    painter = painterResource(Drawables.ic_arrow_previous),
+                    contentDescription = "stop/resume music button",
+                    onClick = callbacks::onSkipToPreviousClick,
+                )
+                ActiveIconButton(
+                    painter = painterResource(playPauseButton),
+                    contentDescription = "stop/resume music button",
+                    onClick = callbacks::onTogglePlayback,
+                )
+                ActiveIconButton(
+                    painter = painterResource(Drawables.ic_arrow_next),
+                    contentDescription = "stop/resume music button",
+                    onClick = callbacks::onSkipToNextClick,
+                )
             }
         }
     }

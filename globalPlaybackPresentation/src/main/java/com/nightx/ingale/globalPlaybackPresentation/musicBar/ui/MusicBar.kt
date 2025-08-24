@@ -46,7 +46,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import androidx.compose.ui.zIndex
-import com.nightx.ingale.core.ui.IconButton
+import com.nightx.ingale.core.ui.PassiveIconButton
 import com.nightx.ingale.core.ui.SongIcon
 import com.nightx.ingale.core.ui.TextMarquee
 import com.nightx.ingale.core.ui.theme.dimensions
@@ -183,12 +183,12 @@ fun MusicBar(
                             PlaybackActions.ic_play
                         }
                     }
-                    IconButton(
+                    PassiveIconButton(
                         painter = painterResource(playPauseButton),
                         contentDescription = "stop/resume music button",
                         onClick = callbacks::onTogglePlaybackClick,
                     )
-                    IconButton(
+                    PassiveIconButton(
                         painter = painterResource(PlaybackActions.ic_arrow_next),
                         contentDescription = "stop music button",
                         onClick = callbacks::onSkipToNextClick,
