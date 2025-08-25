@@ -6,8 +6,6 @@ import com.nightx.ingale.root.api.snackbar.SnackbarComponent
 import com.nightx.ingale.root.impl.bottomNavigation.BottomBarControllerImpl
 import com.nightx.ingale.root.impl.root.RootComponentFactoryImpl
 import com.nightx.ingale.root.impl.snackbar.SnackbarComponentFactoryImpl
-import org.koin.core.module.dsl.singleOf
-import org.koin.dsl.binds
 import org.koin.dsl.module
 
 val rootModule = module {
@@ -17,11 +15,15 @@ val rootModule = module {
             snackbarComponentFactory = get(),
             musicBarComponentFactory = get(),
             playbackScreenComponentFactory = get(),
-            bottomBarControllerImpl = get(),
+            bottomBarController = get(),
         )
     }
 
-    singleOf(::BottomBarControllerImpl) binds arrayOf(BottomBarController::class)
+    single<BottomBarController> {
+        BottomBarControllerImpl(
+            applicationScope = get(),
+        )
+    }
 
     factory<SnackbarComponent.Factory> {
         SnackbarComponentFactoryImpl(

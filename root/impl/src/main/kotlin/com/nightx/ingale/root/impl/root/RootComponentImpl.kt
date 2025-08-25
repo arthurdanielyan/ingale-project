@@ -8,6 +8,7 @@ import com.arkivanov.decompose.router.stack.bringToFront
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.value.subscribe
 import com.arkivanov.essenty.backhandler.BackCallback
+import com.nightx.ingale.bottomBarApi.BottomBarController
 import com.nightx.ingale.core.decompose.AppComponentContext
 import com.nightx.ingale.core.decompose.appChildContext
 import com.nightx.ingale.core.decompose.appChildSlot
@@ -23,7 +24,6 @@ import com.nightx.ingale.root.api.root.RootComponent
 import com.nightx.ingale.root.api.root.RootScreenConfig
 import com.nightx.ingale.root.api.root.toBottomBarItemViewState
 import com.nightx.ingale.root.api.snackbar.SnackbarComponent
-import com.nightx.ingale.root.impl.bottomNavigation.BottomBarControllerImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -36,7 +36,7 @@ internal class RootComponentImpl(
     snackbarComponentFactory: SnackbarComponent.Factory,
     musicBarComponentFactory: MusicBarComponent.Factory,
     playbackScreenComponentFactory: PlaybackScreenComponent.Factory,
-    private val bottomBarControllerImpl: BottomBarControllerImpl,
+    private val bottomBarController: BottomBarController,
 ) : RootComponent, AppComponentContext by appComponentContext {
 
     private val backCallback = BackCallback {
@@ -47,7 +47,7 @@ internal class RootComponentImpl(
 
     override val uiState: StateFlow<BottomNavigationState> = combine(
         selectedTab,
-        bottomBarControllerImpl.isBottomBarVisible,
+        bottomBarController.isBottomBarVisible,
     ) { selectedTab, isBottomBarVisible ->
         BottomNavigationState(
             selectedTab = selectedTab,
@@ -125,7 +125,7 @@ internal class RootComponentImpl(
     }
 
     override fun onTabSelected(tab: BottomBarItemViewState) {
-        if (bottomBarControllerImpl.isBottomBarVisible.value) {
+        if (bottomBarController.isBottomBarVisible.value) {
             stackNavigation.bringToFront(tab.toConfig())
         }
     }
