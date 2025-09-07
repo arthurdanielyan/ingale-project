@@ -16,6 +16,7 @@
     <string name="unknown">Unknown</string>
     <string name="unknown_album">Unknown album</string>
     <string name="unknown_artist">Unknown artist</string>
+    <string name="unknown_genre">Unknown genre</string>
 
     <string name="refresh">Refresh</string>
     <string name="grant_permission">Grant permission</string>

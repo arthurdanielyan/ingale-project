@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import com.nightx.ingale.core.audioPlayer.impl.PlayerService.Companion.MUSIC_PLAYER_NOTIFICATION_CHANNEL_ID
 import com.nightx.ingale.core.audioPlayer.impl.playerServiceCommunicatorModule
 import com.nightx.ingale.core.dataModel.di.mappersModule
 import com.nightx.ingale.core.dataModel.di.realmModule
@@ -24,10 +25,6 @@ import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 
 class IngaleApplication : Application() {
-
-    companion object {
-        const val MUSIC_PLAYER_NOTIFICATION_CHANNEL_ID = "music_player"
-    }
 
     override fun onCreate() {
         super.onCreate()

@@ -12,6 +12,6 @@ interface PlaybackScreenUiCallbacks {
     fun onSeekTo(
         @FloatRange(from = 0.0, to = 1.0) percentage: Float
     )
-
+    fun onToggleLoopMode()
     fun onClose()
 }

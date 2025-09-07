@@ -5,19 +5,20 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
-import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
 import android.util.Size
+import androidx.core.net.toUri
 import com.nightx.ingale.core.dataModel.SongRealm
 import com.nightx.ingale.core.dataModel.mapper.SongRealmMapper
-import com.nightx.ingale.core.domainModel.DomainConstants
 import com.nightx.ingale.core.domainModel.LoadState
 import com.nightx.ingale.core.domainModel.Song
 import com.nightx.ingale.core.utils.CoroutineDispatchers
 import com.nightx.ingale.core.utils.mapList
+import com.nightx.ingale.core.utils.yap
 import com.nightx.ingale.featureLocal.featureHome.domain.repository.LocalMainRepository
+import com.nightx.ingale.resources.strings.StringProvider
 import io.realm.kotlin.Realm
 import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.ext.query
@@ -35,6 +36,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.util.LinkedList
 import kotlin.math.sqrt
+import com.nightx.ingale.resources.strings.R.string as Strings
 
 
 class LocalMainRepositoryImpl(
@@ -42,6 +44,7 @@ class LocalMainRepositoryImpl(
     private val songsDb: Realm,
     private val dispatchers: CoroutineDispatchers,
     private val songRealmMapper: SongRealmMapper,
+    private val stringProvider: StringProvider,
     private val applicationScope: CoroutineScope,
 ) : LocalMainRepository {
 
@@ -111,6 +114,7 @@ class LocalMainRepositoryImpl(
                     val artistName =
                         metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST)
                             ?: cursor.getString(artistNameColumnIndex)
+                    yap(artistName)
 
 
                     val albumIdCol = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)
@@ -124,9 +128,8 @@ class LocalMainRepositoryImpl(
                         metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE)
                             ?: if (genreNameColumnIndex >= 0) {
                                 cursor.getString(genreNameColumnIndex)
-                                    ?: DomainConstants.UNKNOWN_SONG_DATA_ID
                             } else {
-                                DomainConstants.UNKNOWN_SONG_DATA_ID
+                                null
                             }
 
                     val artistIdCol = cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID)
@@ -153,7 +156,7 @@ class LocalMainRepositoryImpl(
                                 )
                             } else {
 
-                                val sArtWorkUri = Uri.parse("content://media/external/audio/album")
+                                val sArtWorkUri = "content://media/external/audio/album".toUri()
                                 val albumArtUri =
                                     ContentUris.withAppendedId(sArtWorkUri, albumId)
 
@@ -198,9 +201,9 @@ class LocalMainRepositoryImpl(
                         this.duration = duration
                         this.artist =
                             if (artistName in UnknownArtistPlaceholders) {
-                                DomainConstants.UNKNOWN_SONG_DATA_ID
+                                stringProvider.string(Strings.unknown_artist)
                             } else artistName
-                        this.genre = genre
+                        this.genre = genre ?: stringProvider.string(Strings.unknown_genre)
                         this.path = songPath
                         this.previewPath = previewPath
                         this.albumId = albumId

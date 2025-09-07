@@ -27,7 +27,7 @@ internal class MusicBarComponentImpl(
     private val isMusicBarExpanded = MutableStateFlow(true)
 
     override val uiState = combine(
-        currentSongInfoStateHolder.currentSongInfo,
+        currentSongInfoStateHolder.currentPlaybackInfo,
         isMusicBarExpanded,
     ) { currentSongInfo, isMusicBarExpanded ->
         MusicBarViewState(

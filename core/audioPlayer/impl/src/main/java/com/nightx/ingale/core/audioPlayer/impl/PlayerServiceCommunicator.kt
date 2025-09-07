@@ -1,28 +1,24 @@
 package com.nightx.ingale.core.audioPlayer.impl
 
-import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.os.IBinder
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
-import com.nightx.ingale.core.audioPlayer.api.CurrentSongInfo
+import com.nightx.ingale.core.audioPlayer.api.CurrentPlaybackInfo
 import com.nightx.ingale.core.audioPlayer.api.CurrentSongInfoStateProvider
+import com.nightx.ingale.core.audioPlayer.api.PlaybackLoopMode
 import com.nightx.ingale.core.audioPlayer.api.PlaybackUserActions
 import com.nightx.ingale.core.domainModel.DomainConstants
 import com.nightx.ingale.core.domainModel.Song
+import com.nightx.ingale.resources.icon.R
 import com.nightx.ingale.resources.strings.StringProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import com.nightx.ingale.resources.icon.R.mipmap as IconMipmap
 import com.nightx.ingale.resources.strings.R.string as Strings
 
 class PlayerServiceCommunicator(
@@ -31,139 +27,201 @@ class PlayerServiceCommunicator(
     applicationScope: CoroutineScope,
 ) : PlaybackUserActions, CurrentSongInfoStateProvider {
 
-    private val defaultSongBitmap: Bitmap
-        get() = ContextCompat
-            .getDrawable(applicationContext, IconMipmap.ic_launcher)!!.toBitmap()
+    private var playlist: List<Song> = emptyList()
+    private val playbackLoopMode = MutableStateFlow(PlaybackLoopMode.PlaylistLoop)
+    var currentQueue = emptyList<Song>()
+        private set
+    private var currentSongIndex = MutableStateFlow(0) // points to a song in playbackOrder
 
-    var isPlaying = false
-        set(value) {
-            field = value
-            _currentSongInfo.update {
-                it?.copy(isPlaying = value)
-            }
-        }
+    private val playerServiceConnection = PlayerServiceConnection(
+        applicationContext = applicationContext,
+        applicationScope = applicationScope
+    )
 
-    var songQueue: List<Song> = emptyList()
+    val seekPosition = MutableStateFlow(0) // updates from service
+    var isPlaying = MutableStateFlow(false) // updates from service
 
-    var seekPosition = MutableStateFlow(0)
-
-    private val _currentSongInfo = MutableStateFlow<CurrentSongInfo?>(null)
-    private val seekPercentage = seekPosition.map { seekPosition ->
-        currentSong?.duration?.toFloat()?.let {
-            seekPosition.toFloat() / it
-        } ?: 0f
-    }.stateIn(applicationScope, SharingStarted.Eagerly, 0f)
-
-    override val currentSongInfo = combine(
-        _currentSongInfo,
-        seekPercentage
-    ) { currentSongInfo, seekPercentage ->
-        currentSongInfo?.copy(seekPercentage = seekPercentage)
-    }.stateIn(applicationScope, SharingStarted.WhileSubscribed(), null)
-
-    @Volatile
-    var pointer = 0
-        set(value) {
-            field = if (value in songQueue.indices) value else
-                if (value < 0) songQueue.lastIndex else 0
-            _currentSongInfo.update { createMusicBarState() }
-        }
-
-    val currentSong: Song?
-        get() {
-            return songQueue.getOrNull(pointer)
-        }
-
-    val songCount: Long
-        get() = songQueue.size.toLong()
-
-    val currentSongBitmap: Bitmap
-        get() = getCurrentSongPreviewPath()?.let {
-            BitmapFactory.decodeFile(it)
-        } ?: defaultSongBitmap
-
-    private fun initService() {
-        fireServiceAction(PlayerActionType.PlaySong)
-    }
-
-    override fun submitNewListAndPlay(songQueue: List<Song>, indexToPlay: Int) {
-        require(indexToPlay in songQueue.indices) {
-            "indexToPlay must be in the range of songQueue"
-        }
-        this.songQueue = songQueue
-        pointer = indexToPlay
-        seekPosition.update { 0 }
-        initService()
-    }
-
-    override fun togglePlaying() {
-        fireServiceAction(PlayerActionType.TogglePlayback)
-    }
-
-    override fun skipToNext() {
-        seekPosition.update { 0 }
-        fireServiceAction(PlayerActionType.SkipToNext)
-    }
-
-    override fun skipToPrevious() {
-        seekPosition.update { 0 }
-        fireServiceAction(PlayerActionType.SkipToPrevious)
-    }
-
-    override fun seekTo(percentage: Float) {
-        fireServiceAction(
-            PlayerActionType.SeekTo(percentage)
-        )
-    }
-
-    override fun changeFavoriteState() {
-        fireServiceAction(PlayerActionType.ChangeFavoriteState)
-    }
-
-    private fun getCurrentSongPreviewPath(): String? =
-        songQueue.getOrNull(pointer)?.picturePath
-
-    private fun createMusicBarState(): CurrentSongInfo =
-        CurrentSongInfo(
-            currentSongPreviewPath = getCurrentSongPreviewPath(),
+    override val currentPlaybackInfo = combine(
+        currentSongIndex,
+        seekPosition,
+        isPlaying,
+        playbackLoopMode
+    ) { _, seekPosition, isPlaying, playbackLoopMode ->
+        val currentSong = getCurrentSong() ?: return@combine null
+        CurrentPlaybackInfo(
+            currentSongPreviewPath = currentSong.picturePath,
             isPlaying = isPlaying,
-            songName = getCurrentSongOrNull()?.title.orEmpty(),
-            artistName =
-            if (getCurrentSongOrNull()?.artist == DomainConstants.UNKNOWN_SONG_DATA_ID) {
+            songName = currentSong.title,
+            artistName = if (currentSong.artist == DomainConstants.UNKNOWN_SONG_DATA_ID) {
                 stringProvider.string(Strings.unknown_artist)
             } else {
-                getCurrentSongOrNull()?.artist ?: stringProvider.string(Strings.unknown_artist)
+                currentSong.artist
             },
-            seekPercentage = seekPercentage.value
+            seekPercentage = if (currentSong.duration == 0L) {
+                0f
+            } else {
+                seekPosition.toFloat() / currentSong.duration
+            },
+            loopMode = playbackLoopMode,
         )
+    }.stateIn(applicationScope, SharingStarted.Eagerly, null)
 
-    private fun getCurrentSongOrNull(): Song? = songQueue.getOrNull(pointer)
+    private fun handleNewPlaylistAndPlay(playlist: List<Song>, indexToPlay: Int) {
+        require(indexToPlay in playlist.indices) {
+            "indexToPlay must be in the range of playlist"
+        }
+        this.playlist = playlist
+        when (playbackLoopMode.value) {
+            PlaybackLoopMode.PlaylistLoop -> {
+                currentQueue = playlist
+                currentSongIndex.update { indexToPlay }
+            }
 
-    private fun fireServiceAction(action: PlayerActionType) {
-        val serviceIntent = Intent(applicationContext, PlayerService::class.java)
-        applicationContext.bindService(
-            serviceIntent,
-            getConnection(action),
-            Context.BIND_AUTO_CREATE
-        )
+            PlaybackLoopMode.Shuffle -> {
+                val songToPlay = playlist[indexToPlay]
+                currentQueue = playlist.toMutableList().apply {
+                    remove(songToPlay)
+                    shuffle()
+                    add(0, songToPlay)
+                }
+                currentSongIndex.update { 0 }
+            }
+
+            PlaybackLoopMode.Single -> {
+                currentQueue = playlist
+                currentSongIndex.update { indexToPlay }
+            }
+        }
+        seekPosition.update { 0 }
+        playerServiceConnection.withConnection {
+            prepareNewSong()
+        }
     }
 
-    private fun getConnection(action: PlayerActionType) =
-        object : ServiceConnection {
-            override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-                val playerServiceActions = service as? PlayerServiceActions ?: return
-
-                when (action) {
-                    PlayerActionType.TogglePlayback -> playerServiceActions.togglePlaying()
-                    PlayerActionType.SkipToNext -> playerServiceActions.skipToNext()
-                    PlayerActionType.SkipToPrevious -> playerServiceActions.skipToPrevious()
-                    PlayerActionType.ChangeFavoriteState -> playerServiceActions.changeFavoriteState()
-                    PlayerActionType.StopService -> playerServiceActions.stopService()
-                    PlayerActionType.PlaySong -> playerServiceActions.initService()
-                    is PlayerActionType.SeekTo -> playerServiceActions.seekTo(action.percentage)
+    private fun onChangePlaybackLoopMode(loopMode: PlaybackLoopMode) {
+        when (loopMode) {
+            PlaybackLoopMode.PlaylistLoop -> {
+                val currentSong = getCurrentSong()
+                currentQueue = playlist
+                currentSongIndex.update {
+                    currentQueue.indexOfFirst { it == currentSong }.coerceAtLeast(0)
                 }
             }
 
-            override fun onServiceDisconnected(name: ComponentName?) = Unit
+            PlaybackLoopMode.Shuffle -> {
+                val currentSong = getCurrentSong()
+                currentQueue = playlist.toMutableList().apply {
+                    remove(currentSong)
+                    shuffle()
+                    currentSong?.let { add(0, it) }
+                }
+                currentSongIndex.update { 0 }
+            }
+
+            PlaybackLoopMode.Single -> Unit
         }
+        playbackLoopMode.update { loopMode }
+    }
+
+    fun handleSkipToNext() { // called from service
+        if (currentQueue.isEmpty()) return
+
+        playNext()
+    }
+
+    fun handleSkipToPrevious() { // called from service
+        if (currentQueue.isEmpty()) return
+
+        seekPosition.update { 0 }
+        if (currentSongIndex.value - 1 < 0) {
+            currentSongIndex.update { currentQueue.lastIndex }
+        } else {
+            currentSongIndex.update { it - 1 }
+        }
+        playerServiceConnection.withConnection {
+            prepareNewSong()
+        }
+    }
+
+    fun handleSongCompletion() {
+        if (currentQueue.isEmpty()) return
+
+        if (playbackLoopMode.value == PlaybackLoopMode.Single) {
+            seekPosition.update { 0 }
+            playerServiceConnection.withConnection {
+                prepareNewSong()
+            }
+        } else {
+            playNext()
+        }
+    }
+
+    fun getTrackNumber(): Int {
+        return currentSongIndex.value
+    }
+
+    fun getCurrentSong(): Song? {
+        return currentQueue.getOrNull(currentSongIndex.value)
+    }
+
+    fun unbindService() {
+        playerServiceConnection.unbind()
+    }
+
+    fun getCurrentSongBitmap(): Bitmap {
+        return getCurrentSong()?.let {
+            BitmapFactory.decodeFile(it.picturePath)
+        } ?: ContextCompat
+            .getDrawable(applicationContext, R.mipmap.ic_launcher)!!.toBitmap()
+    }
+
+    private fun playNext() {
+        seekPosition.update { 0 }
+        if (currentSongIndex.value + 1 > currentQueue.lastIndex) {
+            currentSongIndex.update { 0 }
+        } else {
+            currentSongIndex.update { it + 1 }
+        }
+        playerServiceConnection.withConnection {
+            prepareNewSong()
+        }
+    }
+
+    override fun submitNewPlaylistAndPlay(playlist: List<Song>, indexToPlay: Int) {
+        handleNewPlaylistAndPlay(playlist, indexToPlay)
+    }
+
+    override fun togglePlaying() {
+        playerServiceConnection.withConnection {
+            togglePlaying()
+        }
+    }
+
+    override fun skipToNext() {
+        playerServiceConnection.withConnection {
+            skipToNext()
+        }
+    }
+
+    override fun skipToPrevious() {
+        playerServiceConnection.withConnection {
+            skipToPrevious()
+        }
+    }
+
+    override fun seekTo(percentage: Float) {
+        playerServiceConnection.withConnection {
+            seekTo(percentage)
+        }
+    }
+
+    override fun changeFavoriteState() {
+        playerServiceConnection.withConnection {
+            changeFavoriteState()
+        }
+    }
+
+    override fun changePlaybackLoopMode(loopMode: PlaybackLoopMode) {
+        onChangePlaybackLoopMode(loopMode)
+    }
 }

@@ -3,6 +3,7 @@ package com.nightx.ingale.globalPlaybackPresentation.playbackScreen.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,8 +35,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.nightx.ingale.core.audioPlayer.api.PlaybackLoopMode
 import com.nightx.ingale.core.ui.ActiveIconButton
 import com.nightx.ingale.core.ui.MusicProgressIndicator
+import com.nightx.ingale.core.ui.PassiveIconButton
 import com.nightx.ingale.core.ui.SpacerHeight
 import com.nightx.ingale.core.ui.TextMarquee
 import com.nightx.ingale.core.ui.theme.dimensions
@@ -44,6 +47,7 @@ import com.nightx.ingale.globalPlaybackPresentation.playbackScreen.api.PlaybackS
 import com.nightx.ingale.globalPlaybackPresentation.playbackScreen.api.PlaybackScreenViewState
 import com.nightx.ingale.resources.icon.R
 import com.nightx.ingale.resources.playbackActions.R.drawable as Drawables
+import com.nightx.ingale.resources.playbackActions.R.drawable as PlaybackDrawables
 
 @Composable
 fun PlaybackScreen(
@@ -122,52 +126,102 @@ private fun PlaybackScreen(
                 style = MaterialTheme.typography.labelLarge,
                 textAlign = TextAlign.Start,
             )
+            SpacerHeight(MaterialTheme.dimensions.normal)
             MusicProgressIndicator(
                 progress = playbackProgress,
                 onProgressChange = callbacks::onSeekTo,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        vertical = MaterialTheme.dimensions.normal,
-                    ),
+                    .fillMaxWidth(),
             )
-            val playPauseButton = remember(state.isPlaying) {
-                if (state.isPlaying) {
-                    com.nightx.ingale.resources.playbackActions.R.drawable.ic_pause
-                } else {
-                    com.nightx.ingale.resources.playbackActions.R.drawable.ic_play
-                }
-            }
-            Row(
+            SpacerHeight(MaterialTheme.dimensions.normal)
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(
-                        horizontal = MaterialTheme.dimensions.large,
-                        vertical = MaterialTheme.dimensions.normal,
-                    ),
-                horizontalArrangement = Arrangement
-                    .spacedBy(
-                        alignment = Alignment.CenterHorizontally,
-                        space = MaterialTheme.dimensions.extraLarge
-                    )
             ) {
-                ActiveIconButton(
-                    painter = painterResource(Drawables.ic_arrow_previous),
-                    contentDescription = "stop/resume music button",
-                    onClick = callbacks::onSkipToPreviousClick,
+                ToggleLoopModeButton(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd),
+                    loopMode = state.loopMode,
+                    onToggle = callbacks::onToggleLoopMode
                 )
-                ActiveIconButton(
-                    painter = painterResource(playPauseButton),
-                    contentDescription = "stop/resume music button",
-                    onClick = callbacks::onTogglePlayback,
-                )
-                ActiveIconButton(
-                    painter = painterResource(Drawables.ic_arrow_next),
-                    contentDescription = "stop/resume music button",
-                    onClick = callbacks::onSkipToNextClick,
+                PlaybackControlButtons(
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .padding(
+                            horizontal = MaterialTheme.dimensions.large,
+                            vertical = MaterialTheme.dimensions.normal,
+                        ),
+                    isPlaying = state.isPlaying,
+                    onSkipToPreviousClick = callbacks::onSkipToPreviousClick,
+                    onTogglePlaybackClick = callbacks::onTogglePlayback,
+                    onSkipToNextClick = callbacks::onSkipToNextClick,
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun ToggleLoopModeButton(
+    modifier: Modifier = Modifier,
+    loopMode: PlaybackLoopMode,
+    onToggle: () -> Unit
+) {
+    PassiveIconButton(
+        modifier = modifier
+            .requiredSize(IconSize),
+        painter = painterResource(getLoopModeIconRes(loopMode)),
+        contentDescription = "Toggle loop mode",
+        onClick = onToggle
+    )
+}
+
+private fun getLoopModeIconRes(loopMode: PlaybackLoopMode): Int {
+    return when (loopMode) {
+        PlaybackLoopMode.PlaylistLoop -> PlaybackDrawables.ic_playlist_repeat
+        PlaybackLoopMode.Shuffle -> PlaybackDrawables.ic_playlist_shuffle
+        PlaybackLoopMode.Single -> PlaybackDrawables.ic_repeat_single
+    }
+}
+
+@Composable
+private fun PlaybackControlButtons(
+    modifier: Modifier = Modifier,
+    isPlaying: Boolean,
+    onSkipToPreviousClick: () -> Unit,
+    onTogglePlaybackClick: () -> Unit,
+    onSkipToNextClick: () -> Unit,
+) {
+    val playPauseButton = remember(isPlaying) {
+        if (isPlaying) {
+            com.nightx.ingale.resources.playbackActions.R.drawable.ic_pause
+        } else {
+            com.nightx.ingale.resources.playbackActions.R.drawable.ic_play
+        }
+    }
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement
+            .spacedBy(
+                alignment = Alignment.CenterHorizontally,
+                space = MaterialTheme.dimensions.extraLarge
+            )
+    ) {
+        ActiveIconButton(
+            painter = painterResource(Drawables.ic_arrow_previous),
+            contentDescription = "stop/resume music button",
+            onClick = onSkipToPreviousClick,
+        )
+        ActiveIconButton(
+            painter = painterResource(playPauseButton),
+            contentDescription = "stop/resume music button",
+            onClick = onTogglePlaybackClick,
+        )
+        ActiveIconButton(
+            painter = painterResource(Drawables.ic_arrow_next),
+            contentDescription = "stop/resume music button",
+            onClick = onSkipToNextClick,
+        )
     }
 }
 

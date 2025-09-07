@@ -14,6 +14,7 @@
     <string name="unknown">Неизвестный</string>
     <string name="unknown_album">Неизвестный альбом</string>
     <string name="unknown_artist">Неизвестный автор</string>
+    <string name="unknown_genre">Неизвестный жанр</string>
 
     <string name="refresh">Обновить</string>
     <string name="grant_permission">Разрешить</string>

@@ -4,10 +4,11 @@ import com.nightx.ingale.core.domainModel.Song
 
 interface PlaybackUserActions {
 
-    fun submitNewListAndPlay(songQueue: List<Song>, indexToPlay: Int)
+    fun submitNewPlaylistAndPlay(playlist: List<Song>, indexToPlay: Int)
     fun togglePlaying()
     fun skipToNext()
     fun skipToPrevious()
     fun seekTo(percentage: Float)
     fun changeFavoriteState()
+    fun changePlaybackLoopMode(loopMode: PlaybackLoopMode)
 }

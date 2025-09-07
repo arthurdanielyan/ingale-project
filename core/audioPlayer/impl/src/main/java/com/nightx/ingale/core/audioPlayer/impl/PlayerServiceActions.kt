@@ -4,7 +4,7 @@ import androidx.annotation.FloatRange
 
 interface PlayerServiceActions {
 
-    fun initService()
+    fun prepareNewSong()
     fun stopService()
     fun togglePlaying()
     fun skipToNext()

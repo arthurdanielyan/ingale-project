@@ -24,6 +24,9 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import com.nightx.ingale.core.ui.theme.dimensions
 
+/**
+ * No background, when touched darkens the color
+ * */
 @Composable
 fun PassiveIconButton(
     modifier: Modifier = Modifier,
@@ -58,6 +61,9 @@ fun PassiveIconButton(
     }
 }
 
+/**
+ * When touched performs ripple effect
+ * */
 @Composable
 fun ActiveIconButton(
     modifier: Modifier = Modifier,

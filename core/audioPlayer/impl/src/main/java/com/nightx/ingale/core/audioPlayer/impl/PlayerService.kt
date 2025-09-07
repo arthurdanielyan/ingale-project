@@ -2,10 +2,7 @@ package com.nightx.ingale.core.audioPlayer.impl
 
 import android.app.PendingIntent
 import android.app.Service
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.media.MediaPlayer
 import android.os.Binder
 import android.os.Build
@@ -44,7 +41,6 @@ class PlayerService : MediaBrowserServiceCompat() {
 
         private const val MEDIA_NOTIFICATION_ID = 1
         private const val ROOT_ID = "connection_root_id"
-        private const val STOP_SERVICE_ACTION = "stop_player_service_action"
 
         private const val STOP_ACTION_ID = "custom_action_stop_id"
         private const val FAVORITE_ACTION_ID = "custom_action_add_to_favorites_id"
@@ -59,11 +55,13 @@ class PlayerService : MediaBrowserServiceCompat() {
 
     private var mediaPlayer = MediaPlayer().apply {
         setOnCompletionListener {
+            if (duration <= 0) return@setOnCompletionListener
             if (duration - currentPosition <= SongFinishThreshold) {
-                skipToNext()
+                onSongCompleted()
             }
         }
     }
+    private var isMediaPlayerPrepared = false
 
     private lateinit var mediaSession: MediaSessionCompat
 
@@ -86,10 +84,11 @@ class PlayerService : MediaBrowserServiceCompat() {
         override fun onCustomAction(action: String?, extras: Bundle?) {
             super.onCustomAction(action, extras)
 
-            when(action) {
+            when (action) {
                 STOP_ACTION_ID -> {
                     stopService()
                 }
+
                 FAVORITE_ACTION_ID -> {
                     changeFavoriteState()
                 }
@@ -145,12 +144,16 @@ class PlayerService : MediaBrowserServiceCompat() {
         }
     }
 
+    init {
+        trackSeekPosition()
+    }
+
     // Overriding methods /////////////////////////////////////////////////////////////////////////////
     override fun onBind(intent: Intent?): IBinder =
         object : Binder(), PlayerServiceActions {
 
-            override fun initService() {
-                this@PlayerService.initService()
+            override fun prepareNewSong() {
+                this@PlayerService.prepareNewSong(playerServiceCommunicator.seekPosition.value)
             }
 
             override fun togglePlaying() {
@@ -199,37 +202,18 @@ class PlayerService : MediaBrowserServiceCompat() {
             isActive = true
         }
         sessionToken = mediaSession.sessionToken
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(
-                NotificationDismissedReceiver(),
-                IntentFilter(STOP_SERVICE_ACTION),
-                RECEIVER_NOT_EXPORTED
-            )
-        } else {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-                registerReceiver(
-                    NotificationDismissedReceiver(),
-                    IntentFilter(STOP_SERVICE_ACTION),
-                )
-            } else {
-                registerReceiver(
-                    NotificationDismissedReceiver(),
-                    IntentFilter(STOP_SERVICE_ACTION),
-                    RECEIVER_NOT_EXPORTED
-                )
-            }
-        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        initService()
         return Service.START_STICKY
     }
 
     override fun onDestroy() {
         super.onDestroy()
         scope.cancel()
-        playerServiceCommunicator.seekPosition.update { mediaPlayer.currentPosition }
+        playerServiceCommunicator.seekPosition.update {
+            mediaPlayer.currentPosition
+        }
         mediaSession.release()
         mediaPlayer.release()
     }
@@ -247,7 +231,7 @@ class PlayerService : MediaBrowserServiceCompat() {
     ) {
         val items = mutableListOf<MediaBrowserCompat.MediaItem>()
 
-        val albumList = playerServiceCommunicator.songQueue
+        val albumList = playerServiceCommunicator.currentQueue
         for (it in albumList) {
             val descriptionBuilder = MediaDescriptionCompat.Builder()
                 .setTitle(it.title)
@@ -272,19 +256,16 @@ class PlayerService : MediaBrowserServiceCompat() {
         } else {
             mediaPlayer.seekTo((mediaPlayer.duration * progress.coerceIn(0f, 1f)).roundToInt())
         }
-        updateState()
-    }
-
-    private fun initService() {
-        onSongChanged(playerServiceCommunicator.seekPosition.value)
-        trackSeekPosition()
+        updateMediaSessionState()
     }
 
     private fun trackSeekPosition() {
         scope.launch {
             while (this.isActive) {
-                playerServiceCommunicator.seekPosition.update {
-                    mediaPlayer.currentPosition
+                if (isMediaPlayerPrepared) {
+                    playerServiceCommunicator.seekPosition.update {
+                        mediaPlayer.currentPosition
+                    }
                 }
                 delay(SeekPositionUpdateFrequency)
             }
@@ -293,29 +274,35 @@ class PlayerService : MediaBrowserServiceCompat() {
 
     private fun pause() {
         mediaPlayer.pause()
-        updateState()
+        updateMediaSessionState()
         updateNotificationIfLowerTiramisu()
     }
 
     private fun play() {
-        mediaPlayer.start()
-        updateNotificationIfLowerTiramisu()
-        updateState()
+        if (isMediaPlayerPrepared.not()) {
+            prepareNewSong(playerServiceCommunicator.seekPosition.value)
+        } else {
+            mediaPlayer.start()
+            updateNotificationIfLowerTiramisu()
+            updateMediaSessionState()
+        }
     }
 
     private fun skipToNext() {
-        playerServiceCommunicator.pointer++
-        onSongChanged()
+        playerServiceCommunicator.handleSkipToNext()
     }
 
     private fun skipToPrevious() {
-        if(mediaPlayer.currentPosition <= MinSkipToPreviousTimestamp) {
-            playerServiceCommunicator.pointer--
-            onSongChanged()
+        if (mediaPlayer.currentPosition <= MinSkipToPreviousTimestamp) {
+            playerServiceCommunicator.handleSkipToPrevious()
         } else {
             seekTo(0f)
-            updateState(true)
+            updateMediaSessionState(true)
         }
+    }
+
+    private fun onSongCompleted() {
+        playerServiceCommunicator.handleSongCompletion()
     }
 
     private fun changeFavoriteState() {
@@ -325,11 +312,12 @@ class PlayerService : MediaBrowserServiceCompat() {
     private fun stopService() {
         pause()
         stopForeground(STOP_FOREGROUND_REMOVE)
+        playerServiceCommunicator.unbindService()
         stopSelf()
     }
 
     // State management ////////////////////////////////////////////////////////////////////////////
-    private fun updateState(isNewSong: Boolean = false) {
+    private fun updateMediaSessionState(isNewSong: Boolean = false) {
         mediaSession.setPlaybackState(
             PlaybackStateCompat.Builder()
                 .apply {
@@ -339,17 +327,13 @@ class PlayerService : MediaBrowserServiceCompat() {
                 }
                 .setState(
                     if (isNewSong || mediaPlayer.isPlaying) {
-                        playerServiceCommunicator.isPlaying = true
+                        playerServiceCommunicator.isPlaying.update { true }
                         PlaybackStateCompat.STATE_PLAYING
                     } else {
-                        playerServiceCommunicator.isPlaying = false
+                        playerServiceCommunicator.isPlaying.update { false }
                         PlaybackStateCompat.STATE_PAUSED
                     },
-                    if(isNewSong){
-                        0L
-                    } else {
-                        mediaPlayer.currentPosition.toLong()
-                    },
+                    playerServiceCommunicator.seekPosition.value.toLong(),
                     1f
                 )
                 .setActions(
@@ -362,48 +346,52 @@ class PlayerService : MediaBrowserServiceCompat() {
     }
 
     private fun applyNewSongData() {
-        updateState(true)
+        updateMediaSessionState(true)
+        val currentSong = playerServiceCommunicator.getCurrentSong()
 
         val metadataBuilder = MediaMetadataCompat.Builder()
             .putBitmap(
                 MediaMetadataCompat.METADATA_KEY_ART,
-                playerServiceCommunicator.currentSongBitmap
+                playerServiceCommunicator.getCurrentSongBitmap()
             )
             .putString(
                 MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE,
-                playerServiceCommunicator.currentSong?.title.orEmpty()
+                currentSong?.title.orEmpty()
             )
             .putString(
                 MediaMetadataCompat.METADATA_KEY_TITLE,
-                playerServiceCommunicator.currentSong?.title.orEmpty()
+                currentSong?.title.orEmpty()
             )
             .putString(
                 MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE,
-                playerServiceCommunicator.currentSong?.artist.orEmpty()
+                currentSong?.artist
             )
             .putLong(
                 MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER,
-                playerServiceCommunicator.pointer.toLong()
+                playerServiceCommunicator.getTrackNumber().toLong()
             )
             .putLong(
                 MediaMetadataCompat.METADATA_KEY_NUM_TRACKS,
-                playerServiceCommunicator.songCount
+                playerServiceCommunicator.currentQueue.size.toLong()
             )
             .putLong(
                 MediaMetadataCompat.METADATA_KEY_DURATION,
-                playerServiceCommunicator.currentSong?.duration ?: 0
+                currentSong?.duration ?: 0
             )
         mediaSession.setMetadata(metadataBuilder.build())
     }
 
-    private fun onSongChanged(seekPosition: Int = 0) {
+    private fun prepareNewSong(
+        seekPosition: Int = 0
+    ) {
         applyNewSongData()
         updateNotification()
         mediaPlayer.stop()
         mediaPlayer.reset()
-        mediaPlayer.setDataSource(playerServiceCommunicator.currentSong?.path.orEmpty())
+        mediaPlayer.setDataSource(playerServiceCommunicator.getCurrentSong()?.path.orEmpty())
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
+            isMediaPlayerPrepared = true
             it.start()
             it.seekTo(seekPosition)
             updateNotificationIfLowerTiramisu()
@@ -421,40 +409,44 @@ class PlayerService : MediaBrowserServiceCompat() {
             .setMediaSession(mediaSession.sessionToken)
 
 
-
         val togglePlayingIcon = if (mediaPlayer.isPlaying)
             R.drawable.ic_pause
         else {
             R.drawable.ic_play
         }
 
+        val currentSong = playerServiceCommunicator.getCurrentSong()
+
         val notification =
             AndroidNotificationCompat.Builder(this, MUSIC_PLAYER_NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(IconMipmap.ic_launcher_foreground)
-                .addAction(R.drawable.ic_arrow_previous, "Previous",
+                .addAction(
+                    R.drawable.ic_arrow_previous, "Previous",
                     getPendingIntent(PlayerActionType.SkipToPrevious)
                 ) // #0
-                .addAction(togglePlayingIcon, "Pause",
+                .addAction(
+                    togglePlayingIcon, "Pause",
                     getPendingIntent(PlayerActionType.TogglePlayback)
                 ) // #1
-                .addAction(R.drawable.ic_arrow_next, "Next",
+                .addAction(
+                    R.drawable.ic_arrow_next, "Next",
                     getPendingIntent(PlayerActionType.SkipToNext)
                 ) // #2
-                .addAction(R.drawable.ic_close_white, "Stop playback",
+                .addAction(
+                    R.drawable.ic_close_white, "Stop playback",
                     getPendingIntent(PlayerActionType.StopService)
                 )
                 .setStyle(mediaStyle)
-                .setContentTitle(playerServiceCommunicator.currentSong?.title.orEmpty())
-                .setContentText(playerServiceCommunicator.currentSong?.artist.orEmpty())
-                .setLargeIcon(playerServiceCommunicator.currentSongBitmap)
-                .setDeleteIntent(onDismissedIntent)
+                .setContentTitle(currentSong?.title.orEmpty())
+                .setContentText(currentSong?.artist.orEmpty())
+                .setLargeIcon(playerServiceCommunicator.getCurrentSongBitmap())
                 .build()
 
         startForeground(MEDIA_NOTIFICATION_ID, notification)
     }
 
     private fun getPendingIntent(action: PlayerActionType): PendingIntent =
-        when(action) {
+        when (action) {
             PlayerActionType.TogglePlayback ->
                 PendingIntent.getBroadcast(
                     this,
@@ -494,25 +486,5 @@ class PlayerService : MediaBrowserServiceCompat() {
                     Intent(this, PlayerActionStopServiceReceiver::class.java),
                     PendingIntent.FLAG_IMMUTABLE
                 )
-
-            PlayerActionType.PlaySong ->
-                throw IllegalAccessException("PlayerService is already started")
-
-            is PlayerActionType.SeekTo ->
-                throw IllegalArgumentException("Seeking from notifications is handled automatically")
         }
-
-    private val onDismissedIntent: PendingIntent
-        get() = PendingIntent.getBroadcast(
-            this,
-            0,
-            Intent(STOP_SERVICE_ACTION),
-            PendingIntent.FLAG_IMMUTABLE
-        )
-
-    inner class NotificationDismissedReceiver : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            this@PlayerService.stopSelf()
-        }
-    }
 }

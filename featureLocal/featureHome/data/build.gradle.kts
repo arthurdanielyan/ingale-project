@@ -9,9 +9,11 @@ android {
 
 dependencies {
 
+    implementation(libs.androidx.ktx)
     implementation(libs.koin.core)
     implementation(libs.kotlinx.coroutines.core)
     implementation(projects.core.utils)
+    implementation(projects.resources.strings)
     implementation(projects.core.dataModel)
     implementation(projects.core.domainModel)
     implementation(projects.featureLocal.featureHome.domain)

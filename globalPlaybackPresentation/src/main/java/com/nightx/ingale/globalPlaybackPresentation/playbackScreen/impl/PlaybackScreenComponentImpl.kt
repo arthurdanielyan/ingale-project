@@ -5,6 +5,7 @@ import com.arkivanov.essenty.lifecycle.doOnStart
 import com.arkivanov.essenty.lifecycle.doOnStop
 import com.nightx.ingale.bottomBarApi.BottomBarController
 import com.nightx.ingale.core.audioPlayer.api.CurrentSongInfoStateProvider
+import com.nightx.ingale.core.audioPlayer.api.PlaybackLoopMode
 import com.nightx.ingale.core.audioPlayer.api.PlaybackUserActions
 import com.nightx.ingale.core.decompose.AppComponentContext
 import com.nightx.ingale.core.utils.stateInWhileSubscribed
@@ -27,17 +28,18 @@ internal class PlaybackScreenComponentImpl(
         onCloseCallback()
     }
 
-    override val uiState = currentSongInfoStateHolder.currentSongInfo.map { currentSongInfo ->
+    override val uiState = currentSongInfoStateHolder.currentPlaybackInfo.map { currentSongInfo ->
         PlaybackScreenViewState(
             currentSongPreviewPath = currentSongInfo?.currentSongPreviewPath.orEmpty(),
             isPlaying = currentSongInfo?.isPlaying ?: false,
             songName = currentSongInfo?.songName.orEmpty(),
             artistName = currentSongInfo?.artistName.orEmpty(),
             seekPercentage = currentSongInfo?.seekPercentage ?: 0f,
+            loopMode = currentSongInfo?.loopMode ?: PlaybackLoopMode.PlaylistLoop,
         )
     }.stateInWhileSubscribed(componentScope, PlaybackScreenViewState())
 
-    override val playbackProgress = currentSongInfoStateHolder.currentSongInfo.map {
+    override val playbackProgress = currentSongInfoStateHolder.currentPlaybackInfo.map {
         it?.seekPercentage ?: 0f
     }.stateInWhileSubscribed(componentScope, 0f)
 
@@ -68,6 +70,10 @@ internal class PlaybackScreenComponentImpl(
 
     override fun onSeekTo(percentage: Float) {
         playbackUserActions.seekTo(percentage)
+    }
+
+    override fun onToggleLoopMode() {
+        playbackUserActions.changePlaybackLoopMode(uiState.value.loopMode.next)
     }
 
     override fun onClose() {

@@ -251,8 +251,8 @@ internal class LocalHomeComponentImpl(
     }
 
     override fun onSongClick(song: SongViewState) {
-        playbackUserActions.submitNewListAndPlay(
-            songQueue = allSongsDomain,
+        playbackUserActions.submitNewPlaylistAndPlay(
+            playlist = allSongsDomain,
             indexToPlay = allSongsDomain
                 .indexOfFirst { it.id == song.id }.coerceAtLeast(0)
         )

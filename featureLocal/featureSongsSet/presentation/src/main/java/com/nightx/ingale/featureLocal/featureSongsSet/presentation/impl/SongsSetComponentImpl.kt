@@ -31,7 +31,7 @@ internal class SongsSetComponentImpl(
     override val uiCallbacks = this
 
     override fun onSongClick(song: SongViewState) {
-        playbackUserActions.submitNewListAndPlay(
+        playbackUserActions.submitNewPlaylistAndPlay(
             songs,
             uiState.value.songs.indexOf(song)
         )
