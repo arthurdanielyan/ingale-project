@@ -16,7 +16,6 @@ import com.nightx.ingale.core.domainModel.LoadState
 import com.nightx.ingale.core.domainModel.Song
 import com.nightx.ingale.core.utils.CoroutineDispatchers
 import com.nightx.ingale.core.utils.mapList
-import com.nightx.ingale.core.utils.yap
 import com.nightx.ingale.featureLocal.featureHome.domain.repository.LocalMainRepository
 import com.nightx.ingale.resources.strings.StringProvider
 import io.realm.kotlin.Realm
@@ -114,7 +113,6 @@ class LocalMainRepositoryImpl(
                     val artistName =
                         metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST)
                             ?: cursor.getString(artistNameColumnIndex)
-                    yap(artistName)
 
 
                     val albumIdCol = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)
