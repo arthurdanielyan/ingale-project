@@ -67,7 +67,7 @@ fun TextMarquee(
         val shouldScroll = textPxWidth > containerWidth
 
         // Subcompose exactly one version with the *final* modifiers
-        val placeables = subcompose(if (shouldScroll) "scroll" else "static") {
+        val placeables = subcompose(if (shouldScroll) text else "static") {
             val base = Modifier
                 .modifyIf(shouldScroll) {
                     transparentEdges(opacityWidth = opacityWidth)
@@ -107,4 +107,3 @@ fun TextMarquee(
         }
     }
 }
-
