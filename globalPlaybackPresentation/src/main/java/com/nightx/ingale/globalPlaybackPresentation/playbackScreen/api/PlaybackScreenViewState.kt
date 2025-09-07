@@ -9,6 +9,5 @@ data class PlaybackScreenViewState(
     val isPlaying: Boolean = false,
     val songName: String = "",
     val artistName: String = "",
-    val seekPercentage: Float = 0f,
     val loopMode: PlaybackLoopMode = PlaybackLoopMode.PlaylistLoop,
 )

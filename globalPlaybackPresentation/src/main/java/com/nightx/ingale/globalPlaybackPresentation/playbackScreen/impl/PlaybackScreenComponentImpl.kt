@@ -34,7 +34,6 @@ internal class PlaybackScreenComponentImpl(
             isPlaying = currentSongInfo?.isPlaying ?: false,
             songName = currentSongInfo?.songName.orEmpty(),
             artistName = currentSongInfo?.artistName.orEmpty(),
-            seekPercentage = currentSongInfo?.seekPercentage ?: 0f,
             loopMode = currentSongInfo?.loopMode ?: PlaybackLoopMode.PlaylistLoop,
         )
     }.stateInWhileSubscribed(componentScope, PlaybackScreenViewState())
