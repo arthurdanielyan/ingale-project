@@ -16,7 +16,8 @@ import android.support.v4.media.session.PlaybackStateCompat
 import android.view.KeyEvent
 import androidx.annotation.FloatRange
 import androidx.media.MediaBrowserServiceCompat
-import com.nightx.ingale.core.audioPlayer.impl.playerActionReceivers.PlayerActionChangeFavoriteStateReceiver
+import com.nightx.ingale.core.audioPlayer.api.PlaybackLoopMode
+import com.nightx.ingale.core.audioPlayer.impl.playerActionReceivers.PlayerActionChangePlaybackLoopModeReceiver
 import com.nightx.ingale.core.audioPlayer.impl.playerActionReceivers.PlayerActionSkipToNextReceiver
 import com.nightx.ingale.core.audioPlayer.impl.playerActionReceivers.PlayerActionSkipToPrevious
 import com.nightx.ingale.core.audioPlayer.impl.playerActionReceivers.PlayerActionStopServiceReceiver
@@ -24,6 +25,7 @@ import com.nightx.ingale.core.audioPlayer.impl.playerActionReceivers.PlayerActio
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -33,6 +35,7 @@ import kotlin.math.roundToLong
 import androidx.core.app.NotificationCompat as AndroidNotificationCompat
 import androidx.media.app.NotificationCompat as MediaNotificationCompat
 import com.nightx.ingale.resources.icon.R.mipmap as IconMipmap
+import com.nightx.ingale.resources.playbackActions.R.drawable as PlaybackDrawables
 
 class PlayerService : MediaBrowserServiceCompat() {
 
@@ -43,7 +46,7 @@ class PlayerService : MediaBrowserServiceCompat() {
         private const val ROOT_ID = "connection_root_id"
 
         private const val STOP_ACTION_ID = "custom_action_stop_id"
-        private const val FAVORITE_ACTION_ID = "custom_action_add_to_favorites_id"
+        private const val CHANGE_LOOP_MODE_ACTION_ID = "custom_action_change_playback_loop_mode_id"
 
         private const val MinSkipToPreviousTimestamp = 3000
         private const val SongFinishThreshold = 200
@@ -68,14 +71,18 @@ class PlayerService : MediaBrowserServiceCompat() {
     private val customActions: List<CustomAction>
         get() = listOf(
             CustomAction(
-                actionId = FAVORITE_ACTION_ID,
-                actionName = "Add to favourites",
-                actionIcon = R.drawable.ic_add_to_favorites
+                actionId = CHANGE_LOOP_MODE_ACTION_ID,
+                actionName = "Change loop mode",
+                actionIcon = when (playerServiceCommunicator.playbackLoopMode.value) {
+                    PlaybackLoopMode.PlaylistLoop -> PlaybackDrawables.ic_playlist_repeat
+                    PlaybackLoopMode.Shuffle -> PlaybackDrawables.ic_playlist_shuffle
+                    PlaybackLoopMode.Single -> PlaybackDrawables.ic_repeat_single
+                }
             ),
             CustomAction(
                 actionId = STOP_ACTION_ID,
                 actionName = "Stop player",
-                actionIcon = R.drawable.ic_close_white
+                actionIcon = PlaybackDrawables.ic_close_white
             ),
         )
 
@@ -89,8 +96,8 @@ class PlayerService : MediaBrowserServiceCompat() {
                     stopService()
                 }
 
-                FAVORITE_ACTION_ID -> {
-                    changeFavoriteState()
+                CHANGE_LOOP_MODE_ACTION_ID -> {
+                    this@PlayerService.changePlaybackLoopMode()
                 }
             }
         }
@@ -146,6 +153,7 @@ class PlayerService : MediaBrowserServiceCompat() {
 
     init {
         trackSeekPosition()
+        observePlaybackLoopMode()
     }
 
     // Overriding methods /////////////////////////////////////////////////////////////////////////////
@@ -176,12 +184,12 @@ class PlayerService : MediaBrowserServiceCompat() {
                 this@PlayerService.seekTo(progress)
             }
 
-            override fun changeFavoriteState() {
-                this@PlayerService.changeFavoriteState()
-            }
-
             override fun stopService() {
                 this@PlayerService.stopService()
+            }
+
+            override fun changePlaybackLoopMode() {
+                this@PlayerService.changePlaybackLoopMode()
             }
         }
 
@@ -248,14 +256,16 @@ class PlayerService : MediaBrowserServiceCompat() {
 
     // Player actions ///////////////////////////////////////////////////////////////////////////////////
     private fun seekTo(@FloatRange(from = 0.0, to = 1.0) progress: Float) {
+        val seekPosition = (mediaPlayer.duration * progress.coerceIn(0f, 1f))
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             mediaPlayer.seekTo(
-                (mediaPlayer.duration * progress.coerceIn(0f, 1f)).roundToLong(),
+                seekPosition.roundToLong(),
                 MediaPlayer.SEEK_PREVIOUS_SYNC
             )
         } else {
-            mediaPlayer.seekTo((mediaPlayer.duration * progress.coerceIn(0f, 1f)).roundToInt())
+            mediaPlayer.seekTo(seekPosition.roundToInt())
         }
+        playerServiceCommunicator.seekPosition.update { seekPosition.roundToInt() }
         updateMediaSessionState()
     }
 
@@ -268,6 +278,14 @@ class PlayerService : MediaBrowserServiceCompat() {
                     }
                 }
                 delay(SeekPositionUpdateFrequency)
+            }
+        }
+    }
+
+    private fun observePlaybackLoopMode() {
+        scope.launch {
+            playerServiceCommunicator.playbackLoopMode.collectLatest {
+                updateMediaSessionState()
             }
         }
     }
@@ -305,8 +323,10 @@ class PlayerService : MediaBrowserServiceCompat() {
         playerServiceCommunicator.handleSongCompletion()
     }
 
-    private fun changeFavoriteState() {
-        // TODO: Not Implemented Yet
+    private fun changePlaybackLoopMode() {
+        playerServiceCommunicator.changePlaybackLoopMode(
+            loopMode = playerServiceCommunicator.playbackLoopMode.value.next
+        )
     }
 
     private fun stopService() {
@@ -410,9 +430,9 @@ class PlayerService : MediaBrowserServiceCompat() {
 
 
         val togglePlayingIcon = if (mediaPlayer.isPlaying)
-            R.drawable.ic_pause
+            PlaybackDrawables.ic_pause
         else {
-            R.drawable.ic_play
+            PlaybackDrawables.ic_play
         }
 
         val currentSong = playerServiceCommunicator.getCurrentSong()
@@ -421,7 +441,7 @@ class PlayerService : MediaBrowserServiceCompat() {
             AndroidNotificationCompat.Builder(this, MUSIC_PLAYER_NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(IconMipmap.ic_launcher_foreground)
                 .addAction(
-                    R.drawable.ic_arrow_previous, "Previous",
+                    PlaybackDrawables.ic_arrow_previous, "Previous",
                     getPendingIntent(PlayerActionType.SkipToPrevious)
                 ) // #0
                 .addAction(
@@ -429,11 +449,11 @@ class PlayerService : MediaBrowserServiceCompat() {
                     getPendingIntent(PlayerActionType.TogglePlayback)
                 ) // #1
                 .addAction(
-                    R.drawable.ic_arrow_next, "Next",
+                    PlaybackDrawables.ic_arrow_next, "Next",
                     getPendingIntent(PlayerActionType.SkipToNext)
                 ) // #2
                 .addAction(
-                    R.drawable.ic_close_white, "Stop playback",
+                    PlaybackDrawables.ic_close_white, "Stop playback",
                     getPendingIntent(PlayerActionType.StopService)
                 )
                 .setStyle(mediaStyle)
@@ -471,11 +491,11 @@ class PlayerService : MediaBrowserServiceCompat() {
                     PendingIntent.FLAG_IMMUTABLE
                 )
 
-            PlayerActionType.ChangeFavoriteState ->
+            PlayerActionType.ChangePlaybackLoopMode ->
                 PendingIntent.getBroadcast(
                     this,
                     0,
-                    Intent(this, PlayerActionChangeFavoriteStateReceiver::class.java),
+                    Intent(this, PlayerActionChangePlaybackLoopModeReceiver::class.java),
                     PendingIntent.FLAG_IMMUTABLE
                 )
 

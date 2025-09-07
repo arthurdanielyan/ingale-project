@@ -6,13 +6,13 @@ import android.content.Intent
 import com.nightx.ingale.core.audioPlayer.impl.PlaybackActionService
 import com.nightx.ingale.core.audioPlayer.impl.PlayerActionType
 
-class PlayerActionChangeFavoriteStateReceiver : BroadcastReceiver() {
+class PlayerActionChangePlaybackLoopModeReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         val actionsServiceIntent = Intent(context, PlaybackActionService::class.java)
             .putExtra(
                 PlaybackActionService.EXTRA_ACTION_KEY,
-                PlayerActionType.ChangeFavoriteState.alias
+                PlayerActionType.ChangePlaybackLoopMode.alias
             )
         context?.startService(actionsServiceIntent)
     }

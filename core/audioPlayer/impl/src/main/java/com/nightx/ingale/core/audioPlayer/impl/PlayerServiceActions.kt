@@ -10,5 +10,5 @@ interface PlayerServiceActions {
     fun skipToNext()
     fun skipToPrevious()
     fun seekTo(@FloatRange(from = 0.0, to = 1.0) progress: Float)
-    fun changeFavoriteState()
+    fun changePlaybackLoopMode()
 }

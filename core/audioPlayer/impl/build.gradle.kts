@@ -17,5 +17,6 @@ dependencies {
     implementation(projects.core.utils)
     implementation(projects.core.domainModel)
     implementation(projects.resources.icon)
+    implementation(projects.resources.playbackActions)
     implementation(projects.resources.strings)
 }

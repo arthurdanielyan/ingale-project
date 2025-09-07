@@ -28,7 +28,7 @@ class PlayerServiceCommunicator(
 ) : PlaybackUserActions, CurrentSongInfoStateProvider {
 
     private var playlist: List<Song> = emptyList()
-    private val playbackLoopMode = MutableStateFlow(PlaybackLoopMode.PlaylistLoop)
+    val playbackLoopMode = MutableStateFlow(PlaybackLoopMode.PlaylistLoop)
     var currentQueue = emptyList<Song>()
         private set
     private var currentSongIndex = MutableStateFlow(0) // points to a song in playbackOrder
@@ -98,7 +98,7 @@ class PlayerServiceCommunicator(
         }
     }
 
-    private fun onChangePlaybackLoopMode(loopMode: PlaybackLoopMode) {
+    private fun handleChangePlaybackLoopMode(loopMode: PlaybackLoopMode) {
         when (loopMode) {
             PlaybackLoopMode.PlaylistLoop -> {
                 val currentSong = getCurrentSong()
@@ -216,12 +216,10 @@ class PlayerServiceCommunicator(
     }
 
     override fun changeFavoriteState() {
-        playerServiceConnection.withConnection {
-            changeFavoriteState()
-        }
+        // TODO: Not implemented yet
     }
 
     override fun changePlaybackLoopMode(loopMode: PlaybackLoopMode) {
-        onChangePlaybackLoopMode(loopMode)
+        handleChangePlaybackLoopMode(loopMode)
     }
 }

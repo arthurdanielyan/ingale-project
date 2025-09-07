@@ -15,7 +15,7 @@ sealed interface PlayerActionType {
         override val alias = "player_actions_service_skip_to_previous"
     }
 
-    data object ChangeFavoriteState : PlayerActionType {
+    data object ChangePlaybackLoopMode : PlayerActionType {
         override val alias = "player_actions_service_change_favorite_state"
     }
 

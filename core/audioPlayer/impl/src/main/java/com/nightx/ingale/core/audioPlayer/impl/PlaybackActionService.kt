@@ -40,7 +40,7 @@ class PlaybackActionService : Service() {
                 PlayerActionType.TogglePlayback.alias -> playerServiceActions.togglePlaying()
                 PlayerActionType.SkipToNext.alias -> playerServiceActions.skipToNext()
                 PlayerActionType.SkipToPrevious.alias -> playerServiceActions.skipToPrevious()
-                PlayerActionType.ChangeFavoriteState.alias -> playerServiceActions.changeFavoriteState()
+                PlayerActionType.ChangePlaybackLoopMode.alias -> playerServiceActions.changePlaybackLoopMode()
                 PlayerActionType.StopService.alias -> playerServiceActions.stopService()
             }
             stopSelf()
