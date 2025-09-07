@@ -1,5 +1,6 @@
 package com.nightx.ingale.core.ui
 
+import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitEachGesture
@@ -82,7 +83,9 @@ fun MusicProgressIndicator(
             }
     ) {
         val indicatorWidth = this.constraints.maxWidth
-        dragState.setDragBound(indicatorWidth.toFloat())
+        LaunchedEffect(indicatorWidth) {
+            dragState.setDragBound(indicatorWidth.toFloat())
+        }
         Box(
             modifier = Modifier
                 .matchParentSize()
@@ -151,6 +154,8 @@ private class LinearProgressIndicatorDragState(
 
     fun setDragBound(maxOffset: Float) {
         this.maxOffset = maxOffset
+        Log.d("yapping", "setDragBound")
+        updateOffset(progress.value * maxOffset)
     }
 
     fun onRelease() {
