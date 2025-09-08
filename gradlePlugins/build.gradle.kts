@@ -13,14 +13,14 @@ gradlePlugin {
             implementationClass = "com.nightx.gradlePlugins.IngaleAndroidLibraryPlugin"
             version = "1.0.0"
         }
-        create("realmApplierPlugin") {
-            id = "nightx.ingale.realm"
-            implementationClass = "com.nightx.gradlePlugins.RealmPlugin"
-            version = "1.0.0"
-        }
         create("usesComposePlugin") {
             id = "nightx.ingale.uses.compose"
             implementationClass = "com.nightx.gradlePlugins.UsesComposePlugin"
+            version = "1.0.0"
+        }
+        create("roomApplierPlugin") {
+            id = "nightx.ingale.room"
+            implementationClass = "com.nightx.gradlePlugins.RoomPlugin"
             version = "1.0.0"
         }
     }

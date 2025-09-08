@@ -1,16 +1,16 @@
 [versions]
 ktx = "1.9.0"
-agp_version = "8.2.1"
-kotlin-version = "1.9.24"
+agp_version = "8.13.0"
+kotlin-version = "2.1.0"
 compose-bom = "2024.09.03"
 androidx-lifecycle = "2.7.0"
 koin = "3.5.6"
-realm = "1.14.0"
 coil = "2.6.0"
 espresso-core-version = "3.5.1"
 appcompat-version = "1.7.0"
-decompose-version = "3.0.0"
+decompose-version = "3.3.0"
 kotlin-serialization-json = "1.6.2"
+room = "2.7.2"
 
 [libraries]
 android-tools-build-gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "agp_version" }
@@ -32,18 +32,12 @@ androidx-compose-material3 = { group = "androidx.compose.material3", name ="mate
 google-material = { group = "com.google.android.material", name ="material", version = "1.11.0" }
 junit = { group = "junit", name ="junit", version = "4.13.2" }
 androidx-junit = { group = "androidx.test.ext", name ="junit", version = "1.1.5" }
-#androidx-espresso = { group = "androidx.test.espresso", name ="espresso" }
-androidx-compose-junit = { group = "androidx.compose.ui", name ="ui-test-junit4" }
-androidx-compose-ui-tooling = { group = "androidx.compose.ui", name ="ui-tooling" }
-androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name ="ui-test-manifest" }
 androidx-compose-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout-solver", version = "2.0.4" }
 androidx-constraintlayout-solver = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version = "1.0.1" }
 androidx-media = { group = "androidx.media", name = "media", version = "1.6.0" }
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
-realm-kotlin = { group = "io.realm.kotlin", name = "library-base", version.ref = "realm" }
-realm-gradle-plugin = { group = "io.realm.kotlin", name = "gradle-plugin", version.ref = "realm" }
 coil-compose = { group ="io.coil-kt", name = "coil-compose", version.ref = "coil" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core-version" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat-version" }
@@ -51,15 +45,19 @@ decompose-core = { group = "com.arkivanov.decompose", name = "decompose", versio
 decompose-extensions-compose = { group = "com.arkivanov.decompose", name = "extensions-compose", version.ref = 'decompose-version' }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlin-serialization-json" }
 
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+
 [plugins]
 ingale-android-library = { id = "nightx.ingale.android.library", version = "1.0.0" }
-ingale-realm = { id = "nightx.ingale.realm", version = "1.0.0" }
+ingale-room = { id = "nightx.ingale.room", version = "1.0.0" }
 ingale-uses-compose = { id = "nightx.ingale.uses.compose", version = "1.0.0" }
 android-application = { id = "com.android.application", version.ref = "agp_version" }
 android-library = { id = "com.android.library", version.ref = "agp_version" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin-version" }
-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin-version" }
-realm-kotlin = { id = "io.realm.kotlin", version.ref = "realm" }
 kotlinx-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin-version" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-version" }
+ksp = { id = "com.google.devtools.ksp", version = "2.1.0-1.0.29" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin-version" }

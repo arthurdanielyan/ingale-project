@@ -3,12 +3,11 @@ package com.nightx.ingale
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.Context
 import android.os.Build
 import com.nightx.ingale.core.audioPlayer.impl.PlayerService.Companion.MUSIC_PLAYER_NOTIFICATION_CHANNEL_ID
 import com.nightx.ingale.core.audioPlayer.impl.playerServiceCommunicatorModule
 import com.nightx.ingale.core.dataModel.di.mappersModule
-import com.nightx.ingale.core.dataModel.di.realmModule
+import com.nightx.ingale.core.dataModel.di.roomModule
 import com.nightx.ingale.core.presentation.osExt.di.osExtModule
 import com.nightx.ingale.core.utils.di.coroutineDispatchersModule
 import com.nightx.ingale.featureLocal.core.ui.featureLocalCoreUiModule
@@ -16,7 +15,6 @@ import com.nightx.ingale.featureLocal.featureHome.presentation.di.featureHomePre
 import com.nightx.ingale.featureLocal.featureRequirePermissions.di.requirePermissionsComponentFactoryModule
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.di.songsSetPresentationModule
 import com.nightx.ingale.featureLocal.navigation.impl.di.localComponentFactoryModule
-import com.nightx.ingale.featureLocal.navigation.impl.di.localNavigationModule
 import com.nightx.ingale.globalPlaybackPresentation.di.globalPlaybackPresentationModule
 import com.nightx.ingale.root.impl.di.rootModule
 import com.nightx.ingale.root.impl.snackbar.snackbarMessageSenderModule
@@ -37,10 +35,9 @@ class IngaleApplication : Application() {
                 snackbarMessageSenderModule,
                 playerServiceCommunicatorModule,
                 mappersModule,
-                realmModule,
+                roomModule,
                 coroutineDispatchersModule,
                 featureLocalCoreUiModule,
-                localNavigationModule,
                 localComponentFactoryModule,
                 requirePermissionsComponentFactoryModule,
                 *globalPlaybackPresentationModule.toTypedArray(),
@@ -59,7 +56,7 @@ class IngaleApplication : Application() {
                 NotificationManager.IMPORTANCE_LOW
             )
             val notificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(musicNotificationChannel)
         }
     }
