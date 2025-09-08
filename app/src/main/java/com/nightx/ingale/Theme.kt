@@ -16,7 +16,6 @@ import com.nightx.ingale.core.ui.theme.LocalDimensions
 import com.nightx.ingale.core.ui.theme.colorScheme.IngaleColorsDark
 import com.nightx.ingale.core.ui.theme.colorScheme.IngaleColorsLight
 import com.nightx.ingale.core.ui.theme.colorScheme.LocalIngaleColors
-import com.nightx.ingale.featureLocal.navigation.api.LocalNavigation
 import com.nightx.ingale.globalPlaybackPresentation.musicBar.api.LocalMusicBarController
 import org.koin.compose.koinInject
 
@@ -113,7 +112,6 @@ fun IngaleTheme(
         LocalDimensions provides DefaultDimensions(),
         LocalIngaleColors provides
                 if (isSystemInDarkTheme()) IngaleColorsDark() else IngaleColorsLight(),
-        LocalNavigation provides koinInject(),
         LocalMusicBarController provides koinInject(),
     ) {
         MaterialTheme(

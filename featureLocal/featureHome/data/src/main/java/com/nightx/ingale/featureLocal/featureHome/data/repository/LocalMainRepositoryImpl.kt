@@ -10,18 +10,15 @@ import android.provider.MediaStore
 import android.util.Log
 import android.util.Size
 import androidx.core.net.toUri
-import com.nightx.ingale.core.dataModel.SongRealm
-import com.nightx.ingale.core.dataModel.mapper.SongRealmMapper
+import com.nightx.ingale.core.dataModel.mapper.SongEntityMapper
+import com.nightx.ingale.core.dataModel.room.songsCache.dao.SongsCacheDao
+import com.nightx.ingale.core.dataModel.room.songsCache.entity.SongEntity
 import com.nightx.ingale.core.domainModel.LoadState
 import com.nightx.ingale.core.domainModel.Song
 import com.nightx.ingale.core.utils.CoroutineDispatchers
 import com.nightx.ingale.core.utils.mapList
 import com.nightx.ingale.featureLocal.featureHome.domain.repository.LocalMainRepository
 import com.nightx.ingale.resources.strings.StringProvider
-import io.realm.kotlin.Realm
-import io.realm.kotlin.UpdatePolicy
-import io.realm.kotlin.ext.query
-import io.realm.kotlin.notifications.ResultsChange
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
@@ -40,17 +37,16 @@ import com.nightx.ingale.resources.strings.R.string as Strings
 
 class LocalMainRepositoryImpl(
     private val applicationContext: Context,
-    private val songsDb: Realm,
+    private val songsDao: SongsCacheDao,
     private val dispatchers: CoroutineDispatchers,
-    private val songRealmMapper: SongRealmMapper,
+    private val songEntityMapper: SongEntityMapper,
     private val stringProvider: StringProvider,
     private val applicationScope: CoroutineScope,
 ) : LocalMainRepository {
 
     override suspend fun isCached(): Boolean {
-        return songsDb.query<SongRealm>()
-            .asFlow()
-            .first().list.isEmpty().not()
+        return songsDao.observeSongsCache()
+            .first().isEmpty().not()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -58,19 +54,18 @@ class LocalMainRepositoryImpl(
         val savingDeferred = applicationScope.async {
             saveLocally()
         }
-        return songsDb.query<SongRealm>()
-            .asFlow()
-            .mapLatest<ResultsChange<SongRealm>, LoadState<List<Song>>> {
-                var localSave: List<SongRealm>? = null
-                if (it.list.isEmpty()) {
+        return songsDao.observeSongsCache()
+            .mapLatest<List<SongEntity>, LoadState<List<Song>>> {
+                var localSave: List<SongEntity>? = null
+                if (it.isEmpty()) {
                     if (!savingDeferred.isCompleted) {
                         localSave = savingDeferred.await()
                     }
                 }
                 LoadState.Success(
-                    songRealmMapper.mapList(
-                        // take already saved if exists not to wait for Realm to emit them
-                        localSave ?: it.list
+                    songEntityMapper.mapList(
+                        // take already saved if exists not to wait for Room to emit them
+                        localSave ?: it
                     )
                 )
             }.onStart { emit(LoadState.Loading()) }
@@ -79,7 +74,7 @@ class LocalMainRepositoryImpl(
     private suspend fun saveLocally() = withContext(dispatchers.io) {
         val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
         val cursor = applicationContext.contentResolver.query(uri, null, null, null, null)
-        val localSongs = LinkedList<SongRealm>() // only additions happens so LinkedList is faster
+        val localSongs = LinkedList<SongEntity>() // only additions happens so LinkedList is faster
 
         if ((cursor?.count ?: -1) > 0) {
             cursor!!
@@ -163,7 +158,7 @@ class LocalMainRepositoryImpl(
                                     albumArtUri
                                 )
                             }
-                        } catch (e: Exception) {
+                        } catch (_: Exception) {
                             null
                         }
 
@@ -192,22 +187,22 @@ class LocalMainRepositoryImpl(
                         }
                     }
 
-                    val song = SongRealm().apply {
-                        this.id = id
-                        this.title = title
-                        this.album = albumName
-                        this.duration = duration
-                        this.artist =
+                    val song = SongEntity(
+                        id = id,
+                        title = title,
+                        album = albumName,
+                        duration = duration,
+                        artist =
                             if (artistName in UnknownArtistPlaceholders) {
                                 stringProvider.string(Strings.unknown_artist)
-                            } else artistName
-                        this.genre = genre ?: stringProvider.string(Strings.unknown_genre)
-                        this.path = songPath
-                        this.previewPath = previewPath
-                        this.albumId = albumId
-                        this.artistId = artistId
-                        this.lastModified = modificationDate
-                    }
+                            } else artistName,
+                        genre = genre ?: stringProvider.string(Strings.unknown_genre),
+                        path = songPath,
+                        previewPath = previewPath,
+                        albumId = albumId,
+                        artistId = artistId,
+                        lastModified = modificationDate,
+                    )
 
                     localSongs.add(song)
                 } catch (e: Exception) {
@@ -216,11 +211,7 @@ class LocalMainRepositoryImpl(
 
             } while (cursor.moveToNext())
             cursor.close()
-            songsDb.write {
-                localSongs.forEach {
-                    copyToRealm(it, UpdatePolicy.ALL)
-                }
-            }
+            songsDao.insertAll(localSongs)
         }
 
         localSongs

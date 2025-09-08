@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.ingale.android.library)
-    alias(libs.plugins.ingale.realm)
+    alias(libs.plugins.ingale.room)
 }
 
 android {

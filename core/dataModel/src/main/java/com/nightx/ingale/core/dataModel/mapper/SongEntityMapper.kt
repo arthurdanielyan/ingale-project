@@ -1,12 +1,12 @@
 package com.nightx.ingale.core.dataModel.mapper
 
-import com.nightx.ingale.core.dataModel.SongRealm
+import com.nightx.ingale.core.dataModel.room.songsCache.entity.SongEntity
 import com.nightx.ingale.core.domainModel.Song
 import com.nightx.ingale.core.utils.Mapper
 
-class SongRealmMapper : Mapper<SongRealm, Song> {
+class SongEntityMapper : Mapper<SongEntity, Song> {
 
-    override fun map(from: SongRealm): Song =
+    override fun map(from: SongEntity): Song =
         Song(
             id = from.id,
             title = from.title,

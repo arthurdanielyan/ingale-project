@@ -22,6 +22,9 @@ internal fun VersionCatalog.getLib(lib: String): MinimalExternalModuleDependency
 internal fun DependencyHandler.implementation(dependency: Any) =
     add("implementation", dependency)
 
+internal fun DependencyHandler.ksp(dependency: Any) =
+    add("ksp", dependency)
+
 internal fun Project.android(config: LibraryExtension.() -> Unit) {
     extensions.getByType(LibraryExtension::class.java).apply(config)
 }
