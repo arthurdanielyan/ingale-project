@@ -40,12 +40,9 @@ fun <T> Flow<T>.stateInWhileSubscribed(
 
 private const val DefaultTimeoutMillis = 5000L
 
-fun <T> MutableStateFlow<T>.updateIf(
-    condition: Boolean,
-    update: (T) -> T
-) {
+fun <T> MutableStateFlow<T>.updateIf(condition: Boolean, modifier: (T) -> T) {
     if (condition) {
-        this.update(update)
+        update(modifier)
     }
 }
 

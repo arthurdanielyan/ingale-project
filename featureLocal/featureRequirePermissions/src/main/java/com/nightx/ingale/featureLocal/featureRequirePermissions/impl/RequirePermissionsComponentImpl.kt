@@ -4,7 +4,7 @@ import com.arkivanov.essenty.lifecycle.doOnStart
 import com.nightx.ingale.core.decompose.AppComponentContext
 import com.nightx.ingale.core.presentation.osExt.api.PermissionInspector
 import com.nightx.ingale.core.presentation.osExt.api.SettingsLauncher
-import com.nightx.ingale.core.presentation.viewModel.UiEffectSender
+import com.nightx.ingale.core.presentation.presentationExt.UiEffectSender
 import com.nightx.ingale.core.utils.stateInWhileSubscribed
 import com.nightx.ingale.core.viewState.composeListOf
 import com.nightx.ingale.core.viewState.toComposeList

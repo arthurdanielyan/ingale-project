@@ -1,4 +1,4 @@
-package com.nightx.ingale.core.presentation.viewModel
+package com.nightx.ingale.core.presentation.presentationExt
 
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow

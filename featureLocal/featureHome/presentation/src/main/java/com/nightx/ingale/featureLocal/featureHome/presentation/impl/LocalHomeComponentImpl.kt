@@ -15,10 +15,10 @@ import com.nightx.ingale.core.decompose.appChildContext
 import com.nightx.ingale.core.domainModel.LoadState
 import com.nightx.ingale.core.domainModel.Song
 import com.nightx.ingale.core.presentation.osExt.api.PermissionInspector
-import com.nightx.ingale.core.presentation.viewModel.UiEffectSender
-import com.nightx.ingale.core.presentation.viewModel.updateIf
+import com.nightx.ingale.core.presentation.presentationExt.UiEffectSender
 import com.nightx.ingale.core.utils.mapList
 import com.nightx.ingale.core.utils.stateInWhileSubscribed
+import com.nightx.ingale.core.utils.updateIf
 import com.nightx.ingale.core.viewState.LoadingViewState
 import com.nightx.ingale.core.viewState.emptyComposeList
 import com.nightx.ingale.core.viewState.isLoading

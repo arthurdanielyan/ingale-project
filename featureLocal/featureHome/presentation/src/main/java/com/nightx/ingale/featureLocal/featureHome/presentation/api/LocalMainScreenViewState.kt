@@ -1,7 +1,6 @@
 package com.nightx.ingale.featureLocal.featureHome.presentation.api
 
 import androidx.compose.runtime.Immutable
-import com.nightx.ingale.core.presentation.viewModel.UiState
 import com.nightx.ingale.core.viewState.ComposeList
 import com.nightx.ingale.core.viewState.LoadingViewState
 import com.nightx.ingale.core.viewState.composeListOf
@@ -17,7 +16,7 @@ data class LocalMainScreenViewState(
     val albums: ComposeList<SongsSetViewState> = emptyComposeList(),
     val artists: ComposeList<SongsSetViewState> = emptyComposeList(),
     val loadingState: LoadingViewState = LoadingViewState.Loading,
-) : UiState {
+) {
 
     companion object {
         const val PERMISSION_NOT_GRANTED_ERROR = "no_audio_permission_granted"
