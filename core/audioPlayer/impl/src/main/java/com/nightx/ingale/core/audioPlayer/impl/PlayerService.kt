@@ -161,7 +161,7 @@ class PlayerService : MediaBrowserServiceCompat() {
         object : Binder(), PlayerServiceActions {
 
             override fun prepareNewSong() {
-                this@PlayerService.prepareNewSong(playerServiceCommunicator.seekPosition.value)
+                this@PlayerService.prepareNewSong()
             }
 
             override fun togglePlaying() {
@@ -404,7 +404,6 @@ class PlayerService : MediaBrowserServiceCompat() {
     private fun prepareNewSong(
         seekPosition: Int = 0
     ) {
-        applyNewSongData()
         updateNotification()
         mediaPlayer.stop()
         mediaPlayer.reset()
@@ -414,7 +413,9 @@ class PlayerService : MediaBrowserServiceCompat() {
             isMediaPlayerPrepared = true
             it.start()
             it.seekTo(seekPosition)
+            playerServiceCommunicator.seekPosition.update { seekPosition }
             updateNotificationIfLowerTiramisu()
+            applyNewSongData()
         }
     }
 

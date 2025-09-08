@@ -176,7 +176,6 @@ class PlayerServiceCommunicator(
     }
 
     private fun playNext() {
-        seekPosition.update { 0 }
         if (currentSongIndex.value + 1 > currentQueue.lastIndex) {
             currentSongIndex.update { 0 }
         } else {
