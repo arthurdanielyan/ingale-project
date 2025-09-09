@@ -9,21 +9,17 @@ import com.nightx.ingale.core.audioPlayer.api.CurrentPlaybackInfo
 import com.nightx.ingale.core.audioPlayer.api.CurrentSongInfoStateProvider
 import com.nightx.ingale.core.audioPlayer.api.PlaybackLoopMode
 import com.nightx.ingale.core.audioPlayer.api.PlaybackUserActions
-import com.nightx.ingale.core.domainModel.DomainConstants
 import com.nightx.ingale.core.domainModel.Song
 import com.nightx.ingale.resources.icon.R
-import com.nightx.ingale.resources.strings.StringProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import com.nightx.ingale.resources.strings.R.string as Strings
 
 class PlayerServiceCommunicator(
     private val applicationContext: Context,
-    private val stringProvider: StringProvider,
     applicationScope: CoroutineScope,
 ) : PlaybackUserActions, CurrentSongInfoStateProvider {
 
@@ -52,11 +48,7 @@ class PlayerServiceCommunicator(
             currentSongPreviewPath = currentSong.picturePath,
             isPlaying = isPlaying,
             songName = currentSong.title,
-            artistName = if (currentSong.artist == DomainConstants.UNKNOWN_SONG_DATA_ID) {
-                stringProvider.string(Strings.unknown_artist)
-            } else {
-                currentSong.artist
-            },
+            artistName = currentSong.artist,
             seekPercentage = if (currentSong.duration == 0L) {
                 0f
             } else {

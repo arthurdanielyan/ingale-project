@@ -192,11 +192,10 @@ class LocalMainRepositoryImpl(
                         title = title,
                         album = albumName,
                         duration = duration,
-                        artist =
-                            if (artistName in UnknownArtistPlaceholders) {
-                                stringProvider.string(Strings.unknown_artist)
-                            } else artistName,
-                        genre = genre ?: stringProvider.string(Strings.unknown_genre),
+                        artist = artistName.takeIf { it !in UnknownValuePlaceholders }
+                            ?: stringProvider.string(Strings.unknown_artist),
+                        genre = genre.takeIf { it !in UnknownValuePlaceholders }
+                            ?: stringProvider.string(Strings.unknown_genre),
                         path = songPath,
                         previewPath = previewPath,
                         albumId = albumId,
@@ -221,6 +220,6 @@ class LocalMainRepositoryImpl(
         private const val MaxImageSizeByte = 1048576 // 1024*1024, 1 MB
         private const val ImageExtension = "png"
         private val ImageCompressFormat = Bitmap.CompressFormat.PNG
-        private val UnknownArtistPlaceholders = setOf(null, "", "<unknown>")
+        private val UnknownValuePlaceholders = setOf(null, "", "<unknown>")
     }
 }
