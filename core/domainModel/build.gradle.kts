@@ -5,3 +5,7 @@ plugins {
 android {
     namespace = "com.nightx.ingale.core.domainModel"
 }
+
+dependencies {
+    implementation(libs.koin.core)
+}

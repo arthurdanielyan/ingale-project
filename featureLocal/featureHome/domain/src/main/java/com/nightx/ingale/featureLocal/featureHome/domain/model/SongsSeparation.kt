@@ -1,6 +1,6 @@
 package com.nightx.ingale.featureLocal.featureHome.domain.model
 
-import com.nightx.ingale.core.domainModel.Song
+import com.nightx.ingale.core.domainModel.model.Song
 
 data class SongsSeparation(
     val songs: List<Song>,

@@ -1,4 +1,4 @@
-package com.nightx.ingale.core.domainModel
+package com.nightx.ingale.core.utils
 
 sealed interface LoadState<T> {
     data class Loading<T> (val lastSuccessfulData: T? = null) : LoadState<T>

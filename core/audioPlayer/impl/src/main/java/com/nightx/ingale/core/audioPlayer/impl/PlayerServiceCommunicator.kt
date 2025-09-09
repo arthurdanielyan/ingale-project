@@ -9,7 +9,7 @@ import com.nightx.ingale.core.audioPlayer.api.CurrentPlaybackInfo
 import com.nightx.ingale.core.audioPlayer.api.CurrentSongInfoStateProvider
 import com.nightx.ingale.core.audioPlayer.api.PlaybackLoopMode
 import com.nightx.ingale.core.audioPlayer.api.PlaybackUserActions
-import com.nightx.ingale.core.domainModel.Song
+import com.nightx.ingale.core.domainModel.model.Song
 import com.nightx.ingale.resources.icon.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -115,10 +115,10 @@ class PlayerServiceCommunicator(
         playbackLoopMode.update { loopMode }
     }
 
-    fun handleSkipToNext() { // called from service
+    fun handleSkipToNext(causeRemoval: Boolean = false) { // called from service
         if (currentQueue.isEmpty()) return
 
-        playNext()
+        playNext(causeRemoval)
     }
 
     fun handleSkipToPrevious() { // called from service
@@ -133,6 +133,13 @@ class PlayerServiceCommunicator(
         playerServiceConnection.withConnection {
             prepareNewSong()
         }
+    }
+
+    fun onSongWasDeletedError() {
+        currentQueue = currentQueue.toMutableList().apply {
+            removeAt(currentSongIndex.value)
+        }
+        handleSkipToNext(causeRemoval = true)
     }
 
     fun handleSongCompletion() {
@@ -167,11 +174,16 @@ class PlayerServiceCommunicator(
             .getDrawable(applicationContext, R.mipmap.ic_launcher)!!.toBitmap()
     }
 
-    private fun playNext() {
-        if (currentSongIndex.value + 1 > currentQueue.lastIndex) {
+    private fun playNext(causeRemoval: Boolean = false) {
+        val nextIndex = if (causeRemoval) {
+            currentSongIndex.value
+        } else {
+            currentSongIndex.value + 1
+        }
+        if (nextIndex > currentQueue.lastIndex) {
             currentSongIndex.update { 0 }
         } else {
-            currentSongIndex.update { it + 1 }
+            currentSongIndex.update { nextIndex }
         }
         playerServiceConnection.withConnection {
             prepareNewSong()

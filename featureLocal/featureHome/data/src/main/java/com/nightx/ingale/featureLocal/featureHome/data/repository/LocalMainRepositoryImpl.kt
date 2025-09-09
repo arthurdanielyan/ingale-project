@@ -13,9 +13,9 @@ import androidx.core.net.toUri
 import com.nightx.ingale.core.dataModel.mapper.SongEntityMapper
 import com.nightx.ingale.core.dataModel.room.songsCache.dao.SongsCacheDao
 import com.nightx.ingale.core.dataModel.room.songsCache.entity.SongEntity
-import com.nightx.ingale.core.domainModel.LoadState
-import com.nightx.ingale.core.domainModel.Song
+import com.nightx.ingale.core.domainModel.model.Song
 import com.nightx.ingale.core.utils.CoroutineDispatchers
+import com.nightx.ingale.core.utils.LoadState
 import com.nightx.ingale.core.utils.mapList
 import com.nightx.ingale.featureLocal.featureHome.domain.repository.LocalMainRepository
 import com.nightx.ingale.resources.strings.StringProvider
@@ -210,7 +210,7 @@ class LocalMainRepositoryImpl(
 
             } while (cursor.moveToNext())
             cursor.close()
-            songsDao.insertAll(localSongs)
+            songsDao.replaceAll(localSongs)
         }
 
         localSongs

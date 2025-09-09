@@ -2,7 +2,7 @@ package com.nightx.ingale.featureLocal.featureSongsSet.presentation.impl
 
 import com.nightx.ingale.core.audioPlayer.api.PlaybackUserActions
 import com.nightx.ingale.core.decompose.AppComponentContext
-import com.nightx.ingale.core.domainModel.Song
+import com.nightx.ingale.core.domainModel.model.Song
 import com.nightx.ingale.core.utils.mapList
 import com.nightx.ingale.featureLocal.core.ui.viewState.SongViewState
 import com.nightx.ingale.featureLocal.core.ui.viewState.SongsSetViewState

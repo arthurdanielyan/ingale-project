@@ -27,4 +27,6 @@
     <string name="notification_permission_not_granted_permission">Пожалуйста предоставьте разришение уведомлений, чтобы вы могли управлять воспроизведением пока приложение закрыто</string>
 
     <string name="something_went_wrong">Что-то пошло не так</string>
+
+    <string name="audio_deleted">Этот аудиофайл был удален с устройства (%1$s)</string>
 </resources>

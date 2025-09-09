@@ -58,6 +58,7 @@ dependencies {
     implementation(projects.globalPlaybackPresentation)
     implementation(projects.core.audioPlayer.impl)
     implementation(projects.core.dataModel)
+    implementation(projects.core.domainModel)
     implementation(projects.core.utils)
     implementation(projects.core.presentation)
     implementation(projects.featureLocal.core.ui)

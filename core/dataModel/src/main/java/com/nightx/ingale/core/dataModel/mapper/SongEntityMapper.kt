@@ -1,7 +1,7 @@
 package com.nightx.ingale.core.dataModel.mapper
 
 import com.nightx.ingale.core.dataModel.room.songsCache.entity.SongEntity
-import com.nightx.ingale.core.domainModel.Song
+import com.nightx.ingale.core.domainModel.model.Song
 import com.nightx.ingale.core.utils.Mapper
 
 class SongEntityMapper : Mapper<SongEntity, Song> {

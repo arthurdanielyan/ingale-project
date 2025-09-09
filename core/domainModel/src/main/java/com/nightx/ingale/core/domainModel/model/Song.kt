@@ -1,4 +1,4 @@
-package com.nightx.ingale.core.domainModel
+package com.nightx.ingale.core.domainModel.model
 
 data class Song(
     val id: Long,

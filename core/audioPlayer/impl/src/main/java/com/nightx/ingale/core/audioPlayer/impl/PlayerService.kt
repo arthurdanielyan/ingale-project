@@ -30,6 +30,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
+import org.koin.android.ext.android.inject
+import java.io.FileNotFoundException
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
 import androidx.core.app.NotificationCompat as AndroidNotificationCompat
@@ -52,6 +54,8 @@ class PlayerService : MediaBrowserServiceCompat() {
         private const val SongFinishThreshold = 200
         private const val SeekPositionUpdateFrequency = 1000L
     }
+
+    private val songNotFoundHandler by this.inject<SongNotFoundHandler>()
 
     private val playerServiceCommunicator = this.get<PlayerServiceCommunicator>()
     private val scope = MainScope()
@@ -407,15 +411,24 @@ class PlayerService : MediaBrowserServiceCompat() {
         updateNotification()
         mediaPlayer.stop()
         mediaPlayer.reset()
-        mediaPlayer.setDataSource(playerServiceCommunicator.getCurrentSong()?.path.orEmpty())
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            isMediaPlayerPrepared = true
-            it.start()
-            it.seekTo(seekPosition)
-            playerServiceCommunicator.seekPosition.update { seekPosition }
-            updateNotificationIfLowerTiramisu()
-            applyNewSongData()
+        val currentSong = playerServiceCommunicator.getCurrentSong()
+        try {
+            mediaPlayer.setDataSource(currentSong?.path.orEmpty())
+            mediaPlayer.prepareAsync()
+            mediaPlayer.setOnPreparedListener {
+                isMediaPlayerPrepared = true
+                it.start()
+                it.seekTo(seekPosition)
+                playerServiceCommunicator.seekPosition.update { seekPosition }
+                updateNotificationIfLowerTiramisu()
+                applyNewSongData()
+            }
+        } catch (_: FileNotFoundException) {
+            songNotFoundHandler.handleSongNotFound(
+                currentSong?.id ?: -1,
+                currentSong?.title.orEmpty()
+            )
+            playerServiceCommunicator.onSongWasDeletedError()
         }
     }
 

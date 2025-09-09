@@ -1,6 +1,6 @@
 package com.nightx.ingale.core.viewState
 
-import com.nightx.ingale.core.domainModel.LoadState
+import com.nightx.ingale.core.utils.LoadState
 
 sealed interface LoadingViewState {
     data object Loading : LoadingViewState

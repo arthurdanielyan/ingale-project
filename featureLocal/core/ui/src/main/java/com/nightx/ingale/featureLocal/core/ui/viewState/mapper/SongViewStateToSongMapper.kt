@@ -1,6 +1,6 @@
 package com.nightx.ingale.featureLocal.core.ui.viewState.mapper
 
-import com.nightx.ingale.core.domainModel.Song
+import com.nightx.ingale.core.domainModel.model.Song
 import com.nightx.ingale.core.utils.Mapper
 import com.nightx.ingale.featureLocal.core.ui.viewState.SongViewState
 

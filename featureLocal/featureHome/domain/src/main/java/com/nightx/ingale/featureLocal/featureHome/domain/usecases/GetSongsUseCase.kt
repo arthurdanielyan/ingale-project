@@ -1,7 +1,7 @@
 package com.nightx.ingale.featureLocal.featureHome.domain.usecases
 
-import com.nightx.ingale.core.domainModel.LoadState
-import com.nightx.ingale.core.domainModel.Song
+import com.nightx.ingale.core.domainModel.model.Song
+import com.nightx.ingale.core.utils.LoadState
 import com.nightx.ingale.featureLocal.featureHome.domain.repository.LocalMainRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

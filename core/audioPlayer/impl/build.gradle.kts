@@ -14,6 +14,7 @@ dependencies {
     implementation(libs.androidx.ktx)
     implementation(libs.koin.android)
 
+    implementation(projects.bottomBarApi)
     implementation(projects.core.utils)
     implementation(projects.core.domainModel)
     implementation(projects.resources.icon)

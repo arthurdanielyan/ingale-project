@@ -5,9 +5,12 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
 import com.nightx.ingale.core.audioPlayer.impl.PlayerService.Companion.MUSIC_PLAYER_NOTIFICATION_CHANNEL_ID
+import com.nightx.ingale.core.audioPlayer.impl.audioPlayerImplModule
 import com.nightx.ingale.core.audioPlayer.impl.playerServiceCommunicatorModule
+import com.nightx.ingale.core.dataModel.di.coreRepositoriesModule
 import com.nightx.ingale.core.dataModel.di.mappersModule
 import com.nightx.ingale.core.dataModel.di.roomModule
+import com.nightx.ingale.core.domainModel.di.coreDomainModule
 import com.nightx.ingale.core.presentation.osExt.di.osExtModule
 import com.nightx.ingale.core.utils.di.coroutineDispatchersModule
 import com.nightx.ingale.featureLocal.core.ui.featureLocalCoreUiModule
@@ -31,11 +34,14 @@ class IngaleApplication : Application() {
             androidLogger()
             modules(
                 osExtModule,
+                audioPlayerImplModule,
                 rootModule,
                 snackbarMessageSenderModule,
                 playerServiceCommunicatorModule,
                 mappersModule,
                 roomModule,
+                coreDomainModule,
+                coreRepositoriesModule,
                 coroutineDispatchersModule,
                 featureLocalCoreUiModule,
                 localComponentFactoryModule,

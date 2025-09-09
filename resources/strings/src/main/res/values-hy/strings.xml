@@ -27,4 +27,6 @@
     <string name="notification_permission_not_granted_permission">Խնդրում ենք տրամադրել ծանուցման թույլտվություն, որպեսզի կարողանաք կառավարել աուդիո նվագարկումը՝ հավելվածը փակված վիճակում</string>
 
     <string name="something_went_wrong">Տեղի է ունեցել սխալ</string>
+
+    <string name="audio_deleted">Այս աուդիո ֆայլը ջնջվել է ձեր սարքից (%1$s)</string>
 </resources>
