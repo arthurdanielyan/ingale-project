@@ -1,6 +1,6 @@
 package com.nightx.ingale.featureLocal.featureHome.domain.model
 
-import com.nightx.ingale.core.domainModel.model.Song
+import com.nightx.ingale.core.domain.model.Song
 
 data class SongsSet(
     val id: Long,

@@ -12,7 +12,7 @@ import com.nightx.ingale.bottomBarApi.SnackbarMessageSender
 import com.nightx.ingale.core.audioPlayer.api.PlaybackUserActions
 import com.nightx.ingale.core.decompose.AppComponentContext
 import com.nightx.ingale.core.decompose.appChildContext
-import com.nightx.ingale.core.domainModel.model.Song
+import com.nightx.ingale.core.domain.model.Song
 import com.nightx.ingale.core.presentation.osExt.api.PermissionInspector
 import com.nightx.ingale.core.presentation.presentationExt.UiEffectSender
 import com.nightx.ingale.core.utils.LoadState

@@ -11,7 +11,7 @@ dependencies {
 
     implementation(projects.core.ui)
     implementation(projects.resources.songOperations)
-    implementation(projects.core.domainModel)
+    implementation(projects.featureLocal.core.domain)
     implementation(projects.core.viewState)
     implementation(projects.core.presentation)
     implementation(projects.core.utils)

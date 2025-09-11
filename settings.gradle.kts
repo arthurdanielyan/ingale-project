@@ -18,8 +18,6 @@ rootProject.name = "Ingale"
 includeBuild("gradlePlugins")
 include(":app")
 
-val layerModules
-    get() = listOf(Module("data"), Module("domain"), Module("presentation"))
 val apiImpl
     get() = listOf(Module("api"), Module("impl"))
 
@@ -30,8 +28,6 @@ val coreModule = Module(
             name = "audioPlayer",
             submodules = listOf(Module("api"), Module("impl"))
         ),
-        Module("dataModel"),
-        Module("domainModel"),
         Module("decompose"),
         Module("presentation"),
         Module("ui"),
@@ -52,12 +48,16 @@ val featureLocal = Module(
             name = "core",
             submodules = listOf(
                 Module("data"),
+                Module("domain"),
                 Module("ui"),
             )
         ),
         Module(
             name = "featureHome",
-            submodules = layerModules
+            submodules = listOf(
+                Module("domain"),
+                Module("presentation"),
+            )
         ),
         Module("featureRequirePermissions"),
         Module(

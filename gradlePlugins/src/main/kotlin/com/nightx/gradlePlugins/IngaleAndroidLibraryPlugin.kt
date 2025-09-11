@@ -3,6 +3,7 @@ package com.nightx.gradlePlugins
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
 
 class IngaleAndroidLibraryPlugin : Plugin<Project> {
 
@@ -44,5 +45,7 @@ class IngaleAndroidLibraryPlugin : Plugin<Project> {
                 targetCompatibility = JavaVersion.VERSION_17
             }
         }
+
+        project.kotlinExtension.jvmToolchain(17)
     }
 }

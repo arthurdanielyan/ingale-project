@@ -9,5 +9,5 @@ android {
 dependencies {
 
     implementation(libs.kotlinx.coroutines.core)
-    implementation(projects.core.domainModel)
+    implementation(projects.featureLocal.core.domain)
 }

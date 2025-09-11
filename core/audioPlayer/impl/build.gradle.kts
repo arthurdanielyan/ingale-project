@@ -16,7 +16,7 @@ dependencies {
 
     implementation(projects.bottomBarApi)
     implementation(projects.core.utils)
-    implementation(projects.core.domainModel)
+    implementation(projects.featureLocal.core.domain)
     implementation(projects.resources.icon)
     implementation(projects.resources.playbackActions)
     implementation(projects.resources.strings)

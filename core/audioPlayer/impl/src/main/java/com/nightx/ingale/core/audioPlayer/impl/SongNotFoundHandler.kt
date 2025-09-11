@@ -1,7 +1,7 @@
 package com.nightx.ingale.core.audioPlayer.impl
 
 import com.nightx.ingale.bottomBarApi.SnackbarMessageSender
-import com.nightx.ingale.core.domainModel.usecase.RemoveSongUseCase
+import com.nightx.ingale.core.domain.usecase.RemoveSongUseCase
 import com.nightx.ingale.resources.strings.R
 import com.nightx.ingale.resources.strings.StringProvider
 import kotlinx.coroutines.CoroutineScope

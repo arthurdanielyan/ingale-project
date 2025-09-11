@@ -1,6 +1,6 @@
 package com.nightx.ingale.featureLocal.featureHome.domain.usecases
 
-import com.nightx.ingale.core.domainModel.model.Song
+import com.nightx.ingale.core.domain.model.Song
 import com.nightx.ingale.core.utils.CoroutineDispatchers
 import com.nightx.ingale.featureLocal.featureHome.domain.model.SongsSeparation
 import com.nightx.ingale.featureLocal.featureHome.domain.model.SongsSet

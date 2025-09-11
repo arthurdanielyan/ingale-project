@@ -16,7 +16,7 @@ dependencies{
     implementation(projects.featureLocal.core.ui)
     implementation(projects.globalPlaybackPresentation)
     implementation(projects.bottomBarApi)
-    implementation(projects.core.domainModel)
+    implementation(projects.featureLocal.core.domain)
     implementation(projects.core.audioPlayer.api)
     implementation(projects.core.ui)
     implementation(projects.core.presentation)

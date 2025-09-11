@@ -11,6 +11,6 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.koin.core)
 
-    implementation(projects.core.domainModel)
+    implementation(projects.featureLocal.core.domain)
     implementation(projects.core.utils)
 }

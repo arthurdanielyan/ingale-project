@@ -29,7 +29,7 @@
             <option value="$PROJECT_DIR$/core/audioPlayer/impl" />
             <option value="$PROJECT_DIR$/core/dataModel" />
             <option value="$PROJECT_DIR$/core/decompose" />
-            <option value="$PROJECT_DIR$/core/domainModel" />
+            <option value="$PROJECT_DIR$/core/domain" />
             <option value="$PROJECT_DIR$/core/presentation" />
             <option value="$PROJECT_DIR$/core/ui" />
             <option value="$PROJECT_DIR$/core/utils" />
