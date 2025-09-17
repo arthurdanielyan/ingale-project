@@ -1,8 +1,8 @@
 package com.nightx.ingale.featureLocal.featureHome.presentation.api
 
 import androidx.compose.runtime.Immutable
-import com.nightx.ingale.featureLocal.core.ui.viewState.SongViewState
-import com.nightx.ingale.featureLocal.core.ui.viewState.SongsSetViewState
+import com.nightx.ingale.featureLocal.core.presentation.common.viewState.SongViewState
+import com.nightx.ingale.featureLocal.core.presentation.common.viewState.SongsSetViewState
 
 @Immutable
 interface LocalMainCallbacks {

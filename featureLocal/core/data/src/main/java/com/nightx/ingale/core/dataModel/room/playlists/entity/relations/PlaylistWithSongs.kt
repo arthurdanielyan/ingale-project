@@ -11,11 +11,11 @@ import com.nightx.ingale.core.dataModel.room.songsCache.entity.SongEntity
 data class PlaylistWithSongs(
     @Embedded val playlist: PlaylistEntity,
     @Relation(
-        parentColumn = PlaylistsTable.COLUMN_ID,
+        parentColumn = PlaylistsTable.COLUMN_NAME,
         entityColumn = SongsCacheTable.COLUMN_ID,
         associateBy = Junction(
             value = PlaylistSongCrossRef::class,
-            parentColumn = PlaylistsTable.PlaylistSongCrossRef.COLUMN_PLAYLIST_ID,
+            parentColumn = PlaylistsTable.PlaylistSongCrossRef.COLUMN_PLAYLIST_NAME,
             entityColumn = PlaylistsTable.PlaylistSongCrossRef.COLUMN_SONG_ID
         )
     )

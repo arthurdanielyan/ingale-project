@@ -17,6 +17,7 @@ import androidx.annotation.DoNotInline
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.R
@@ -32,6 +33,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.platform.AbstractComposeView
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -84,7 +86,10 @@ fun ModalBottomSheetDialog(
                 .apply {
                     setContent(composition) {
                         Box(
-                            Modifier.semantics { dialog() },
+                            Modifier
+                                .semantics { dialog() }
+                                .navigationBarsPadding()
+                                .clipToBounds(),
                         ) {
                             currentContent()
                         }
@@ -141,7 +146,7 @@ private class ModalBottomSheetDialogWrapper(
         val window = window ?: error("Dialog has no window")
         window.requestFeature(Window.FEATURE_NO_TITLE)
         window.setBackgroundDrawableResource(android.R.color.transparent)
-        window.setWindowAnimations(-1)
+        window.setWindowAnimations(0)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         dialogLayout =
             ModalBottomSheetDialogLayout(

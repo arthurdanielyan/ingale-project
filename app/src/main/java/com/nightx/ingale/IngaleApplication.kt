@@ -13,7 +13,12 @@ import com.nightx.ingale.core.dataModel.di.roomModule
 import com.nightx.ingale.core.domain.di.coreDomainModule
 import com.nightx.ingale.core.presentation.osExt.di.osExtModule
 import com.nightx.ingale.core.utils.di.coroutineDispatchersModule
-import com.nightx.ingale.featureLocal.core.ui.featureLocalCoreUiModule
+import com.nightx.ingale.featureLocal.core.presentation.common.featureLocalCommonUiModule
+import com.nightx.ingale.featureLocal.core.presentation.featureCreatePlaylist.di.createNewPlaylistComponentFactoryModule
+import com.nightx.ingale.featureLocal.core.presentation.featureSongsList.currentPlaylistsBottomSheet.di.currentPlaylistsBottomSheetComponentFactoryModule
+import com.nightx.ingale.featureLocal.core.presentation.featureSongsList.songOperationsParentComponent.parent.di.songOperationsParentComponentFactoryModule
+import com.nightx.ingale.featureLocal.core.presentation.featureSongsList.songOperationsParentComponent.songOperationsBottomSheet.di.songOperationsBottomSheetComponentFactoryModule
+import com.nightx.ingale.featureLocal.core.presentation.featureSongsList.songsList.di.songsListComponentFactoryModule
 import com.nightx.ingale.featureLocal.featureHome.presentation.di.featureHomePresentationModule
 import com.nightx.ingale.featureLocal.featureRequirePermissions.di.requirePermissionsComponentFactoryModule
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.di.songsSetPresentationModule
@@ -43,7 +48,12 @@ class IngaleApplication : Application() {
                 coreDomainModule,
                 repositoriesModule,
                 coroutineDispatchersModule,
-                featureLocalCoreUiModule,
+                featureLocalCommonUiModule,
+                createNewPlaylistComponentFactoryModule,
+                songOperationsBottomSheetComponentFactoryModule,
+                songOperationsParentComponentFactoryModule,
+                songsListComponentFactoryModule,
+                currentPlaylistsBottomSheetComponentFactoryModule,
                 localComponentFactoryModule,
                 requirePermissionsComponentFactoryModule,
                 *globalPlaybackPresentationModule.toTypedArray(),

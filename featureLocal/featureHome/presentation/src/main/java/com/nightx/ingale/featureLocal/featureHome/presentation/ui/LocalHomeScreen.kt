@@ -29,7 +29,8 @@ import com.nightx.ingale.core.ui.flows.ObserveEffects
 import com.nightx.ingale.core.ui.theme.dimensions
 import com.nightx.ingale.core.viewState.isError
 import com.nightx.ingale.core.viewState.isLoading
-import com.nightx.ingale.featureLocal.core.ui.components.SongsLazyList
+import com.nightx.ingale.featureLocal.core.presentation.featureSongsList.songsList.api.SongsListComponent
+import com.nightx.ingale.featureLocal.core.presentation.featureSongsList.songsList.ui.SongsList
 import com.nightx.ingale.featureLocal.featureHome.presentation.api.LocalHomeComponent
 import com.nightx.ingale.featureLocal.featureHome.presentation.api.LocalMainCallbacks
 import com.nightx.ingale.featureLocal.featureHome.presentation.api.LocalMainScreenViewState
@@ -57,7 +58,8 @@ fun LocalHomeScreen(
     LocalHomeScreen(
         state = state,
         callbacks = callbacks,
-        effects = effect
+        effects = effect,
+        songsListComponent = component.songsListComponent,
     )
 
     RequiredPermissionsRequesterDialog(
@@ -70,6 +72,7 @@ private fun LocalHomeScreen(
     state: LocalMainScreenViewState,
     callbacks: LocalMainCallbacks,
     effects: Flow<LocalMainUiEffect>,
+    songsListComponent: SongsListComponent,
 ) {
     val songsLazyColumnState = rememberLazyListState()
     val albumsGridsState = rememberLazyGridState()
@@ -150,15 +153,23 @@ private fun LocalHomeScreen(
                     LoadingStatePresenter(
                         loadingState = state.loadingState,
                         notErrorView = {
-                            SongsLazyList(
+                            SongsList(
+                                component = songsListComponent,
                                 modifier = Modifier
                                     .nestedScroll(rememberNestedScrollForMusicBarNotification()),
                                 lazyListState = songsLazyColumnState,
-                                songs = state.songs,
                                 query = state.searchTextField,
-                                isLoading = state.loadingState.isLoading(),
-                                onSongClick = callbacks::onSongClick
+                                isLoading = state.loadingState.isLoading()
                             )
+//                            SongsLazyList(
+//                                modifier = Modifier
+//                                    .nestedScroll(rememberNestedScrollForMusicBarNotification()),
+//                                lazyListState = songsLazyColumnState,
+//                                songs = state.songs,
+//                                query = state.searchTextField,
+//                                isLoading = state.loadingState.isLoading(),
+//                                onSongClick = callbacks::onSongClick
+//                            )
                         },
                         errorView = {
                             DataPlaceholder(

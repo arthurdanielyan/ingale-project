@@ -1,6 +1,6 @@
 package com.nightx.ingale.core.audioPlayer.api
 
-import com.nightx.ingale.core.domain.model.Song
+import com.nightx.ingale.core.domain.songs.model.Song
 
 interface PlaybackUserActions {
 

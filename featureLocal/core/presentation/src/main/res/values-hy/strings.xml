@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="create_new_playlist">Ստեղծել նոր երգացանկ</string>
+    <string name="create_playlist">Ստեղծել երգացանկ</string>
+    <string name="playlist_name">Երգացանկի անվանումը</string>
+    <string name="added_to_playlist">Երաժշտություն ավելացվեց %1$s</string>
+    <string name="modify_song_info">Փոփոխել երաժշտության տեղեկությունները</string>
+    <string name="save_to_playlist">Պահպանել երգացանկում</string>
+    <string name="save_to_favourites">Պահպանել նախընտրածների մեջ</string>
+    <string name="play_next">Nվագարկել hաջորդը</string>
+    <string name="add_to_queue">Ավելացնել հերթում</string>
+    <string name="playlist_exists">Այս անունով երգացանկ արդեն գոյություն ունի</string>
+</resources>

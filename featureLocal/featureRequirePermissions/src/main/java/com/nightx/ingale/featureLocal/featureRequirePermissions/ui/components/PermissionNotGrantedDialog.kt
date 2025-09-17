@@ -38,7 +38,8 @@ internal fun PermissionNotGrantedDialog(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    color = MaterialTheme.colorScheme.surface
+                    color = MaterialTheme.colorScheme.surface,
+                    shape = MaterialTheme.shapes.small,
                 ),
         ) {
             Text(

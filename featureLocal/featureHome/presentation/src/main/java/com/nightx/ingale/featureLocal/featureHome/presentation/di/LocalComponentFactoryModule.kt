@@ -9,6 +9,7 @@ val localHomeComponentFactoryModule = module {
         LocalHomeComponentFactoryImpl(
             requirePermissionComponentFactory = get(),
             permissionInspector = get(),
+            songsListComponentFactory = get(),
             getSongsUseCase = get(),
             getCachedState = get(),
             songViewStateMapper = get(),

@@ -10,7 +10,7 @@ android {
 
 dependencies {
 
-    api(projects.core.decompose)
+    api(projects.core.decompose)// TODO make implementation, include navigation and core.decompose separately
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.runtime)

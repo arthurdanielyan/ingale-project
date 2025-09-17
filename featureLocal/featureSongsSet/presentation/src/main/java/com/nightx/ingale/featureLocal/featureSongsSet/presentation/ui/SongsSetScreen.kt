@@ -31,8 +31,8 @@ import com.nightx.ingale.core.ui.theme.dimensions
 import com.nightx.ingale.core.ui.topBar.TopBarBackButton
 import com.nightx.ingale.core.ui.topBar.TopBarHeight
 import com.nightx.ingale.core.ui.topBar.TopBarWithBackButton
-import com.nightx.ingale.featureLocal.core.ui.components.SongsLazyList
-import com.nightx.ingale.featureLocal.core.ui.viewState.SongsSetViewState
+import com.nightx.ingale.featureLocal.core.presentation.common.viewState.SongsSetViewState
+import com.nightx.ingale.featureLocal.core.presentation.featureSongsList.songsList.ui.components.SongsLazyList
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.api.SongsSetComponent
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.impl.SongsSetUiCallbacks
 import com.nightx.ingale.globalPlaybackPresentation.musicBar.api.rememberNestedScrollForMusicBarNotification

@@ -27,9 +27,7 @@
             <option value="$PROJECT_DIR$/core/audioPlayer" />
             <option value="$PROJECT_DIR$/core/audioPlayer/api" />
             <option value="$PROJECT_DIR$/core/audioPlayer/impl" />
-            <option value="$PROJECT_DIR$/core/dataModel" />
             <option value="$PROJECT_DIR$/core/decompose" />
-            <option value="$PROJECT_DIR$/core/domain" />
             <option value="$PROJECT_DIR$/core/presentation" />
             <option value="$PROJECT_DIR$/core/ui" />
             <option value="$PROJECT_DIR$/core/utils" />
@@ -37,11 +35,12 @@
             <option value="$PROJECT_DIR$/featureLocal" />
             <option value="$PROJECT_DIR$/featureLocal/core" />
             <option value="$PROJECT_DIR$/featureLocal/core/data" />
-            <option value="$PROJECT_DIR$/featureLocal/core/ui" />
+            <option value="$PROJECT_DIR$/featureLocal/core/domain" />
+            <option value="$PROJECT_DIR$/featureLocal/core/presentation" />
             <option value="$PROJECT_DIR$/featureLocal/featureHome" />
-            <option value="$PROJECT_DIR$/featureLocal/featureHome/data" />
             <option value="$PROJECT_DIR$/featureLocal/featureHome/domain" />
             <option value="$PROJECT_DIR$/featureLocal/featureHome/presentation" />
+            <option value="$PROJECT_DIR$/featureLocal/featurePlaylists" />
             <option value="$PROJECT_DIR$/featureLocal/featureRequirePermissions" />
             <option value="$PROJECT_DIR$/featureLocal/featureSongsSet" />
             <option value="$PROJECT_DIR$/featureLocal/featureSongsSet/presentation" />

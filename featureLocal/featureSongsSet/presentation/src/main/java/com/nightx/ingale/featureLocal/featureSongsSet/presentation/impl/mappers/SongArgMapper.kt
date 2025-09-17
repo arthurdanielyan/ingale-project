@@ -1,6 +1,6 @@
 package com.nightx.ingale.featureLocal.featureSongsSet.presentation.impl.mappers
 
-import com.nightx.ingale.core.domain.model.Song
+import com.nightx.ingale.core.domain.songs.model.Song
 import com.nightx.ingale.core.utils.Mapper
 import com.nightx.ingale.featureLocal.navigation.api.LocalScreenConfig.SongsSet.SongArg
 

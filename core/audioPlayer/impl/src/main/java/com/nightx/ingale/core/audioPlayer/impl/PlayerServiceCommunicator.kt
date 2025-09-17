@@ -9,7 +9,7 @@ import com.nightx.ingale.core.audioPlayer.api.CurrentPlaybackInfo
 import com.nightx.ingale.core.audioPlayer.api.CurrentSongInfoStateProvider
 import com.nightx.ingale.core.audioPlayer.api.PlaybackLoopMode
 import com.nightx.ingale.core.audioPlayer.api.PlaybackUserActions
-import com.nightx.ingale.core.domain.model.Song
+import com.nightx.ingale.core.domain.songs.model.Song
 import com.nightx.ingale.resources.icon.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -2,10 +2,10 @@ package com.nightx.ingale.featureLocal.featureSongsSet.presentation.impl
 
 import com.nightx.ingale.core.audioPlayer.api.PlaybackUserActions
 import com.nightx.ingale.core.decompose.AppComponentContext
-import com.nightx.ingale.core.domain.model.Song
+import com.nightx.ingale.core.domain.songs.model.Song
 import com.nightx.ingale.core.utils.mapList
-import com.nightx.ingale.featureLocal.core.ui.viewState.SongViewState
-import com.nightx.ingale.featureLocal.core.ui.viewState.SongsSetViewState
+import com.nightx.ingale.featureLocal.core.presentation.common.viewState.SongViewState
+import com.nightx.ingale.featureLocal.core.presentation.common.viewState.SongsSetViewState
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.api.SongsSetComponent
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.api.SongsSetComponent.Params
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.impl.mappers.SongArgMapper

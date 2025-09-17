@@ -5,8 +5,8 @@ import com.nightx.ingale.core.viewState.ComposeList
 import com.nightx.ingale.core.viewState.LoadingViewState
 import com.nightx.ingale.core.viewState.composeListOf
 import com.nightx.ingale.core.viewState.emptyComposeList
-import com.nightx.ingale.featureLocal.core.ui.viewState.SongViewState
-import com.nightx.ingale.featureLocal.core.ui.viewState.SongsSetViewState
+import com.nightx.ingale.featureLocal.core.presentation.common.viewState.SongViewState
+import com.nightx.ingale.featureLocal.core.presentation.common.viewState.SongsSetViewState
 import com.nightx.ingale.resources.strings.R.string as Strings
 
 @Immutable

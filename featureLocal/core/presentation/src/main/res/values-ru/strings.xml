@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="create_new_playlist">Создать новый плейлист</string>
+    <string name="create_playlist">Создать плейлист</string>
+    <string name="playlist_name">Название плейлиста</string>
+    <string name="added_to_playlist">Музыка доваблена в %1$s</string>
+    <string name="modify_song_info">Изменить информацию о музыке</string>
+    <string name="save_to_playlist">Добавить в плейлист</string>
+    <string name="save_to_favourites">Добавить в избранные</string>
+    <string name="play_next">Играть следующий</string>
+    <string name="add_to_queue">Добавить в очередь</string>
+    <string name="playlist_exists">Плейлист с таким названием уже существует</string>
+</resources>

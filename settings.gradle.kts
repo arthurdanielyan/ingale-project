@@ -49,7 +49,7 @@ val featureLocal = Module(
             submodules = listOf(
                 Module("data"),
                 Module("domain"),
-                Module("ui"),
+                Module("presentation"),
             )
         ),
         Module(
@@ -65,6 +65,9 @@ val featureLocal = Module(
             submodules = listOf(
                 Module("presentation"),
             )
+        ),
+        Module(
+            name = "featurePlaylists",
         ),
         Module(
             name = "navigation",

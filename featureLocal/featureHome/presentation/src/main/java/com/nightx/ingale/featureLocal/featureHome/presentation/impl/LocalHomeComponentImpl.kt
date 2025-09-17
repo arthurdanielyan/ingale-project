@@ -12,7 +12,7 @@ import com.nightx.ingale.bottomBarApi.SnackbarMessageSender
 import com.nightx.ingale.core.audioPlayer.api.PlaybackUserActions
 import com.nightx.ingale.core.decompose.AppComponentContext
 import com.nightx.ingale.core.decompose.appChildContext
-import com.nightx.ingale.core.domain.model.Song
+import com.nightx.ingale.core.domain.songs.model.Song
 import com.nightx.ingale.core.presentation.osExt.api.PermissionInspector
 import com.nightx.ingale.core.presentation.presentationExt.UiEffectSender
 import com.nightx.ingale.core.utils.LoadState
@@ -24,9 +24,10 @@ import com.nightx.ingale.core.viewState.emptyComposeList
 import com.nightx.ingale.core.viewState.isLoading
 import com.nightx.ingale.core.viewState.toComposeList
 import com.nightx.ingale.core.viewState.toLoadingViewState
-import com.nightx.ingale.featureLocal.core.ui.viewState.SongViewState
-import com.nightx.ingale.featureLocal.core.ui.viewState.SongsSetViewState
-import com.nightx.ingale.featureLocal.core.ui.viewState.mapper.SongViewStateMapper
+import com.nightx.ingale.featureLocal.core.presentation.common.viewState.SongViewState
+import com.nightx.ingale.featureLocal.core.presentation.common.viewState.SongsSetViewState
+import com.nightx.ingale.featureLocal.core.presentation.common.viewState.mapper.SongViewStateMapper
+import com.nightx.ingale.featureLocal.core.presentation.featureSongsList.songsList.api.SongsListComponent
 import com.nightx.ingale.featureLocal.featureHome.domain.usecases.GetCachedState
 import com.nightx.ingale.featureLocal.featureHome.domain.usecases.GetSongsUseCase
 import com.nightx.ingale.featureLocal.featureHome.domain.usecases.OrganizeSongsUseCase
@@ -57,6 +58,7 @@ import com.nightx.ingale.featureLocal.featureHome.presentation.R.string as Strin
 internal class LocalHomeComponentImpl(
     appComponentContext: AppComponentContext,
     requirePermissionComponentFactory: RequirePermissionsComponent.Factory,
+    songsListComponentFactory: SongsListComponent.Factory,
     permissionInspector: PermissionInspector,
     private val getSongsUseCase: GetSongsUseCase,
     private val getCachedState: GetCachedState,
@@ -119,6 +121,11 @@ internal class LocalHomeComponentImpl(
                 }
             }
         }
+    )
+
+    override val songsListComponent = songsListComponentFactory(
+        appComponentContext = appChildContext("songsListComponent"),
+        songs = songs
     )
 
     override val uiCallbacks = this

@@ -20,14 +20,16 @@ import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.value.Value
 import kotlinx.coroutines.yield
 
-//@Composable
-//fun <C : Any, T : Any> ChildSlot(
-//    childSlot: Value<ChildSlot<C, T>>,
-//    content: @Composable (Child<C, T>) -> Unit
-//) {
-//    val child: ChildSlot<C, T> by childSlot.subscribeAsState()
-//    content(child)
-//}
+@Composable
+fun <C : Any, T : Any> ChildSlot(
+    slot: Value<ChildSlot<C, T>>,
+    content: @Composable (Child.Created<C, T>) -> Unit
+) {
+    val childSlot: ChildSlot<C, T> by slot.subscribeAsState()
+    childSlot.child?.let {
+        content(it)
+    }
+}
 
 //@Composable
 //fun <C : Any, T : Any> ChildrenSlot(

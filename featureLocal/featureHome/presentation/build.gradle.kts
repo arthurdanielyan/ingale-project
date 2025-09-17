@@ -9,11 +9,11 @@ android {
 
 dependencies{
 
-    api(projects.featureLocal.navigation.api)
+    api(projects.featureLocal.navigation.api) // TODO include navigation and core.decompose separately
 
     implementation(projects.featureLocal.featureHome.domain)
     implementation(projects.featureLocal.featureRequirePermissions)
-    implementation(projects.featureLocal.core.ui)
+    implementation(projects.featureLocal.core.presentation)
     implementation(projects.globalPlaybackPresentation)
     implementation(projects.bottomBarApi)
     implementation(projects.featureLocal.core.domain)

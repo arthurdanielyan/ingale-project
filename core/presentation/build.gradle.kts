@@ -18,6 +18,6 @@ dependencies {
     api(libs.androidx.lifecycle.viewmodel.savedstate)
     api(libs.koin.core)
     api(libs.koin.androidx.compose)
+    api(projects.core.utils)
 
-    implementation(projects.core.utils) // TODO: try to make this api
 }

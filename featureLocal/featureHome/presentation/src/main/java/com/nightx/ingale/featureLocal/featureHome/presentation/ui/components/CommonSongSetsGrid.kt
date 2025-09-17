@@ -38,7 +38,7 @@ import com.nightx.ingale.core.ui.extensions.shimmer
 import com.nightx.ingale.core.ui.highlight
 import com.nightx.ingale.core.ui.theme.dimensions
 import com.nightx.ingale.core.viewState.ComposeList
-import com.nightx.ingale.featureLocal.core.ui.viewState.SongsSetViewState
+import com.nightx.ingale.featureLocal.core.presentation.common.viewState.SongsSetViewState
 
 /**
  * For Albums, Artists sections and for Playlists in the future

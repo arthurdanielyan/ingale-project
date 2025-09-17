@@ -15,19 +15,17 @@ interface PlaylistsDao {
     @Transaction
     @Query(
         "SELECT * FROM ${PlaylistsTable.TABLE_NAME} " +
-                "WHERE ${PlaylistsTable.COLUMN_ID} = :playlistId"
+                "WHERE ${PlaylistsTable.COLUMN_NAME} = :playlistName"
     )
-    suspend fun getPlaylistWithSongs(playlistId: Int): PlaylistWithSongs
+    suspend fun getPlaylistWithSongs(playlistName: Int): PlaylistWithSongs
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun initializePlaylist(playlist: PlaylistEntity)
+    @Transaction
+    @Query("SELECT * FROM ${PlaylistsTable.TABLE_NAME}")
+    suspend fun getPlaylists(): List<PlaylistWithSongs>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun createPlaylist(playlist: PlaylistEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPlaylistSongCrossRef(crossRef: PlaylistSongCrossRef)
-
-    @Transaction
-    suspend fun createPlaylist(playlist: PlaylistEntity, songId: Long) {
-        initializePlaylist(playlist)
-        insertPlaylistSongCrossRef(PlaylistSongCrossRef(playlist.id, songId))
-    }
 }

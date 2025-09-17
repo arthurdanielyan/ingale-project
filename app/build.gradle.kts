@@ -59,7 +59,7 @@ dependencies {
     implementation(projects.core.audioPlayer.impl)
     implementation(projects.core.utils)
     implementation(projects.core.presentation)
-    implementation(projects.featureLocal.core.ui)
+    implementation(projects.featureLocal.core.presentation)
     implementation(projects.featureLocal.core.data)
     implementation(projects.featureLocal.core.domain)
     implementation(projects.featureLocal.featureHome.domain)

@@ -29,4 +29,8 @@
     <string name="something_went_wrong">Что-то пошло не так</string>
 
     <string name="audio_deleted">Этот аудиофайл был удален с устройства (%1$s)</string>
+
+    <string name="cancel">Отемна</string>
+    <string name="delete">Удалить</string>
+    <string name="playlist_created">Плейлист создан</string>
 </resources>

@@ -2,8 +2,8 @@ package com.nightx.ingale.featureLocal.featureSongsSet.presentation.impl.mappers
 
 import com.nightx.ingale.core.utils.Mapper
 import com.nightx.ingale.core.viewState.toComposeList
-import com.nightx.ingale.featureLocal.core.ui.viewState.SongViewState
-import com.nightx.ingale.featureLocal.core.ui.viewState.SongsSetViewState
+import com.nightx.ingale.featureLocal.core.presentation.common.viewState.SongViewState
+import com.nightx.ingale.featureLocal.core.presentation.common.viewState.SongsSetViewState
 import com.nightx.ingale.featureLocal.featureSongsSet.presentation.api.SongsSetComponent
 
 class SongsSetParamsMapper : Mapper<SongsSetComponent.Params, SongsSetViewState> {

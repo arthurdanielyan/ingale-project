@@ -11,7 +11,7 @@ dependencies{
 
     implementation(projects.featureLocal.navigation.api)
     implementation(projects.featureLocal.featureHome.domain)
-    implementation(projects.featureLocal.core.ui)
+    implementation(projects.featureLocal.core.presentation)
     implementation(projects.globalPlaybackPresentation)
     implementation(projects.bottomBarApi)
     implementation(projects.featureLocal.core.domain)
